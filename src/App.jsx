@@ -13,8 +13,8 @@ export default function App() {
     <div className="min-h-screen" style={{ backgroundColor: '#FAFAF8' }}>
       <Navbar />
       <Hero />
-      <Services />
       <Products />
+      <Services />
       <BeforeAfter />
       <WhyLionElite />
       <Testimonials />
