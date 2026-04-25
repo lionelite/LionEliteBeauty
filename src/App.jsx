@@ -1,14 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import Services from './components/Services'
-import Products from './components/Products'
-import BeforeAfter from './components/BeforeAfter'
 import SkincareLine from './components/SkincareLine'
-import WhyLionElite from './components/WhyLionElite'
 import NeuroProgram from './components/NeuroProgram'
 import FertilityProgram from './components/FertilityProgram'
 import HairProgram from './components/HairProgram'
+import MuscleProgram from './components/MuscleProgram'
 import WeightProgram from './components/WeightProgram'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
@@ -24,11 +21,8 @@ function HomePage() {
     <div style={{ backgroundColor: '#0D0D0D' }}>
       <Navbar />
       <Hero />
-      <Services />
-      <Products />
-      <BeforeAfter />
+      <MuscleProgram />
       <SkincareLine />
-      <WhyLionElite />
       <NeuroProgram />
       <FertilityProgram />
       <HairProgram />

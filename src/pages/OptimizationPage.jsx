@@ -1,23 +1,20 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import Services from '../components/Services'
-import Products from '../components/Products'
-import BeforeAfter from '../components/BeforeAfter'
-import WhyLionElite from '../components/WhyLionElite'
+import MuscleProgram from '../components/MuscleProgram'
 import Footer from '../components/Footer'
 
 const allPrograms = [
   {
-    label: 'Optimization Program',
-    tagline: 'Body & Performance',
-    desc: 'A data-driven system using advanced biomarker testing and personalized strategies to help you unlock your highest level.',
+    label: 'Muscle & Recovery Program',
+    tagline: 'Strength & Performance',
+    desc: 'Maximize muscle development, accelerate recovery, and operate at peak physical performance with a data-driven system.',
     accent: '#C9A96E',
-    bg: '#161008',
+    bg: '#0C0A08',
     border: '#C9A96E30',
     href: '/programs/optimization',
     price: '$1,000',
-    icon: '⚡',
+    icon: '💪',
     active: true,
   },
   {
@@ -132,29 +129,26 @@ export default function OptimizationPage() {
       {/* Divider */}
       <div style={{ borderTop: '1px solid #1E1E1E' }} />
 
-      {/* Optimization Program Detail */}
-      <section style={{ padding: '40px 0 0' }}>
-        <div className="max-w-3xl mx-auto px-6 text-center" style={{ paddingTop: '80px', paddingBottom: '20px' }}>
-          <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }} className="uppercase mb-5">Body Optimization</p>
+      {/* Program Hero */}
+      <section style={{ padding: '80px 0 20px' }}>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }} className="uppercase mb-5">Muscle & Recovery</p>
           <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.8rem', lineHeight: '1.15' }} className="font-normal mb-6">
-            Lion Elite<br /><span style={{ color: '#C9A96E' }}>Optimization Program</span>
+            Lion Elite<br /><span style={{ color: '#C9A96E' }}>Muscle & Recovery Program</span>
           </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '17px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto 40px' }}>
-            A data-driven system using advanced biomarker testing and personalized performance strategies to help you unlock your highest level.
+            A data-driven system using advanced biomarker testing and personalized performance strategies to help you build, recover, and perform at your highest level.
           </p>
           <a href="mailto:info@lionelitewellness.com"
-            style={{ display: 'inline-block', backgroundColor: '#C9A96E', color: '#fff', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.15em', fontSize: '12px', padding: '18px 48px', textDecoration: 'none' }}
+            style={{ display: 'inline-block', backgroundColor: '#C9A96E', color: '#000', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.15em', fontSize: '12px', padding: '18px 48px', textDecoration: 'none' }}
             className="uppercase hover:opacity-90 transition-opacity">
-            👉 Start Your Optimization Program
+            👉 Apply / Get Started Now
           </a>
         </div>
       </section>
 
-      <Services />
-      <Products />
-      <BeforeAfter />
-      <WhyLionElite />
+      <MuscleProgram />
 
       {/* Pricing card */}
       <section style={{ backgroundColor: '#0D0D0D', padding: '80px 0' }}>
@@ -163,11 +157,18 @@ export default function OptimizationPage() {
             <div style={{ backgroundColor: '#1A1A1A', padding: '48px', textAlign: 'center', borderBottom: '1px solid #C9A96E18' }}>
               <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">One-Time Investment</p>
               <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '5rem', lineHeight: '1', letterSpacing: '-0.02em' }}>$1,000</p>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', marginTop: '10px', letterSpacing: '0.15em' }}>Complete Optimization Program</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', marginTop: '10px', letterSpacing: '0.15em' }}>Muscle & Recovery Optimization Program</p>
             </div>
             <div style={{ padding: '36px 48px' }}>
               <ul className="space-y-4 mb-10">
-                {['Full biomarker testing kit (shipped to you)', 'Complete data analysis & breakdown', 'Personalized optimization strategy', '1-on-1 coaching + implementation guidance', 'Performance & recovery insights', 'Ongoing recommendations'].map(item => (
+                {[
+                  'Full performance & recovery biomarker testing kit (shipped to you)',
+                  'Complete data analysis & breakdown',
+                  'Personalized muscle & recovery strategy',
+                  '1-on-1 coaching + implementation guidance',
+                  'Strength, performance & recovery insights',
+                  'Ongoing recommendations',
+                ].map(item => (
                   <li key={item} className="flex items-start gap-3">
                     <span style={{ color: '#C9A96E', fontSize: '13px', flexShrink: 0, marginTop: '2px' }}>✔</span>
                     <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.5' }}>{item}</span>
@@ -175,9 +176,9 @@ export default function OptimizationPage() {
                 ))}
               </ul>
               <a href="mailto:info@lionelitewellness.com"
-                style={{ display: 'block', backgroundColor: '#C9A96E', color: '#fff', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.15em', padding: '18px', textAlign: 'center', textDecoration: 'none' }}
+                style={{ display: 'block', backgroundColor: '#C9A96E', color: '#000', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.15em', padding: '18px', textAlign: 'center', textDecoration: 'none' }}
                 className="uppercase hover:opacity-90 transition-opacity">
-                👉 Start Your Optimization Program
+                👉 Apply / Get Started Now
               </a>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', textAlign: 'center', marginTop: '16px' }}>
                 Or email us directly: <a href="mailto:info@lionelitewellness.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitewellness.com</a>

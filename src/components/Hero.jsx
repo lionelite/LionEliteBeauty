@@ -45,7 +45,7 @@ export default function Hero() {
                 textDecoration: 'none',
               }}
               className="uppercase hover:opacity-90 transition-opacity">
-              👉 Start Your Optimization Program
+              👉 View All Programs
             </a>
             <a href="#skincare"
               style={{

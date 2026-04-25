@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 const programs = [
-  { label: 'Optimization Program', href: '/programs/optimization', accent: '#C9A96E', desc: 'Body & performance' },
+  { label: 'Muscle & Recovery Program', href: '/programs/optimization', accent: '#C9A96E', desc: 'Strength & performance' },
   { label: 'Neuro Program', href: '/programs/neuro', accent: '#8A9E85', desc: 'Cognitive performance' },
   { label: 'Fertility Program', href: '/programs/fertility', accent: '#B8A4D4', desc: 'Reproductive health' },
   { label: 'Hair Program', href: '/programs/hair', accent: '#C4A265', desc: 'Hair restoration & density' },

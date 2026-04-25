@@ -5,21 +5,21 @@ export default function Testimonials() {
   const programs = [
     {
       id: 'body',
-      eyebrow: 'Body Optimization',
-      name: 'Lion Elite Optimization Program',
+      eyebrow: 'Muscle & Recovery',
+      name: 'Lion Elite Muscle & Recovery Program',
       price: '$1,000',
       priceNote: 'One-Time Investment',
       accent: '#C9A96E',
       href: '/programs/optimization',
       includes: [
-        'Full biomarker testing kit (shipped to you)',
+        'Full performance & recovery biomarker kit (shipped to you)',
         'Complete data analysis & breakdown',
-        'Personalized optimization strategy',
+        'Personalized muscle & recovery strategy',
         '1-on-1 coaching + implementation guidance',
-        'Performance & recovery insights',
+        'Strength, performance & recovery insights',
         'Ongoing recommendations',
       ],
-      cta: '👉 Start Your Optimization Program',
+      cta: '👉 Apply / Get Started Now',
     },
     {
       id: 'neuro',
@@ -162,8 +162,8 @@ export default function Testimonials() {
             className="uppercase">What Clients Say</p>
           <div className="grid md:grid-cols-2 gap-5">
             {[
-              { quote: 'This showed me what my body actually needed. First time I had a real roadmap instead of just guessing.', name: 'J. Thornton', detail: 'Optimization Program Client', accent: '#C9A96E' },
-              { quote: "First time I wasn't guessing with my supplements and protocols. The data changed everything for me.", name: 'M. Rodriguez', detail: 'Optimization Program Client', accent: '#C9A96E' },
+              { quote: 'This showed me what my body actually needed. First time I had a real roadmap instead of just guessing.', name: 'J. Thornton', detail: 'Muscle & Recovery Client', accent: '#C9A96E' },
+              { quote: "First time I wasn't guessing with my supplements and protocols. The data changed everything for me.", name: 'M. Rodriguez', detail: 'Muscle & Recovery Client', accent: '#C9A96E' },
             ].map((t) => (
               <div key={t.name} style={{ backgroundColor: '#111111', border: '1px solid #1E1E1E', padding: '36px' }}>
                 <div className="flex gap-1 mb-5">
