@@ -17,17 +17,6 @@ export default function Navbar() {
   const location = useLocation()
   const isHome = location.pathname === '/'
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClick(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setProgramsOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
-
   // Close dropdown on route change
   useEffect(() => {
     setProgramsOpen(false)
@@ -52,31 +41,35 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
 
-          {/* Programs dropdown — click to open */}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setProgramsOpen(o => !o)}
+          {/* Programs — click navigates to hub, hover shows dropdown */}
+          <div className="relative" ref={dropdownRef}
+            onMouseEnter={() => setProgramsOpen(true)}
+            onMouseLeave={() => setProgramsOpen(false)}>
+            <Link
+              to="/programs/optimization"
               style={{
                 fontFamily: 'Helvetica Neue, Arial, sans-serif',
                 color: programsOpen ? '#C9A96E' : '#5A5A5A',
                 letterSpacing: '0.1em',
-                background: 'none', border: 'none', cursor: 'pointer',
+                textDecoration: 'none',
                 transition: 'color 0.2s',
               }}
               className="text-sm uppercase tracking-wider flex items-center gap-1.5">
               Programs
-              <span style={{ fontSize: '7px', transition: 'transform 0.2s', display: 'inline-block', transform: programsOpen ? 'rotate(180deg)' : 'none' }}>▼</span>
-            </button>
+              <span style={{ fontSize: '7px', display: 'inline-block', transition: 'transform 0.2s', transform: programsOpen ? 'rotate(180deg)' : 'none' }}>▼</span>
+            </Link>
 
             {programsOpen && (
               <div style={{
-                position: 'absolute', top: 'calc(100% + 8px)', left: '50%',
+                position: 'absolute', top: 'calc(100% + 4px)', left: '50%',
                 transform: 'translateX(-50%)',
                 backgroundColor: '#FFFFFF',
                 border: '1px solid #E8DDD0',
                 boxShadow: '0 12px 40px rgba(0,0,0,0.12)',
                 width: '260px', zIndex: 200,
-              }}>
+              }}
+              onMouseEnter={() => setProgramsOpen(true)}
+              onMouseLeave={() => setProgramsOpen(false)}>
                 {programs.map(p => (
                   <Link key={p.label} to={p.href}
                     style={{ display: 'block', padding: '16px 22px', borderBottom: '1px solid #F5F0E8', textDecoration: 'none' }}
