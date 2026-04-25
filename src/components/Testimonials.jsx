@@ -1,93 +1,103 @@
-const testimonials = [
-  {
-    id: 1,
-    quote: "I've tried every high-end serum on the market. The GHK-Cu Peptide Serum from Lion Elite is genuinely the first product I've seen move the needle on my fine lines. My aesthetician noticed the difference before I said anything.",
-    name: 'M. Rodriguez',
-    detail: 'GHK-Cu Serum · 10 weeks',
-    stars: 5,
-  },
-  {
-    id: 2,
-    quote: "After my laser treatment, I used the Post-Procedure Recovery Kit and healed in half the time I expected. The redness was gone in four days. My provider was stunned. I won't do another procedure without it.",
-    name: 'D. Kim',
-    detail: 'Recovery Kit · Post-Laser',
-    stars: 5,
-  },
-  {
-    id: 3,
-    quote: "Tirzepatide through Lion Elite Wellness changed my life — and the skincare line has kept my skin in step with my body transformation. The anti-aging cream is now a daily non-negotiable for me.",
-    name: 'J. Thornton',
-    detail: 'Wellness Program + Skincare',
-    stars: 5,
-  },
-  {
-    id: 4,
-    quote: "What I appreciate most is that nothing feels gimmicky. The science is real, the team explains everything, and the products are formulated the way I'd want as a nurse. Clean, clinical, and it works.",
-    name: 'A. Patel, RN',
-    detail: 'Full Skincare Protocol',
-    stars: 5,
-  },
-]
-
+// Repurposed as Pricing section
 export default function Testimonials() {
   return (
-    <section id="testimonials" style={{ backgroundColor: '#F5F0E8', padding: '100px 0' }}>
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
+    <section id="pricing" style={{ backgroundColor: '#0D0D0D', padding: '100px 0' }}>
+      <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-16">
           <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
-            className="text-xs uppercase tracking-widest mb-4">
-            Client Stories
-          </p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.5rem', lineHeight: '1.2' }}
+            className="text-xs uppercase tracking-widest mb-4">Investment</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.5rem', lineHeight: '1.2' }}
             className="font-normal">
-            Trusted by Those Who<br />Demand Results
+            Lion Elite<br />
+            <span style={{ color: '#C9A96E' }}>Optimization Program</span>
           </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
         </div>
 
-        {/* Testimonial Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {testimonials.map((t) => (
-            <div key={t.id}
-              style={{ backgroundColor: '#FFFFFF', padding: '40px', border: '1px solid #E8DDD0' }}
-              className="flex flex-col">
-              {/* Stars */}
-              <div className="flex gap-1 mb-6">
-                {Array.from({ length: t.stars }).map((_, i) => (
-                  <span key={i} style={{ color: '#C9A96E', fontSize: '14px' }}>★</span>
-                ))}
-              </div>
+        {/* Pricing Card */}
+        <div style={{ backgroundColor: '#161616', border: '1px solid #2E2E2E', maxWidth: '560px', margin: '0 auto' }}>
+          {/* Price header */}
+          <div style={{ backgroundColor: '#1A1A1A', padding: '48px', textAlign: 'center', borderBottom: '1px solid #2E2E2E' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.3em', marginBottom: '16px' }}
+              className="uppercase">One-Time Investment</p>
+            <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '5rem', lineHeight: '1', letterSpacing: '-0.02em' }}>
+              $1,000
+            </p>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', marginTop: '12px', letterSpacing: '0.1em' }}>
+              Complete Optimization Program
+            </p>
+          </div>
 
-              {/* Quote */}
-              <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1rem', lineHeight: '1.8', fontStyle: 'italic', flex: 1 }}>
-                "{t.quote}"
-              </p>
+          {/* Includes */}
+          <div style={{ padding: '40px 48px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '10px', letterSpacing: '0.25em', marginBottom: '24px' }}
+              className="uppercase">Includes</p>
+            <ul className="space-y-4 mb-10">
+              {[
+                'Full biomarker testing kit (shipped to you)',
+                'Complete data analysis & breakdown',
+                'Personalized optimization strategy',
+                '1-on-1 coaching + implementation guidance',
+                'Performance & recovery insights',
+                'Ongoing recommendations',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span style={{ color: '#C9A96E', fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>✔</span>
+                  <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#9A9A9A', fontSize: '14px', lineHeight: '1.5' }}>{item}</span>
+                </li>
+              ))}
+            </ul>
 
-              {/* Divider */}
-              <div style={{ width: '32px', height: '1px', backgroundColor: '#C9A96E', margin: '24px 0' }}></div>
-
-              {/* Attribution */}
-              <div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#1A1A1A', fontSize: '13px', letterSpacing: '0.08em' }}
-                  className="font-medium">{t.name}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', fontSize: '11px', letterSpacing: '0.15em', marginTop: '4px' }}
-                  className="uppercase tracking-wider">{t.detail}</p>
-              </div>
-            </div>
-          ))}
+            <a href="mailto:info@lionelitewellness.com"
+              style={{
+                display: 'block',
+                backgroundColor: '#C9A96E',
+                color: '#FFFFFF',
+                fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                fontSize: '13px',
+                letterSpacing: '0.15em',
+                padding: '18px',
+                textAlign: 'center',
+                textDecoration: 'none',
+                width: '100%',
+              }}
+              className="uppercase hover:opacity-90 transition-opacity">
+              👉 Start Your Optimization Program
+            </a>
+          </div>
         </div>
 
-        {/* Trust Logos / Media Badges */}
-        <div style={{ marginTop: '60px', padding: '40px', borderTop: '1px solid #E8DDD0', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#B0B0B0', fontSize: '10px', letterSpacing: '0.25em' }}
-            className="uppercase tracking-widest mb-8">Featured In & Trusted By</p>
-          <div className="flex flex-wrap items-center justify-center gap-10">
-            {['Medical Aesthetics Journal', 'Peptide Review', 'DermNews', 'Wellness Today'].map(name => (
-              <span key={name}
-                style={{ fontFamily: 'Georgia, serif', color: '#C0B8B0', fontSize: '13px', letterSpacing: '0.05em' }}>
-                {name}
-              </span>
+        {/* Testimonials */}
+        <div style={{ marginTop: '80px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '40px' }}
+            className="uppercase">What Clients Say</p>
+          <div className="grid md:grid-cols-2 gap-5">
+            {[
+              {
+                quote: 'This showed me what my body actually needed. First time I had a real roadmap instead of just guessing.',
+                name: 'J. Thornton',
+                detail: 'Optimization Program Client',
+              },
+              {
+                quote: "First time I wasn't guessing with my supplements and protocols. The data changed everything for me.",
+                name: 'M. Rodriguez',
+                detail: 'Optimization Program Client',
+              },
+            ].map((t) => (
+              <div key={t.name} style={{ backgroundColor: '#161616', border: '1px solid #2A2A2A', padding: '36px' }}>
+                <div className="flex gap-1 mb-5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} style={{ color: '#C9A96E', fontSize: '13px' }}>★</span>
+                  ))}
+                </div>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#CACACA', fontSize: '0.95rem', lineHeight: '1.8', fontStyle: 'italic', marginBottom: '24px' }}>
+                  "{t.quote}"
+                </p>
+                <div style={{ width: '28px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '16px' }}></div>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px' }}>{t.name}</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '11px', letterSpacing: '0.12em', marginTop: '4px' }}
+                  className="uppercase">{t.detail}</p>
+              </div>
             ))}
           </div>
         </div>

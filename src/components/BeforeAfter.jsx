@@ -1,113 +1,80 @@
+// Repurposed as "What You Get" + "Who This Is For"
 export default function BeforeAfter() {
   return (
-    <section id="results" style={{ backgroundColor: '#1A1A1A', padding: '100px 0' }}>
-      <div className="max-w-7xl mx-auto px-6">
-
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
-            className="text-xs uppercase tracking-widest mb-4">Real People. Real Results.</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.5rem', lineHeight: '1.2' }}
-            className="font-normal">Before & After</h2>
-          <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', marginTop: '16px' }}>
-            Both clients apply GHK-Cu topically as a daily serum. No injections. No procedures. Just the peptide.
-          </p>
-        </div>
-
-        {/* Results Grid */}
-        <div className="grid md:grid-cols-2 gap-10">
-
-          {/* Daylen — combined before/after photo */}
-          <div>
-            <div style={{ border: '1px solid #2A2A2A', overflow: 'hidden' }}>
-              <div style={{ position: 'relative' }}>
-                <img
-                  src="/results/daylen-beforeafter.jpeg"
-                  alt="Daylen before and after GHK-Cu peptide serum"
-                  style={{ width: '100%', display: 'block', objectFit: 'cover' }}
-                />
-                {/* Before / After labels */}
-                <div style={{ position: 'absolute', bottom: '16px', left: '0', width: '50%', display: 'flex', justifyContent: 'center' }}>
-                  <span style={{ backgroundColor: 'rgba(0,0,0,0.65)', color: '#FAFAF8', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.2em', padding: '5px 14px' }} className="uppercase">Before</span>
-                </div>
-                <div style={{ position: 'absolute', bottom: '16px', right: '0', width: '50%', display: 'flex', justifyContent: 'center' }}>
-                  <span style={{ backgroundColor: 'rgba(201,169,110,0.85)', color: '#FFFFFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.2em', padding: '5px 14px' }} className="uppercase">After</span>
-                </div>
-              </div>
-              <div style={{ backgroundColor: '#222222', padding: '24px' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '10px', letterSpacing: '0.25em' }} className="uppercase mb-2">
-                  Daylen · GHK-Cu Peptide Serum · Daily Topical Use
-                </p>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1rem', lineHeight: '1.6' }}>
-                  Acne clearance & skin texture improvement
-                </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7', marginTop: '8px' }}>
-                  Visible reduction in active breakouts, post-inflammatory marks, and overall skin congestion from consistent daily peptide application.
-                </p>
-              </div>
-            </div>
+    <>
+      {/* What You Get */}
+      <section id="what-you-get" style={{ backgroundColor: '#0D0D0D', padding: '100px 0' }}>
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
+              className="text-xs uppercase tracking-widest mb-4">Everything Included</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.5rem', lineHeight: '1.2' }}
+              className="font-normal">What You Get</h2>
+            <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
           </div>
 
-          {/* Miranda — two separate photos stacked */}
-          <div>
-            <div style={{ border: '1px solid #2A2A2A', overflow: 'hidden' }}>
-              <div className="grid grid-cols-2" style={{ height: '420px' }}>
-                {/* Before */}
-                <div style={{ position: 'relative', overflow: 'hidden' }}>
-                  <img
-                    src="/results/miranda-before.jpeg"
-                    alt="Miranda before GHK-Cu peptide serum"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
-                  />
-                  <div style={{ position: 'absolute', bottom: '12px', left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
-                    <span style={{ backgroundColor: 'rgba(0,0,0,0.65)', color: '#FAFAF8', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.2em', padding: '5px 14px' }} className="uppercase">Before</span>
-                  </div>
-                </div>
-                {/* After */}
-                <div style={{ position: 'relative', overflow: 'hidden', borderLeft: '2px solid #1A1A1A' }}>
-                  <img
-                    src="/results/miranda-after.jpeg"
-                    alt="Miranda after GHK-Cu peptide serum"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
-                  />
-                  {/* "Skin is insane" badge */}
-                  <div style={{ position: 'absolute', top: '12px', right: '10px', backgroundColor: '#C9A96E', padding: '4px 10px' }}>
-                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '9px', letterSpacing: '0.1em' }}>"Skin is insane"</span>
-                  </div>
-                  <div style={{ position: 'absolute', bottom: '12px', left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
-                    <span style={{ backgroundColor: 'rgba(201,169,110,0.85)', color: '#FFFFFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.2em', padding: '5px 14px' }} className="uppercase">After</span>
-                  </div>
+          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+            {[
+              { item: 'At-home biomarker testing kit', desc: 'Shipped directly to your door. Simple, fast, no clinic visit needed.' },
+              { item: 'Full results breakdown', desc: 'Easy-to-understand analysis of your biomarker data.' },
+              { item: 'Personalized optimization strategy', desc: 'A tailored plan based on your results, goals, and lifestyle.' },
+              { item: '1-on-1 coaching guidance', desc: 'Direct coaching to help you implement your plan effectively.' },
+              { item: 'Performance + recovery insights', desc: 'Clear action steps targeting your specific gaps.' },
+              { item: 'Ongoing recommendations', desc: 'Continued guidance as you progress and optimize over time.' },
+            ].map(({ item, desc }) => (
+              <div key={item} style={{ backgroundColor: '#161616', border: '1px solid #2A2A2A', padding: '28px' }}
+                className="flex gap-4">
+                <span style={{ color: '#C9A96E', fontSize: '16px', flexShrink: 0, marginTop: '2px' }}>✔</span>
+                <div>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '14px', fontWeight: '500', marginBottom: '6px' }}>
+                    {item}
+                  </p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', lineHeight: '1.6' }}>
+                    {desc}
+                  </p>
                 </div>
               </div>
-              <div style={{ backgroundColor: '#222222', padding: '24px' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '10px', letterSpacing: '0.25em' }} className="uppercase mb-2">
-                  Miranda · GHK-Cu Peptide Serum · Daily Topical Use
-                </p>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1rem', lineHeight: '1.6' }}>
-                  Radiance, smoothness & skin clarity
-                </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7', marginTop: '8px' }}>
-                  Noticeably smoother, glass-like skin texture with improved luminosity and reduction of surface irregularities — her words: <em style={{ color: '#8A9E85' }}>"Skin is insane."</em>
-                </p>
-              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Who This Is For */}
+      <section id="who-its-for" style={{ backgroundColor: '#F5F0E8', padding: '100px 0' }}>
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
+                className="text-xs uppercase tracking-widest mb-5">Ideal Candidate</p>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.4rem', lineHeight: '1.2' }}
+                className="font-normal mb-6">Who This Is For</h2>
+              <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '28px' }}></div>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.9' }}>
+                This program is built for individuals who are serious about understanding and optimizing their body — not just following trends.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                'Want real data instead of guessing',
+                'Care about performance, recovery, and longevity',
+                'Are serious about optimizing their body',
+                'Want a premium, guided experience',
+              ].map((point, i) => (
+                <div key={i} style={{ backgroundColor: '#FFFFFF', border: '1px solid #E8DDD0', padding: '22px 28px' }}
+                  className="flex items-center gap-4">
+                  <div style={{ width: '28px', height: '28px', backgroundColor: '#C9A96E', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ color: '#FFFFFF', fontSize: '12px' }}>→</span>
+                  </div>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '14px', lineHeight: '1.5' }}>
+                    {point}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-
-        {/* Disclaimer */}
-        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px', textAlign: 'center', marginTop: '32px', letterSpacing: '0.05em' }}>
-          Individual results may vary. Both clients used GHK-Cu topically as a daily serum without any additional procedures.
-        </p>
-
-        <div className="text-center mt-10">
-          <a href="#products"
-            style={{ border: '1px solid #C9A96E', color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.15em' }}
-            className="text-xs uppercase tracking-widest px-10 py-4 inline-block hover:bg-[#C9A96E] hover:text-white transition-colors">
-            Shop GHK-Cu Serum
-          </a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }

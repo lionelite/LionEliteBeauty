@@ -10,11 +10,11 @@ import Footer from './components/Footer'
 
 export default function App() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAF8' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#0D0D0D' }}>
       <Navbar />
       <Hero />
-      <Products />
       <Services />
+      <Products />
       <BeforeAfter />
       <WhyLionElite />
       <Testimonials />
