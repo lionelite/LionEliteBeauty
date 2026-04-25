@@ -87,7 +87,6 @@ export default function WeightProgram() {
               { step: '03', title: 'Guided Implementation', desc: 'We guide you through every step of your plan to ensure consistency and maximum fat loss while maintaining performance.', points: ['Stay consistent', 'Avoid common pitfalls', 'Maximize fat loss'] },
             ].map(item => (
               <div key={item.step} style={{ backgroundColor: '#0D120D', border: '1px solid #152015', padding: '40px 32px', position: 'relative' }}>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#1E2E1E', fontSize: '5rem', position: 'absolute', top: '16px', right: '24px', lineHeight: '1', userSelect: 'none' }}>{item.step}</p>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '10px', letterSpacing: '0.25em', marginBottom: '12px' }} className="uppercase">Step {item.step}</p>
                 <h4 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.15rem', marginBottom: '14px', lineHeight: '1.3' }} className="font-normal">{item.title}</h4>
                 <div style={{ width: '28px', height: '1px', backgroundColor: '#5BA87A', marginBottom: '16px' }}></div>
@@ -100,6 +99,7 @@ export default function WeightProgram() {
                     </li>
                   ))}
                 </ul>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#1E2E1E', fontSize: '5rem', lineHeight: '1', userSelect: 'none', textAlign: 'right', marginTop: '24px' }}>{item.step}</p>
               </div>
             ))}
           </div>
