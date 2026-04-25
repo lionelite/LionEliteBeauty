@@ -33,6 +33,18 @@ const products = [
     accent: '#8A9E85',
   },
   {
+    name: 'KPV Recovery\nMoisturizer',
+    price: '$78',
+    size: '50ml',
+    badge: 'New',
+    badgeColor: '#8A7AB0',
+    tagline: 'Advanced peptide skin recovery',
+    benefits: ['Calms redness & irritation', 'Strengthens skin barrier', 'Deep hydration, no heaviness'],
+    bg: '#F5F0E8',
+    accent: '#8A7AB0',
+    label: 'KPV',
+  },
+  {
     name: 'Post-Procedure\nRecovery Kit',
     price: '$185',
     size: 'Full Kit',
@@ -74,7 +86,7 @@ export default function SkincareLine() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {products.map((p) => (
             <div key={p.name} style={{ backgroundColor: p.bg, display: 'flex', flexDirection: 'column' }}>
               {/* Badge */}
@@ -96,7 +108,7 @@ export default function SkincareLine() {
                     LION<br />ELITE
                   </p>
                   <div style={{ width: '24px', height: '0.5px', backgroundColor: 'rgba(255,255,255,0.4)', margin: '4px 0' }}></div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '6px', letterSpacing: '0.1em', opacity: 0.7 }}>GHK-Cu</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '6px', letterSpacing: '0.1em', opacity: 0.7 }}>{p.label || 'GHK-Cu'}</p>
                 </div>
 
                 {/* Name */}
@@ -155,16 +167,16 @@ export default function SkincareLine() {
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '8px' }}
               className="uppercase">Best Value</p>
             <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem' }}>
-              Complete GHK-Cu System
+              Complete Skincare System
             </p>
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', marginTop: '6px' }}>
-              All 4 products · Save on the full protocol
+              All 5 products · Save on the full protocol
             </p>
           </div>
           <div className="flex items-center gap-6">
             <div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', textDecoration: 'line-through' }}>$473</p>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '2rem' }}>$433</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', textDecoration: 'line-through' }}>$551</p>
+              <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '2rem' }}>$499</p>
             </div>
             <a href="#"
               style={{
