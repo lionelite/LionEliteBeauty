@@ -1,4 +1,6 @@
-// Pricing section — all three programs
+import { Link } from 'react-router-dom'
+
+// Pricing section — all four programs
 export default function Testimonials() {
   const programs = [
     {
@@ -8,6 +10,7 @@ export default function Testimonials() {
       price: '$1,000',
       priceNote: 'One-Time Investment',
       accent: '#C9A96E',
+      href: '/programs/optimization',
       includes: [
         'Full biomarker testing kit (shipped to you)',
         'Complete data analysis & breakdown',
@@ -17,7 +20,6 @@ export default function Testimonials() {
         'Ongoing recommendations',
       ],
       cta: '👉 Start Your Optimization Program',
-      href: 'mailto:info@lionelitewellness.com',
     },
     {
       id: 'neuro',
@@ -26,6 +28,7 @@ export default function Testimonials() {
       price: 'Premium Access',
       priceNote: 'Apply for Availability',
       accent: '#8A9E85',
+      href: '/programs/neuro',
       includes: [
         'Baseline cognitive & biomarker assessment',
         'Neuro optimization strategy framework',
@@ -35,7 +38,6 @@ export default function Testimonials() {
         'Preferred client-level opportunities',
       ],
       cta: '👉 Apply / Get Started Now',
-      href: 'mailto:info@lionelitewellness.com',
     },
     {
       id: 'fertility',
@@ -44,6 +46,7 @@ export default function Testimonials() {
       price: 'Premium Access',
       priceNote: 'Apply for Availability',
       accent: '#B8A4D4',
+      href: '/programs/fertility',
       includes: [
         'Fertility biomarker testing & assessment',
         'Hormonal balance analysis',
@@ -53,7 +56,24 @@ export default function Testimonials() {
         'Preferred client-level opportunities',
       ],
       cta: '👉 Apply / Get Started Now',
-      href: 'mailto:info@lionelitewellness.com',
+    },
+    {
+      id: 'hair',
+      eyebrow: 'Hair Optimization',
+      name: 'Lion Elite Hair Program',
+      price: 'Premium Access',
+      priceNote: 'Apply for Availability',
+      accent: '#C4A265',
+      href: '/programs/hair',
+      includes: [
+        'Hair & health assessment',
+        'Personalized hair optimization strategy',
+        'Scalp & follicle support framework',
+        'Guided implementation step by step',
+        'Advanced hair-support pathway access',
+        'Preferred client-level opportunities',
+      ],
+      cta: '👉 Apply / Get Started Now',
     },
   ]
 
@@ -72,47 +92,47 @@ export default function Testimonials() {
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
         </div>
 
-        {/* 3 program cards */}
-        <div className="grid md:grid-cols-3 gap-5 mb-20">
+        {/* 4 program cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
           {programs.map(p => (
             <div key={p.id} style={{ backgroundColor: '#161616', border: `1px solid ${p.accent}28`, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ backgroundColor: '#1A1A1A', padding: '36px 32px 28px', borderBottom: `1px solid ${p.accent}18`, textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '10px', letterSpacing: '0.3em', marginBottom: '12px' }}
+              <div style={{ backgroundColor: '#1A1A1A', padding: '28px 24px 22px', borderBottom: `1px solid ${p.accent}18`, textAlign: 'center' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '9px', letterSpacing: '0.3em', marginBottom: '10px' }}
                   className="uppercase">{p.eyebrow}</p>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1rem', lineHeight: '1.4', marginBottom: '18px' }}>{p.name}</p>
-                <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: p.id === 'body' ? '3.2rem' : '1.5rem', lineHeight: '1', letterSpacing: '-0.02em' }}>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '0.9rem', lineHeight: '1.4', marginBottom: '14px' }}>{p.name}</p>
+                <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: p.id === 'body' ? '2.8rem' : '1.2rem', lineHeight: '1', letterSpacing: '-0.01em' }}>
                   {p.price}
                 </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', marginTop: '8px', letterSpacing: '0.15em' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px', marginTop: '6px', letterSpacing: '0.15em' }}>
                   {p.priceNote}
                 </p>
               </div>
-              <div style={{ padding: '28px 32px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', letterSpacing: '0.25em', marginBottom: '16px' }}
+              <div style={{ padding: '22px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '14px' }}
                   className="uppercase">Includes</p>
-                <ul className="space-y-3 mb-8 flex-1">
+                <ul className="space-y-2.5 mb-6 flex-1">
                   {p.includes.map(item => (
-                    <li key={item} className="flex items-start gap-3">
-                      <span style={{ color: p.accent, fontSize: '12px', flexShrink: 0, marginTop: '2px' }}>✔</span>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '13px', lineHeight: '1.5' }}>{item}</span>
+                    <li key={item} className="flex items-start gap-2">
+                      <span style={{ color: p.accent, fontSize: '11px', flexShrink: 0, marginTop: '2px' }}>✔</span>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.5' }}>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <a href={p.href}
+                <Link to={p.href}
                   style={{
                     display: 'block',
                     backgroundColor: p.accent,
                     color: '#FFFFFF',
                     fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                    fontSize: '11px',
-                    letterSpacing: '0.15em',
-                    padding: '16px',
+                    fontSize: '10px',
+                    letterSpacing: '0.12em',
+                    padding: '14px',
                     textAlign: 'center',
                     textDecoration: 'none',
                   }}
                   className="uppercase hover:opacity-90 transition-opacity">
-                  {p.cta}
-                </a>
+                  Learn More →
+                </Link>
               </div>
             </div>
           ))}
