@@ -32,20 +32,36 @@ export default function Hero() {
             A data-driven system using advanced biomarker testing and personalized performance strategies to help you unlock your highest level.
           </p>
 
-          <a href="#pricing"
-            style={{
-              backgroundColor: '#C9A96E',
-              fontFamily: 'Helvetica Neue, Arial, sans-serif',
-              letterSpacing: '0.15em',
-              fontSize: '13px',
-              display: 'inline-block',
-              padding: '18px 48px',
-              color: '#fff',
-              textDecoration: 'none',
-            }}
-            className="uppercase hover:opacity-90 transition-opacity">
-            Start Your Optimization Program
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#pricing"
+              style={{
+                backgroundColor: '#C9A96E',
+                fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                letterSpacing: '0.15em',
+                fontSize: '13px',
+                display: 'inline-block',
+                padding: '18px 48px',
+                color: '#fff',
+                textDecoration: 'none',
+              }}
+              className="uppercase hover:opacity-90 transition-opacity">
+              👉 Start Your Optimization Program
+            </a>
+            <a href="#skincare"
+              style={{
+                border: '1px solid #3A3A3A',
+                fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                letterSpacing: '0.15em',
+                fontSize: '13px',
+                display: 'inline-block',
+                padding: '18px 36px',
+                color: '#7A7A7A',
+                textDecoration: 'none',
+              }}
+              className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-colors">
+              Shop Skincare
+            </a>
+          </div>
 
           <div className="flex items-center justify-center gap-10 mt-16 flex-wrap">
             {[

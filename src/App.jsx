@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import Services from './components/Services'
 import Products from './components/Products'
 import BeforeAfter from './components/BeforeAfter'
+import SkincareLine from './components/SkincareLine'
 import WhyLionElite from './components/WhyLionElite'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
@@ -16,6 +17,7 @@ export default function App() {
       <Services />
       <Products />
       <BeforeAfter />
+      <SkincareLine />
       <WhyLionElite />
       <Testimonials />
       <CTASection />
