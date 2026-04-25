@@ -61,12 +61,13 @@ export default function Navbar() {
 
             {programsOpen && (
               <div style={{
-                position: 'absolute', top: 'calc(100% + 4px)', left: '50%',
+                position: 'absolute', top: '100%', left: '50%',
                 transform: 'translateX(-50%)',
                 backgroundColor: '#FFFFFF',
                 border: '1px solid #E8DDD0',
                 boxShadow: '0 12px 40px rgba(0,0,0,0.12)',
                 width: '260px', zIndex: 200,
+                paddingTop: '8px',
               }}
               onMouseEnter={() => setProgramsOpen(true)}
               onMouseLeave={() => setProgramsOpen(false)}>
