@@ -1,7 +1,7 @@
 const products = [
   {
     name: 'GHK-Cu Peptide\nFace Wash',
-    price: '$68',
+    price: '$67.99',
     size: '150ml',
     badge: 'Bestseller',
     badgeColor: '#C9A96E',
@@ -12,7 +12,7 @@ const products = [
   },
   {
     name: 'Regenerating\nPeptide Serum',
-    price: '$124',
+    price: '$123.99',
     size: '30ml',
     badge: 'Clinical Grade',
     badgeColor: '#8A9E85',
@@ -23,7 +23,7 @@ const products = [
   },
   {
     name: 'Peptide\nAnti-Aging Cream',
-    price: '$96',
+    price: '$95.99',
     size: '50ml',
     badge: 'New Formula',
     badgeColor: '#C9A96E',
@@ -34,7 +34,7 @@ const products = [
   },
   {
     name: 'KPV Recovery\nMoisturizer',
-    price: '$78',
+    price: '$77.99',
     size: '50ml',
     badge: 'New',
     badgeColor: '#8A7AB0',
@@ -46,7 +46,7 @@ const products = [
   },
   {
     name: 'Post-Procedure\nRecovery Kit',
-    price: '$185',
+    price: '$184.99',
     size: 'Full Kit',
     badge: 'Complete Kit',
     badgeColor: '#2A2A2A',
@@ -175,8 +175,8 @@ export default function SkincareLine() {
           </div>
           <div className="flex items-center gap-6">
             <div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', textDecoration: 'line-through' }}>$551</p>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '2rem' }}>$499</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', textDecoration: 'line-through' }}>$549.99</p>
+              <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '2rem' }}>$498.99</p>
             </div>
             <a href="#"
               style={{
