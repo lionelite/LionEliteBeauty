@@ -75,6 +75,24 @@ export default function Testimonials() {
       ],
       cta: '👉 Apply / Get Started Now',
     },
+    {
+      id: 'weight',
+      eyebrow: 'Weight Optimization',
+      name: 'Lion Elite Weight Program',
+      price: 'Premium Access',
+      priceNote: 'Apply for Availability',
+      accent: '#5BA87A',
+      href: '/programs/weight',
+      includes: [
+        'Metabolic & biomarker assessment',
+        'Personalized weight optimization strategy',
+        'Appetite & fat metabolism framework',
+        'Guided implementation step by step',
+        'Advanced metabolic pathway access',
+        'Preferred client-level opportunities',
+      ],
+      cta: '👉 Apply / Get Started Now',
+    },
   ]
 
   return (
@@ -93,7 +111,7 @@ export default function Testimonials() {
         </div>
 
         {/* 4 program cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-20">
           {programs.map(p => (
             <div key={p.id} style={{ backgroundColor: '#161616', border: `1px solid ${p.accent}28`, display: 'flex', flexDirection: 'column' }}>
               <div style={{ backgroundColor: '#1A1A1A', padding: '28px 24px 22px', borderBottom: `1px solid ${p.accent}18`, textAlign: 'center' }}>

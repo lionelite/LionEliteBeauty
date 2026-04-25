@@ -6,6 +6,7 @@ const programs = [
   { label: 'Neuro Program', href: '/programs/neuro', accent: '#8A9E85', desc: 'Cognitive performance' },
   { label: 'Fertility Program', href: '/programs/fertility', accent: '#B8A4D4', desc: 'Reproductive health' },
   { label: 'Hair Program', href: '/programs/hair', accent: '#C4A265', desc: 'Hair restoration & density' },
+  { label: 'Weight Program', href: '/programs/weight', accent: '#5BA87A', desc: 'Fat loss & metabolic health' },
 ]
 
 export default function Navbar() {

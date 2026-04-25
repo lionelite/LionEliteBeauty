@@ -9,6 +9,7 @@ import WhyLionElite from './components/WhyLionElite'
 import NeuroProgram from './components/NeuroProgram'
 import FertilityProgram from './components/FertilityProgram'
 import HairProgram from './components/HairProgram'
+import WeightProgram from './components/WeightProgram'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
@@ -16,6 +17,7 @@ import OptimizationPage from './pages/OptimizationPage'
 import NeuroPage from './pages/NeuroPage'
 import FertilityPage from './pages/FertilityPage'
 import HairPage from './pages/HairPage'
+import WeightPage from './pages/WeightPage'
 
 function HomePage() {
   return (
@@ -30,6 +32,7 @@ function HomePage() {
       <NeuroProgram />
       <FertilityProgram />
       <HairProgram />
+      <WeightProgram />
       <Testimonials />
       <CTASection />
       <Footer />
@@ -46,6 +49,7 @@ export default function App() {
         <Route path="/programs/neuro" element={<NeuroPage />} />
         <Route path="/programs/fertility" element={<FertilityPage />} />
         <Route path="/programs/hair" element={<HairPage />} />
+        <Route path="/programs/weight" element={<WeightPage />} />
       </Routes>
     </BrowserRouter>
   )
