@@ -57,7 +57,7 @@ export default function Hero() {
             maxWidth: '560px',
             margin: '0 auto',
           }}>
-            Precision biomarker testing. Clinical-grade formulations. Data-driven optimization programs — built for people who take their body seriously.
+            Advanced peptide skincare. Clinical-grade formulations. Data-driven optimization programs — science-backed, high-performance, and built for people who take their body seriously.
           </p>
         </div>
 

@@ -26,10 +26,10 @@ export default function BrandManifesto() {
             {/* Right — 4 pillars */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { icon: '🧬', title: 'Peptide-Powered', desc: 'Advanced peptide science at the core of every formulation and protocol.' },
-                { icon: '📊', title: 'Data-Driven', desc: 'Every recommendation backed by biomarker testing and real data.' },
-                { icon: '⚕️', title: 'Clinical Grade', desc: 'Formulations and protocols held to medical-grade standards.' },
-                { icon: '🎯', title: 'Precision First', desc: 'No guesswork. Every strategy is tailored to your unique biology.' },
+                { icon: '🧬', title: 'Peptide-Powered', desc: 'Copper peptide and bioactive skincare science at the core of every formulation.' },
+                { icon: '📊', title: 'Data-Driven', desc: 'Personalized skincare systems backed by biomarker testing, not guesswork.' },
+                { icon: '⚕️', title: 'Clinical Grade', desc: 'Medical-grade, anti-inflammatory skincare formulations — built for real results.' },
+                { icon: '🎯', title: 'Precision First', desc: 'Skin optimization protocols tailored to your unique biology and performance goals.' },
               ].map(p => (
                 <div key={p.title} style={{ backgroundColor: '#0A0A0A', border: '1px solid #1E1E1E', padding: '28px 24px' }}>
                   <span style={{ fontSize: '20px', display: 'block', marginBottom: '12px' }}>{p.icon}</span>

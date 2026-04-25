@@ -5,7 +5,7 @@ const products = [
     size: '150ml',
     badge: 'Bestseller',
     badgeColor: '#C9A96E',
-    tagline: 'Daily peptide-activated cleanse',
+    tagline: 'Copper peptide daily skin renewal',
     benefits: ['Deep pore activation', 'GHK-Cu complex', 'Prepares skin for serum'],
     bg: '#F5F0E8',
     accent: '#C9A96E',
@@ -16,7 +16,7 @@ const products = [
     size: '30ml',
     badge: 'Clinical Grade',
     badgeColor: '#8A9E85',
-    tagline: 'High-concentration bioactive serum',
+    tagline: 'Bioactive skin regeneration serum',
     benefits: ['4,000+ gene activation', 'Collagen stimulation', 'Cellular repair'],
     bg: '#1A1A1A',
     accent: '#C9A96E',
@@ -27,7 +27,7 @@ const products = [
     size: '50ml',
     badge: 'New Formula',
     badgeColor: '#C9A96E',
-    tagline: 'Sustained-release peptide delivery',
+    tagline: 'Anti-aging peptide skin repair cream',
     benefits: ['Barrier restoration', 'Overnight recovery', 'Firming complex'],
     bg: '#F5F0E8',
     accent: '#8A9E85',
@@ -38,7 +38,7 @@ const products = [
     size: '50ml',
     badge: 'New',
     badgeColor: '#8A7AB0',
-    tagline: 'Advanced peptide skin recovery',
+    tagline: 'Anti-inflammatory peptide moisturizer',
     benefits: ['Calms redness & irritation', 'Strengthens skin barrier', 'Deep hydration, no heaviness'],
     bg: '#F5F0E8',
     accent: '#8A7AB0',
@@ -50,7 +50,7 @@ const products = [
     size: 'Full Kit',
     badge: 'Complete Kit',
     badgeColor: '#2A2A2A',
-    tagline: 'Accelerated recovery protocol',
+    tagline: 'Clinical skin repair & recovery kit',
     benefits: ['Post-treatment healing', 'Inflammation control', 'Includes all 3 products'],
     bg: '#2A2A2A',
     accent: '#C9A96E',
@@ -70,11 +70,11 @@ export default function SkincareLine() {
             className="uppercase mb-4">Lion Elite Beauty</p>
           <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.5rem', lineHeight: '1.2' }}
             className="font-normal">
-            GHK-Cu Skincare Collection
+            Advanced Peptide Skincare Collection
           </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto' }}></div>
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto' }}>
-            Clinical-grade, peptide-driven formulations — the same technology used in medical-grade treatments, now available for your daily routine. Often recommended as part of your optimization plan.
+            Medical-grade, copper peptide formulations designed for skin repair, anti-aging, and cellular regeneration — science-backed skincare for high-performance individuals.
           </p>
         </div>
 
