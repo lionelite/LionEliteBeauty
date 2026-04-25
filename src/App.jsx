@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Services from './components/Services'
@@ -10,10 +11,13 @@ import FertilityProgram from './components/FertilityProgram'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
+import OptimizationPage from './pages/OptimizationPage'
+import NeuroPage from './pages/NeuroPage'
+import FertilityPage from './pages/FertilityPage'
 
-export default function App() {
+function HomePage() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#0D0D0D' }}>
+    <div style={{ backgroundColor: '#0D0D0D' }}>
       <Navbar />
       <Hero />
       <Services />
@@ -27,5 +31,18 @@ export default function App() {
       <CTASection />
       <Footer />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/programs/optimization" element={<OptimizationPage />} />
+        <Route path="/programs/neuro" element={<NeuroPage />} />
+        <Route path="/programs/fertility" element={<FertilityPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
