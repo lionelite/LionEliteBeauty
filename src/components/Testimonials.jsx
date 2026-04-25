@@ -1,4 +1,4 @@
-// Pricing section — both programs
+// Pricing section — all three programs
 export default function Testimonials() {
   const programs = [
     {
@@ -35,13 +35,31 @@ export default function Testimonials() {
         'Preferred client-level opportunities',
       ],
       cta: '👉 Apply / Get Started Now',
-      href: '#neuro',
+      href: 'mailto:info@lionelitewellness.com',
+    },
+    {
+      id: 'fertility',
+      eyebrow: 'Fertility Optimization',
+      name: 'Lion Elite Fertility Program',
+      price: 'Premium Access',
+      priceNote: 'Apply for Availability',
+      accent: '#B8A4D4',
+      includes: [
+        'Fertility biomarker testing & assessment',
+        'Hormonal balance analysis',
+        'Personalized fertility optimization strategy',
+        'Guided implementation support',
+        'Advanced fertility support pathways',
+        'Preferred client-level opportunities',
+      ],
+      cta: '👉 Apply / Get Started Now',
+      href: 'mailto:info@lionelitewellness.com',
     },
   ]
 
   return (
     <section id="pricing" style={{ backgroundColor: '#0D0D0D', padding: '100px 0' }}>
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
 
         <div className="text-center mb-16">
           <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }}
@@ -54,28 +72,29 @@ export default function Testimonials() {
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-20">
+        {/* 3 program cards */}
+        <div className="grid md:grid-cols-3 gap-5 mb-20">
           {programs.map(p => (
-            <div key={p.id} style={{ backgroundColor: '#161616', border: `1px solid ${p.accent}30`, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ backgroundColor: '#1A1A1A', padding: '40px 40px 32px', borderBottom: `1px solid ${p.accent}20`, textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '10px', letterSpacing: '0.3em', marginBottom: '14px' }}
+            <div key={p.id} style={{ backgroundColor: '#161616', border: `1px solid ${p.accent}28`, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ backgroundColor: '#1A1A1A', padding: '36px 32px 28px', borderBottom: `1px solid ${p.accent}18`, textAlign: 'center' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '10px', letterSpacing: '0.3em', marginBottom: '12px' }}
                   className="uppercase">{p.eyebrow}</p>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.1rem', lineHeight: '1.4', marginBottom: '20px' }}>{p.name}</p>
-                <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: p.id === 'body' ? '4rem' : '1.8rem', lineHeight: '1', letterSpacing: '-0.02em' }}>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1rem', lineHeight: '1.4', marginBottom: '18px' }}>{p.name}</p>
+                <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: p.id === 'body' ? '3.2rem' : '1.5rem', lineHeight: '1', letterSpacing: '-0.02em' }}>
                   {p.price}
                 </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', marginTop: '10px', letterSpacing: '0.15em' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', marginTop: '8px', letterSpacing: '0.15em' }}>
                   {p.priceNote}
                 </p>
               </div>
-              <div style={{ padding: '32px 40px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', letterSpacing: '0.25em', marginBottom: '20px' }}
+              <div style={{ padding: '28px 32px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', letterSpacing: '0.25em', marginBottom: '16px' }}
                   className="uppercase">Includes</p>
-                <ul className="space-y-3 mb-10 flex-1">
+                <ul className="space-y-3 mb-8 flex-1">
                   {p.includes.map(item => (
                     <li key={item} className="flex items-start gap-3">
-                      <span style={{ color: p.accent, fontSize: '13px', flexShrink: 0, marginTop: '2px' }}>✔</span>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.5' }}>{item}</span>
+                      <span style={{ color: p.accent, fontSize: '12px', flexShrink: 0, marginTop: '2px' }}>✔</span>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '13px', lineHeight: '1.5' }}>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -85,9 +104,9 @@ export default function Testimonials() {
                     backgroundColor: p.accent,
                     color: '#FFFFFF',
                     fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontSize: '11px',
                     letterSpacing: '0.15em',
-                    padding: '18px',
+                    padding: '16px',
                     textAlign: 'center',
                     textDecoration: 'none',
                   }}
@@ -99,6 +118,7 @@ export default function Testimonials() {
           ))}
         </div>
 
+        {/* Testimonials */}
         <div>
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '40px' }}
             className="uppercase">What Clients Say</p>

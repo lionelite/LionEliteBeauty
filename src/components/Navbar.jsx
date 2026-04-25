@@ -17,6 +17,7 @@ export default function Navbar() {
           {[
             { label: 'How It Works', href: '#how-it-works' },
             { label: 'Neuro Program', href: '#neuro' },
+            { label: 'Fertility Program', href: '#fertility' },
             { label: 'Shop Skincare', href: '#skincare' },
             { label: 'Pricing', href: '#pricing' },
           ].map(link => (
@@ -39,6 +40,7 @@ export default function Navbar() {
           {[
             { label: 'How It Works', href: '#how-it-works' },
             { label: 'Neuro Program', href: '#neuro' },
+            { label: 'Fertility Program', href: '#fertility' },
             { label: 'Shop Skincare', href: '#skincare' },
             { label: 'Pricing', href: '#pricing' },
           ].map(link => (

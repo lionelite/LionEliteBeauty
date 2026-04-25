@@ -6,6 +6,7 @@ import BeforeAfter from './components/BeforeAfter'
 import SkincareLine from './components/SkincareLine'
 import WhyLionElite from './components/WhyLionElite'
 import NeuroProgram from './components/NeuroProgram'
+import FertilityProgram from './components/FertilityProgram'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
@@ -21,6 +22,7 @@ export default function App() {
       <SkincareLine />
       <WhyLionElite />
       <NeuroProgram />
+      <FertilityProgram />
       <Testimonials />
       <CTASection />
       <Footer />
