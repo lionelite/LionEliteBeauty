@@ -93,6 +93,24 @@ export default function Testimonials() {
       ],
       cta: '👉 Apply / Get Started Now',
     },
+    {
+      id: 'longevity',
+      eyebrow: 'Longevity & Anti-Aging',
+      name: 'Lion Elite Longevity Program',
+      price: 'Premium Access',
+      priceNote: 'Apply for Availability',
+      accent: '#7A9FBF',
+      href: '/programs/longevity',
+      includes: [
+        'Longevity & recovery biomarker assessment',
+        'Cellular health & inflammation analysis',
+        'Personalized longevity optimization strategy',
+        'Guided implementation step by step',
+        'Advanced cellular repair pathway access',
+        'Preferred client-level opportunities',
+      ],
+      cta: '👉 Apply / Get Started Now',
+    },
   ]
 
   return (

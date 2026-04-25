@@ -61,6 +61,17 @@ const allPrograms = [
     price: '$1,000',
     icon: '🔥',
   },
+  {
+    label: 'Longevity Program',
+    tagline: 'Anti-Aging & Cellular Repair',
+    desc: 'Support cellular health, accelerate recovery, and stay strong and resilient for the long term with a premium data-driven system.',
+    accent: '#7A9FBF',
+    bg: '#08090C',
+    border: '#7A9FBF30',
+    href: '/programs/longevity',
+    price: '$1,000',
+    icon: '🔬',
+  },
 ]
 
 export default function OptimizationPage() {

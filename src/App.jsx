@@ -6,6 +6,7 @@ import NeuroProgram from './components/NeuroProgram'
 import FertilityProgram from './components/FertilityProgram'
 import HairProgram from './components/HairProgram'
 import MuscleProgram from './components/MuscleProgram'
+import LongevityProgram from './components/LongevityProgram'
 import WeightProgram from './components/WeightProgram'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
@@ -15,6 +16,7 @@ import NeuroPage from './pages/NeuroPage'
 import FertilityPage from './pages/FertilityPage'
 import HairPage from './pages/HairPage'
 import WeightPage from './pages/WeightPage'
+import LongevityPage from './pages/LongevityPage'
 
 function HomePage() {
   return (
@@ -27,6 +29,7 @@ function HomePage() {
       <FertilityProgram />
       <HairProgram />
       <WeightProgram />
+      <LongevityProgram />
       <Testimonials />
       <CTASection />
       <Footer />
@@ -44,6 +47,7 @@ export default function App() {
         <Route path="/programs/fertility" element={<FertilityPage />} />
         <Route path="/programs/hair" element={<HairPage />} />
         <Route path="/programs/weight" element={<WeightPage />} />
+        <Route path="/programs/longevity" element={<LongevityPage />} />
       </Routes>
     </BrowserRouter>
   )

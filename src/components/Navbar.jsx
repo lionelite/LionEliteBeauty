@@ -7,6 +7,7 @@ const programs = [
   { label: 'Fertility Program', href: '/programs/fertility', accent: '#B8A4D4', desc: 'Reproductive health' },
   { label: 'Hair Program', href: '/programs/hair', accent: '#C4A265', desc: 'Hair restoration & density' },
   { label: 'Weight Program', href: '/programs/weight', accent: '#5BA87A', desc: 'Fat loss & metabolic health' },
+  { label: 'Longevity Program', href: '/programs/longevity', accent: '#7A9FBF', desc: 'Anti-aging & cellular repair' },
 ]
 
 export default function Navbar() {
