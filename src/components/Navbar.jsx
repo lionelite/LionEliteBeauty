@@ -92,11 +92,11 @@ export default function Navbar() {
                   </Link>
                 ))}
                 <div style={{ padding: '12px 22px', backgroundColor: '#FAFAF8' }}>
-                  <a href={anchorHref('#pricing')}
+                  <Link to="/programs/optimization"
                     style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.1em', textDecoration: 'none' }}
                     className="uppercase hover:opacity-70 transition-opacity">
-                    Compare all programs →
-                  </a>
+                    View all programs →
+                  </Link>
                 </div>
               </div>
             )}

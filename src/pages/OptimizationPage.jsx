@@ -7,6 +7,65 @@ import BeforeAfter from '../components/BeforeAfter'
 import WhyLionElite from '../components/WhyLionElite'
 import Footer from '../components/Footer'
 
+const allPrograms = [
+  {
+    label: 'Optimization Program',
+    tagline: 'Body & Performance',
+    desc: 'A data-driven system using advanced biomarker testing and personalized strategies to help you unlock your highest level.',
+    accent: '#C9A96E',
+    bg: '#161008',
+    border: '#C9A96E30',
+    href: '/programs/optimization',
+    price: '$1,000',
+    icon: '⚡',
+    active: true,
+  },
+  {
+    label: 'Neuro Program',
+    tagline: 'Cognitive Performance',
+    desc: 'Sharpen focus, memory, and mental clarity through precision testing and targeted cognitive optimization.',
+    accent: '#8A9E85',
+    bg: '#081008',
+    border: '#8A9E8530',
+    href: '/programs/neuro',
+    price: '$1,000',
+    icon: '🧠',
+  },
+  {
+    label: 'Fertility Program',
+    tagline: 'Reproductive Health',
+    desc: 'Comprehensive hormonal and reproductive optimization for men and women ready to take their fertility seriously.',
+    accent: '#B8A4D4',
+    bg: '#0A0810',
+    border: '#B8A4D430',
+    href: '/programs/fertility',
+    price: '$1,000',
+    icon: '🌿',
+  },
+  {
+    label: 'Hair Program',
+    tagline: 'Hair Restoration & Density',
+    desc: 'Address the root causes of hair thinning and loss with a biomarker-driven approach to restoration and regrowth.',
+    accent: '#C4A265',
+    bg: '#100E08',
+    border: '#C4A26530',
+    href: '/programs/hair',
+    price: '$1,000',
+    icon: '✦',
+  },
+  {
+    label: 'Weight Program',
+    tagline: 'Fat Loss & Metabolic Health',
+    desc: 'Burn fat, control hunger, and take back your body with a precision metabolic system built around your biology.',
+    accent: '#5BA87A',
+    bg: '#081008',
+    border: '#5BA87A30',
+    href: '/programs/weight',
+    price: '$1,000',
+    icon: '🔥',
+  },
+]
+
 export default function OptimizationPage() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
   return (
@@ -14,7 +73,7 @@ export default function OptimizationPage() {
       <Navbar />
 
       {/* Back link */}
-      <div style={{ paddingTop: '100px', paddingBottom: '0' }}>
+      <div style={{ paddingTop: '100px' }}>
         <div className="max-w-7xl mx-auto px-6">
           <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:text-[#C9A96E] transition-colors flex items-center gap-2">
@@ -23,13 +82,63 @@ export default function OptimizationPage() {
         </div>
       </div>
 
-      {/* Hero */}
-      <section style={{ padding: '60px 0 80px' }}>
+      {/* Programs Hub Header */}
+      <section style={{ padding: '60px 0 40px' }}>
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }} className="uppercase mb-5">Body Optimization</p>
+          <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }} className="uppercase mb-5">Lion Elite</p>
           <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '3.2rem', lineHeight: '1.15' }} className="font-normal mb-6">
-            Lion Elite<br /><span style={{ color: '#C9A96E' }}>Optimization Program</span>
+            All Programs
           </h1>
+          <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '17px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto' }}>
+            Every Lion Elite program is built on the same foundation — precision testing, personalized strategy, and guided implementation. Choose the program that matches your goal.
+          </p>
+        </div>
+      </section>
+
+      {/* Programs Grid */}
+      <section style={{ padding: '40px 0 100px' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allPrograms.map((p) => (
+              <div key={p.href} style={{ backgroundColor: p.bg, border: `1px solid ${p.border}`, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+                {p.active && (
+                  <div style={{ position: 'absolute', top: 0, right: 0, backgroundColor: p.accent, padding: '6px 16px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#000', fontSize: '9px', letterSpacing: '0.2em' }} className="uppercase">Current Page</p>
+                  </div>
+                )}
+                <div style={{ padding: '40px 36px 32px', flex: 1 }}>
+                  <p style={{ fontSize: '2rem', marginBottom: '16px' }}>{p.icon}</p>
+                  <p style={{ color: p.accent, fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '10px' }} className="uppercase">{p.tagline}</p>
+                  <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.35rem', lineHeight: '1.3', marginBottom: '16px' }} className="font-normal">{p.label}</h2>
+                  <div style={{ width: '28px', height: '1px', backgroundColor: p.accent, marginBottom: '16px' }}></div>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '14px', lineHeight: '1.8', marginBottom: '24px' }}>{p.desc}</p>
+                  <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: '1.6rem', marginBottom: '4px' }}>{p.price}</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', letterSpacing: '0.15em', marginBottom: '28px' }} className="uppercase">One-Time Investment</p>
+                </div>
+                <div style={{ padding: '0 36px 36px' }}>
+                  <Link to={p.href}
+                    style={{ display: 'block', backgroundColor: p.active ? p.accent : 'transparent', border: `1px solid ${p.accent}`, color: p.active ? '#000' : p.accent, fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em', padding: '16px', textAlign: 'center', textDecoration: 'none' }}
+                    className="uppercase hover:opacity-80 transition-opacity">
+                    {p.active ? 'View Program Details' : 'Learn More →'}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div style={{ borderTop: '1px solid #1E1E1E' }} />
+
+      {/* Optimization Program Detail */}
+      <section style={{ padding: '40px 0 0' }}>
+        <div className="max-w-3xl mx-auto px-6 text-center" style={{ paddingTop: '80px', paddingBottom: '20px' }}>
+          <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }} className="uppercase mb-5">Body Optimization</p>
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.8rem', lineHeight: '1.15' }} className="font-normal mb-6">
+            Lion Elite<br /><span style={{ color: '#C9A96E' }}>Optimization Program</span>
+          </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '17px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto 40px' }}>
             A data-driven system using advanced biomarker testing and personalized performance strategies to help you unlock your highest level.
