@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import BrandManifesto from './components/BrandManifesto'
 import SkincareLine from './components/SkincareLine'
 import NeuroProgram from './components/NeuroProgram'
 import FertilityProgram from './components/FertilityProgram'
@@ -23,6 +24,7 @@ function HomePage() {
     <div style={{ backgroundColor: '#0D0D0D' }}>
       <Navbar />
       <Hero />
+      <BrandManifesto />
       <MuscleProgram />
       <SkincareLine />
       <NeuroProgram />
