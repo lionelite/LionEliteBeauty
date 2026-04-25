@@ -16,8 +16,8 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8">
           {[
             { label: 'How It Works', href: '#how-it-works' },
+            { label: 'Neuro Program', href: '#neuro' },
             { label: 'Shop Skincare', href: '#skincare' },
-            { label: 'Elite Access', href: '#elite-access' },
             { label: 'Pricing', href: '#pricing' },
           ].map(link => (
             <a key={link.label} href={link.href}
@@ -38,8 +38,8 @@ export default function Navbar() {
         <div style={{ backgroundColor: '#FAFAF8', borderTop: '1px solid #E8DDD0' }} className="md:hidden px-6 py-6 flex flex-col gap-5">
           {[
             { label: 'How It Works', href: '#how-it-works' },
+            { label: 'Neuro Program', href: '#neuro' },
             { label: 'Shop Skincare', href: '#skincare' },
-            { label: 'Elite Access', href: '#elite-access' },
             { label: 'Pricing', href: '#pricing' },
           ].map(link => (
             <a key={link.label} href={link.href} onClick={() => setMenuOpen(false)}
