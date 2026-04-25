@@ -60,7 +60,7 @@ export default function WeightProgram() {
                 'Never address the biological drivers of weight gain',
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3" style={{ backgroundColor: '#0D120D', border: '1px solid #152015', padding: '14px 18px' }}>
-                  <span style={{ color: '#1E2A1E', fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>✗</span>
+                  <span style={{ color: '#5BA87A', fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>✗</span>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.6' }}>{item}</p>
                 </div>
               ))}
@@ -87,7 +87,7 @@ export default function WeightProgram() {
               { step: '03', title: 'Guided Implementation', desc: 'We guide you through every step of your plan to ensure consistency and maximum fat loss while maintaining performance.', points: ['Stay consistent', 'Avoid common pitfalls', 'Maximize fat loss'] },
             ].map(item => (
               <div key={item.step} style={{ backgroundColor: '#0D120D', border: '1px solid #152015', padding: '40px 32px', position: 'relative' }}>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#131A13', fontSize: '5rem', position: 'absolute', top: '16px', right: '24px', lineHeight: '1', userSelect: 'none' }}>{item.step}</p>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#1E2E1E', fontSize: '5rem', position: 'absolute', top: '16px', right: '24px', lineHeight: '1', userSelect: 'none' }}>{item.step}</p>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '10px', letterSpacing: '0.25em', marginBottom: '12px' }} className="uppercase">Step {item.step}</p>
                 <h4 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.15rem', marginBottom: '14px', lineHeight: '1.3' }} className="font-normal">{item.title}</h4>
                 <div style={{ width: '28px', height: '1px', backgroundColor: '#5BA87A', marginBottom: '16px' }}></div>
@@ -96,7 +96,7 @@ export default function WeightProgram() {
                   {item.points.map(p => (
                     <li key={p} className="flex items-center gap-2">
                       <div style={{ width: '4px', height: '4px', backgroundColor: '#5BA87A', borderRadius: '50%', flexShrink: 0 }}></div>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A6A5A', fontSize: '12px' }}>{p}</span>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A8A7A', fontSize: '12px' }}>{p}</span>
                     </li>
                   ))}
                 </ul>
@@ -124,7 +124,7 @@ export default function WeightProgram() {
                 <span style={{ color: '#5BA87A', fontSize: '14px', flexShrink: 0, marginTop: '2px' }}>✔</span>
                 <div>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px', fontWeight: '500', marginBottom: '6px' }}>{item.title}</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A6A5A', fontSize: '12px', lineHeight: '1.6' }}>{item.desc}</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A8A7A', fontSize: '12px', lineHeight: '1.6' }}>{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -158,11 +158,11 @@ export default function WeightProgram() {
             <div className="space-y-3 mb-8">
               {['Feeling in control of your body', 'Eliminating constant hunger', 'Creating sustainable results', 'Operating with more energy and confidence'].map((item, i) => (
                 <div key={i} style={{ backgroundColor: i % 2 === 0 ? '#5BA87A' : '#0F160F', border: i % 2 === 0 ? 'none' : '1px solid #1A261A', padding: '14px 20px' }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: i % 2 === 0 ? '#FFFFFF' : '#5A6A5A', fontSize: '13px' }}>{item}</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: i % 2 === 0 ? '#FFFFFF' : '#7A8A7A', fontSize: '13px' }}>{item}</p>
                 </div>
               ))}
             </div>
-            <p style={{ fontFamily: 'Georgia, serif', color: '#4A5A4A', fontSize: '0.95rem', fontStyle: 'italic', lineHeight: '1.6' }}>
+            <p style={{ fontFamily: 'Georgia, serif', color: '#6A7A6A', fontSize: '0.95rem', fontStyle: 'italic', lineHeight: '1.6' }}>
               "When your biology is aligned, results come easier."
             </p>
           </div>
@@ -181,7 +181,7 @@ export default function WeightProgram() {
         </div>
 
         {/* Disclaimer */}
-        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#1E2A1E', fontSize: '11px', lineHeight: '1.8', textAlign: 'center', maxWidth: '700px', margin: '0 auto' }}>
+        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A4A3A', fontSize: '11px', lineHeight: '1.8', textAlign: 'center', maxWidth: '700px', margin: '0 auto' }}>
           The information provided in this program is for educational and informational purposes only and is not intended as medical advice. This program is not designed to diagnose, treat, cure, or prevent any disease. Always consult with a qualified healthcare professional before making any health-related decisions.
         </p>
       </div>
