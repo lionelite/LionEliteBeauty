@@ -136,11 +136,8 @@ export default function Testimonials() {
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '9px', letterSpacing: '0.3em', marginBottom: '10px' }}
                   className="uppercase">{p.eyebrow}</p>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '0.9rem', lineHeight: '1.4', marginBottom: '14px' }}>{p.name}</p>
-                <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: p.id === 'body' ? '2.8rem' : '1.2rem', lineHeight: '1', letterSpacing: '-0.01em' }}>
-                  {p.price}
-                </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px', marginTop: '6px', letterSpacing: '0.15em' }}>
-                  {p.priceNote}
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px', letterSpacing: '0.15em' }}>
+                  Premium Access
                 </p>
               </div>
               <div style={{ padding: '22px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>

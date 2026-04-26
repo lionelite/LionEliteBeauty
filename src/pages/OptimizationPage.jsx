@@ -120,9 +120,7 @@ export default function OptimizationPage() {
                   <p style={{ color: p.accent, fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '10px' }} className="uppercase">{p.tagline}</p>
                   <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.35rem', lineHeight: '1.3', marginBottom: '16px' }} className="font-normal">{p.label}</h2>
                   <div style={{ width: '28px', height: '1px', backgroundColor: p.accent, marginBottom: '16px' }}></div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '14px', lineHeight: '1.8', marginBottom: '24px' }}>{p.desc}</p>
-                  <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: '1.6rem', marginBottom: '4px' }}>{p.price}</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '10px', letterSpacing: '0.15em', marginBottom: '28px' }} className="uppercase">One-Time Investment</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '14px', lineHeight: '1.8', marginBottom: '28px' }}>{p.desc}</p>
                 </div>
                 <div style={{ padding: '0 36px 36px' }}>
                   <Link to={p.href}
@@ -160,44 +158,6 @@ export default function OptimizationPage() {
       </section>
 
       <MuscleProgram />
-
-      {/* Pricing card */}
-      <section style={{ backgroundColor: '#0D0D0D', padding: '80px 0' }}>
-        <div className="max-w-lg mx-auto px-6">
-          <div style={{ backgroundColor: '#161616', border: '1px solid #C9A96E28' }}>
-            <div style={{ backgroundColor: '#1A1A1A', padding: '48px', textAlign: 'center', borderBottom: '1px solid #C9A96E18' }}>
-              <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">One-Time Investment</p>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '5rem', lineHeight: '1', letterSpacing: '-0.02em' }}>$1,000</p>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', marginTop: '10px', letterSpacing: '0.15em' }}>Muscle & Recovery Optimization Program</p>
-            </div>
-            <div style={{ padding: '36px 48px' }}>
-              <ul className="space-y-4 mb-10">
-                {[
-                  'Full performance & recovery biomarker testing kit (shipped to you)',
-                  'Complete data analysis & breakdown',
-                  'Personalized muscle & recovery strategy',
-                  '1-on-1 coaching + implementation guidance',
-                  'Strength, performance & recovery insights',
-                  'Ongoing recommendations',
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span style={{ color: '#C9A96E', fontSize: '13px', flexShrink: 0, marginTop: '2px' }}>✔</span>
-                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.5' }}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <a href="mailto:info@lionelitewellness.com"
-                style={{ display: 'block', backgroundColor: '#C9A96E', color: '#000', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.15em', padding: '18px', textAlign: 'center', textDecoration: 'none' }}
-                className="uppercase hover:opacity-90 transition-opacity">
-                👉 Apply / Get Started Now
-              </a>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', textAlign: 'center', marginTop: '16px' }}>
-                Or email us directly: <a href="mailto:info@lionelitewellness.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitewellness.com</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>
