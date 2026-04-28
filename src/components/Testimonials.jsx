@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 export default function Testimonials() {
   const programs = [
     {
-      id: 'body',
+      id: 'muscle',
       eyebrow: 'Muscle & Recovery',
       name: 'Lion Elite Muscle & Recovery Program',
       price: '$1,000',
