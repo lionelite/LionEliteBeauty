@@ -7,64 +7,48 @@ import Footer from '../components/Footer'
 export default function FertilityPage() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
   return (
-    <div style={{ backgroundColor: '#0A0A0F', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#080610', minHeight: '100vh' }}>
       <Navbar />
 
+      {/* Back */}
       <div style={{ paddingTop: '100px' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
+          <Link to="/programs/optimization" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:text-[#B8A4D4] transition-colors flex items-center gap-2">
-            ← Back to Home
+            ← All Programs
           </Link>
         </div>
       </div>
 
-      <section style={{ padding: '60px 0 80px' }}>
+      {/* Hero */}
+      <section style={{ padding: '56px 0 72px' }}>
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }} className="uppercase mb-5">Fertility Optimization</p>
-          <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '3.2rem', lineHeight: '1.15' }} className="font-normal mb-6">
+          <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.35em', fontSize: '10px', marginBottom: '20px' }} className="uppercase">
+            Fertility & Hormonal Health
+          </p>
+          <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '3.2rem', lineHeight: '1.12', marginBottom: '24px' }} className="font-normal">
             Lion Elite<br /><span style={{ color: '#B8A4D4' }}>Fertility Program</span>
           </h1>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#B8A4D4', margin: '0 auto 28px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '17px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto 40px' }}>
-            A structured, data-driven approach to understanding and supporting your reproductive health. Not guesswork. Precision.
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.9', maxWidth: '540px', margin: '0 auto 36px' }}>
+            A structured, data-driven approach to hormonal balance and reproductive optimization — for men and women who want precision over guesswork when it matters most.
           </p>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '40px' }}>
+            {['Biomarker-Tested', 'Personalized Protocol', 'Guided Implementation', 'Ongoing Support'].map(tag => (
+              <span key={tag} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#B8A4D4', fontSize: '10px', letterSpacing: '0.2em', border: '1px solid #B8A4D433', padding: '6px 14px' }} className="uppercase">
+                {tag}
+              </span>
+            ))}
+          </div>
           <Link to="/apply?program=fertility"
-            style={{ display: 'inline-block', backgroundColor: '#B8A4D4', color: '#fff', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.15em', fontSize: '12px', padding: '18px 48px', textDecoration: 'none' }}
+            style={{ display: 'inline-block', backgroundColor: '#B8A4D4', color: '#fff', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.15em', fontSize: '12px', padding: '18px 52px', textDecoration: 'none' }}
             className="uppercase hover:opacity-90 transition-opacity">
-            Apply / Get Started Now →
+            Apply for This Program →
           </Link>
         </div>
       </section>
 
       <FertilityProgram />
-
-      <section style={{ backgroundColor: '#0A0A0F', padding: '80px 0' }}>
-        <div className="max-w-lg mx-auto px-6">
-          <div style={{ backgroundColor: '#111116', border: '1px solid #B8A4D428' }}>
-            <div style={{ backgroundColor: '#161620', padding: '48px', textAlign: 'center', borderBottom: '1px solid #B8A4D418' }}>
-              <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">Premium Access</p>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#B8A4D4', fontSize: '2rem', lineHeight: '1.2' }}>Apply for Availability</p>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A5A', fontSize: '11px', marginTop: '10px', letterSpacing: '0.15em' }}>High-touch, premium program</p>
-            </div>
-            <div style={{ padding: '36px 48px' }}>
-              <ul className="space-y-4 mb-10">
-                {['Fertility biomarker testing & assessment', 'Hormonal balance analysis', 'Personalized fertility optimization strategy', 'Guided implementation support', 'Advanced fertility support pathways', 'Preferred client-level opportunities'].map(item => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span style={{ color: '#B8A4D4', fontSize: '13px', flexShrink: 0, marginTop: '2px' }}>✔</span>
-                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.5' }}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/apply?program=fertility"
-                style={{ display: 'block', backgroundColor: '#B8A4D4', color: '#fff', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.15em', padding: '18px', textAlign: 'center', textDecoration: 'none' }}
-                className="uppercase hover:opacity-90 transition-opacity">
-                Apply / Get Started Now →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>

@@ -1,137 +1,115 @@
 import { Link } from 'react-router-dom'
 
+const timeline = [
+  { week: 'Week 1–2', title: 'Hormonal Baseline', items: ['Full reproductive hormone panel reviewed', 'Inflammatory and thyroid markers assessed', 'Metabolic and nutrient status evaluated', 'Protocol built around your hormonal profile'] },
+  { week: 'Week 3–6', title: 'Protocol Launch', items: ['Personalized fertility peptide protocol begins', 'Hormonal environment begins to shift', 'Cycle regularity often improves early for women', 'Energy and libido changes commonly noted'] },
+  { week: 'Week 7–10', title: 'Optimization Phase', items: ['Reproductive markers trending toward optimal', 'Hormonal balance consolidating', 'Energy, mood, and physical wellness improving', 'Adjustments made based on mid-protocol data'] },
+  { week: 'Week 11+', title: 'Maintenance & Review', items: ['Sustained hormonal optimization', 'Progress reviewed and protocol refined', 'Long-term fertility support strategy established', 'Ongoing monitoring and guidance in place'] },
+]
+
 export default function FertilityProgram() {
   return (
-    <section id="fertility" style={{ backgroundColor: '#0A0A0F', padding: '100px 0', position: 'relative', overflow: 'hidden' }}>
-      {/* Subtle background glow */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(ellipse at 30% 50%, rgba(180,160,210,0.05) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.04) 0%, transparent 60%)',
-      }}></div>
-
-      <div className="max-w-7xl mx-auto px-6" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-20">
-          <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }}
-            className="uppercase mb-4">New Program</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.8rem', lineHeight: '1.15', letterSpacing: '-0.01em' }}
-            className="font-normal mb-6">
-            Optimize Your Fertility.<br />
-            <span style={{ color: '#B8A4D4' }}>Take Control of Your Future.</span>
-          </h2>
-          <div style={{ width: '48px', height: '1px', backgroundColor: '#B8A4D4', margin: '0 auto 24px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '17px', lineHeight: '1.8' }}>
-            Your fertility is one of the most important — and most overlooked — areas of long-term health. The <strong style={{ color: '#FAFAF8', fontWeight: '400' }}>Lion Elite Fertility Optimization Program</strong> is designed for individuals who want a structured, data-driven approach to understanding and supporting their reproductive health.
-          </p>
-          <p style={{ fontFamily: 'Georgia, serif', color: '#B8A4D4', fontSize: '1rem', marginTop: '20px', fontStyle: 'italic' }}>
-            This is not guesswork. This is precision.
-          </p>
-        </div>
-
-        {/* What + Why grid */}
-        <div className="grid md:grid-cols-2 gap-12 items-start mb-20">
-          {/* What This Program Does */}
-          <div>
-            <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px' }}
-              className="uppercase mb-5">What This Program Does</p>
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.8rem', lineHeight: '1.3', marginBottom: '28px' }}
-              className="font-normal">A premium system built to help you:</h3>
-            <div className="space-y-4">
-              {[
-                { label: 'Understand key fertility-related biomarkers', icon: '🔬' },
-                { label: 'Optimize hormonal balance', icon: '⚖️' },
-                { label: 'Support reproductive function', icon: '🌱' },
-                { label: 'Take a proactive approach to future family planning', icon: '🗓️' },
-              ].map(item => (
-                <div key={item.label} className="flex items-center gap-4"
-                  style={{ borderLeft: '2px solid #B8A4D433', paddingLeft: '20px' }}>
-                  <span style={{ fontSize: '18px' }}>{item.icon}</span>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.5' }}>{item.label}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: '32px', backgroundColor: '#111116', border: '1px solid #1E1E28', padding: '24px 28px' }}>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#B8A4D4', fontSize: '1rem', lineHeight: '1.7', fontStyle: 'italic' }}>
-                "Whether you're preparing now or planning ahead, this program gives you clarity and direction."
-              </p>
-            </div>
-          </div>
-
-          {/* Why This Matters */}
-          <div>
-            <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px' }}
-              className="uppercase mb-5">Why This Matters</p>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.8', marginBottom: '20px' }}>
-              Most people:
-            </p>
-            <div className="space-y-3 mb-8">
-              {[
-                "Don't test fertility markers until there's a problem",
-                'Have no visibility into hormone balance',
-                'Rely on generic advice with no personalization',
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3"
-                  style={{ backgroundColor: '#111116', border: '1px solid #1E1E28', padding: '16px 20px' }}>
-                  <span style={{ color: '#2E2E3A', fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>✗</span>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.6' }}>{item}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ backgroundColor: '#161620', border: '1px solid #B8A4D430', padding: '24px 28px' }}>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#B8A4D4', fontSize: '12px', letterSpacing: '0.15em', marginBottom: '8px' }}
-                className="uppercase">We take a different approach</p>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.1rem', lineHeight: '1.6' }}>
-                We focus on <span style={{ color: '#B8A4D4' }}>early insight</span> + structured optimization.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* How It Works */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px' }}
-              className="uppercase mb-3">The Process</p>
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.2' }}
-              className="font-normal">How It Works</h3>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              {
-                step: '01',
-                title: 'Fertility Biomarker Testing',
-                desc: 'We assess key markers that give you real visibility into your reproductive health — not guesswork.',
-                points: ['Hormonal balance', 'Reproductive health indicators', 'Overall system readiness'],
-              },
-              {
-                step: '02',
-                title: 'Personalized Optimization Strategy',
-                desc: 'Based on your results, you receive a structured plan tailored to your biology, goals, and timeline.',
-                points: ['Hormone optimization', 'Reproductive function', 'System balance and recovery'],
-              },
-              {
-                step: '03',
-                title: 'Guided Implementation',
-                desc: "You'll receive clear guidance on how to apply your strategy — step by step, with full support.",
-                points: ['Stay consistent', 'Understand what you\'re doing and why', 'Avoid common mistakes'],
-              },
-            ].map(item => (
-              <div key={item.step} style={{ backgroundColor: '#111116', border: '1px solid #1E1E28', padding: '40px 32px', position: 'relative' }}>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#1A1A24', fontSize: '5rem', position: 'absolute', top: '16px', right: '24px', lineHeight: '1', userSelect: 'none' }}>
-                  {item.step}
+    <div>
+      {/* Who This Is For */}
+      <section style={{ backgroundColor: '#0A0812', padding: '80px 0', borderTop: '1px solid #111' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16 items-start">
+            <div>
+              <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">Who This Is For</p>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.25', marginBottom: '24px' }} className="font-normal">
+                For individuals struggling with:
+              </h2>
+              <div className="space-y-3 mb-10">
+                {[
+                  'Hormonal imbalances affecting reproductive function and overall wellbeing',
+                  'Difficulty conceiving or wanting to optimize fertility proactively',
+                  'Irregular cycles, low libido, or unexplained hormonal symptoms',
+                  'Wanting a data-driven approach before pursuing conventional treatments',
+                  'Men and women seeking to understand and optimize their reproductive biology',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-4" style={{ backgroundColor: '#0C0A16', border: '1px solid #181420', padding: '16px 20px' }}>
+                    <span style={{ color: '#B8A4D4', fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>→</span>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A6A9A', fontSize: '14px', lineHeight: '1.6' }}>{item}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{ backgroundColor: '#100E1A', border: '1px solid #B8A4D422', padding: '28px 32px' }}>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#B8A4D4', fontSize: '1.05rem', fontStyle: 'italic', lineHeight: '1.7' }}>
+                  "Fertility optimization isn't just for those struggling — it's for anyone who wants to take control of their reproductive health."
                 </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#B8A4D4', fontSize: '10px', letterSpacing: '0.25em', marginBottom: '12px' }}
-                  className="uppercase">Step {item.step}</p>
-                <h4 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.15rem', marginBottom: '14px', lineHeight: '1.3' }}
-                  className="font-normal">{item.title}</h4>
-                <div style={{ width: '28px', height: '1px', backgroundColor: '#B8A4D4', marginBottom: '16px' }}></div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.8', marginBottom: '16px' }}>{item.desc}</p>
+              </div>
+            </div>
+
+            <div>
+              <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">What This Program Fixes</p>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.25', marginBottom: '24px' }} className="font-normal">
+                Root causes, not guesswork.
+              </h2>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { problem: 'Hormonal Imbalance', fix: 'Targeted hormonal pathway optimization and regulation' },
+                  { problem: 'Low AMH / FSH', fix: 'Ovarian reserve and follicle support protocols for women' },
+                  { problem: 'Low Testosterone', fix: 'Testosterone pathway support and optimization for men' },
+                  { problem: 'Inflammation', fix: 'Systemic inflammation reduction for reproductive environment' },
+                  { problem: 'Thyroid Dysfunction', fix: 'Thyroid and metabolic support affecting reproductive health' },
+                  { problem: 'Poor Egg / Sperm Quality', fix: 'Antioxidant and cellular health support for gamete quality' },
+                ].map(item => (
+                  <div key={item.problem} style={{ backgroundColor: '#0C0A16', border: '1px solid #181420', padding: '20px 18px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '12px', letterSpacing: '0.08em', marginBottom: '6px' }} className="uppercase">{item.problem}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A3A6A', fontSize: '12px', lineHeight: '1.6' }}>{item.fix}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What's Included */}
+      <section style={{ backgroundColor: '#080610', padding: '80px 0', borderTop: '1px solid #111' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-14">
+            <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '12px' }} className="uppercase">What's Included</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem' }} className="font-normal">Everything in the Program</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { icon: '🧬', title: 'Full Reproductive Panel', desc: 'Comprehensive at-home testing covering sex hormones, thyroid, inflammation, and fertility-specific markers for both men and women.' },
+              { icon: '📋', title: 'Personalized Fertility Protocol', desc: 'A targeted peptide and optimization protocol built around your specific hormonal profile and reproductive goals.' },
+              { icon: '🎯', title: '1-on-1 Strategy Session', desc: 'A direct consultation to walk through your results, discuss your fertility goals, and align on the protocol approach.' },
+              { icon: '📈', title: 'Implementation Guidance', desc: 'Clear, step-by-step protocol instructions. Timing, dosing, and cycling all mapped out precisely.' },
+              { icon: '🔄', title: 'Ongoing Refinements', desc: 'Protocol adjusted based on response and hormone changes throughout the program.' },
+              { icon: '⚡', title: 'Priority Support Access', desc: 'Direct support throughout the program for monitoring, questions, and protocol adjustments.' },
+            ].map(item => (
+              <div key={item.title} style={{ backgroundColor: '#0A0812', border: '1px solid #181420', padding: '32px 28px' }}>
+                <span style={{ fontSize: '24px', display: 'block', marginBottom: '14px' }}>{item.icon}</span>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px', letterSpacing: '0.06em', marginBottom: '8px' }} className="uppercase">{item.title}</p>
+                <div style={{ width: '20px', height: '1px', backgroundColor: '#B8A4D4', marginBottom: '12px' }}></div>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section style={{ backgroundColor: '#0A0812', padding: '80px 0', borderTop: '1px solid #111' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-14">
+            <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '12px' }} className="uppercase">Program Timeline</p>
+            <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem' }} className="font-normal">What to Expect & When</h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-0">
+            {timeline.map((t, i) => (
+              <div key={t.week} style={{ padding: '36px 28px', borderLeft: i === 0 ? '1px solid #181420' : 'none', borderRight: '1px solid #181420', borderTop: '1px solid #181420', borderBottom: '1px solid #181420' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#B8A4D4', fontSize: '9px', letterSpacing: '0.3em', marginBottom: '8px' }} className="uppercase">{t.week}</p>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1rem', marginBottom: '16px', lineHeight: '1.3' }}>{t.title}</p>
+                <div style={{ width: '20px', height: '1px', backgroundColor: '#B8A4D4', marginBottom: '14px' }}></div>
                 <ul className="space-y-2">
-                  {item.points.map(p => (
-                    <li key={p} className="flex items-center gap-2">
-                      <div style={{ width: '4px', height: '4px', backgroundColor: '#B8A4D4', borderRadius: '50%', flexShrink: 0 }}></div>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A6A', fontSize: '12px' }}>{p}</span>
+                  {t.items.map(item => (
+                    <li key={item} className="flex items-start gap-2">
+                      <div style={{ width: '4px', height: '4px', backgroundColor: '#B8A4D444', borderRadius: '50%', flexShrink: 0, marginTop: '6px' }}></div>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A3A6A', fontSize: '12px', lineHeight: '1.6' }}>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -139,105 +117,69 @@ export default function FertilityProgram() {
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Advanced Pathways + Who It's For */}
-        <div className="grid md:grid-cols-2 gap-8 mb-20">
-          <div style={{ backgroundColor: '#111116', border: '1px solid #B8A4D425', padding: '48px 40px' }}>
-            <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '16px' }}
-              className="uppercase">Advanced Pathways</p>
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.5rem', lineHeight: '1.3', marginBottom: '16px' }}
-              className="font-normal">Advanced Fertility Support Pathways</h3>
-            <div style={{ width: '28px', height: '1px', backgroundColor: '#B8A4D4', marginBottom: '20px' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.8', marginBottom: '20px' }}>
-              Some clients choose to explore advanced reproductive-support strategies as part of their optimization process. These approaches are commonly utilized by individuals focused on:
-            </p>
-            {['Hormonal optimization', 'Reproductive system support', 'Preparing for future conception'].map(item => (
-              <div key={item} className="flex items-center gap-3 mb-3">
-                <span style={{ color: '#B8A4D4', fontSize: '12px' }}>→</span>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#9A9A9A', fontSize: '13px' }}>{item}</p>
-              </div>
-            ))}
-            <div style={{ borderTop: '1px solid #1E1E28', paddingTop: '24px', marginTop: '24px' }}>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A5A', fontSize: '11px', lineHeight: '1.7' }}>
-                As a client, you'll receive access to trusted resources, structured implementation frameworks, and preferred client-level opportunities.
+      {/* Outcomes + Why */}
+      <section style={{ backgroundColor: '#080610', padding: '80px 0', borderTop: '1px solid #111' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">Expected Outcomes</p>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.25', marginBottom: '24px' }} className="font-normal">What you will actually notice.</h2>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px' }}>
+                Results vary by individual. These are the most commonly reported outcomes from consistent protocol adherence:
               </p>
+              <div className="space-y-3">
+                {[
+                  { outcome: 'Hormonal balance', detail: 'More stable hormonal levels — measurable in follow-up panels.' },
+                  { outcome: 'Energy & libido', detail: 'Improved energy and drive commonly among the earliest reported changes.' },
+                  { outcome: 'Cycle regularity', detail: 'More predictable and consistent cycles for women on protocol.' },
+                  { outcome: 'Reproductive markers', detail: 'AMH, FSH, testosterone, and other key markers trending toward optimal.' },
+                  { outcome: 'Overall wellbeing', detail: 'Mood, sleep, and physical wellbeing consistently improved.' },
+                ].map(item => (
+                  <div key={item.outcome} style={{ borderLeft: '2px solid #B8A4D433', paddingLeft: '20px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px', marginBottom: '3px' }}>{item.outcome}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A2A5A', fontSize: '12px', lineHeight: '1.6' }}>{item.detail}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div style={{ backgroundColor: '#111116', border: '1px solid #1E1E28', padding: '48px 40px' }}>
-            <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '16px' }}
-              className="uppercase">Ideal Candidate</p>
-            <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.5rem', lineHeight: '1.3', marginBottom: '16px' }}
-              className="font-normal">Who This Is For</h3>
-            <div style={{ width: '28px', height: '1px', backgroundColor: '#B8A4D4', marginBottom: '24px' }}></div>
-            <div className="space-y-4 mb-8">
-              {[
-                'Want to take control of their fertility early',
-                'Value data and precision over guesswork',
-                'Are planning for the future',
-                'Want a structured, guided approach',
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3"
-                  style={{ borderLeft: '2px solid #B8A4D440', paddingLeft: '16px' }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#9A9A9A', fontSize: '14px', lineHeight: '1.5' }}>{item}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ backgroundColor: '#0A0A0F', border: '1px solid #1E1E28', padding: '20px 24px' }}>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#B8A4D4', fontSize: '0.95rem', fontStyle: 'italic', lineHeight: '1.6' }}>
-                "This is a high-touch, premium program focused on clarity, strategy, and long-term optimization."
+            <div style={{ backgroundColor: '#0C0A16', border: '1px solid #B8A4D422', padding: '48px 40px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#B8A4D4', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '16px' }} className="uppercase">Why Early Action Matters</p>
+              <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.4rem', lineHeight: '1.5', marginBottom: '24px' }} className="font-normal">
+                Fertility is easier to optimize<br />than it is to rescue.
+              </p>
+              <div style={{ width: '32px', height: '1px', backgroundColor: '#B8A4D4', marginBottom: '24px' }}></div>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9', marginBottom: '24px' }}>
+                Whether you're actively trying to conceive or simply want to understand and protect your reproductive health — starting with data gives you a significant advantage over waiting for a problem to appear.
+              </p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9' }}>
+                Programs typically range from <span style={{ color: '#FAFAF8' }}>$800–$1,500</span> depending on protocol complexity and support level.
               </p>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Real Benefit banner */}
-        <div style={{ backgroundColor: '#111116', border: '1px solid #1E1E28', padding: '64px 48px', textAlign: 'center', marginBottom: '20px' }}>
-          <p style={{ color: '#B8A4D4', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
-            className="uppercase">The Real Benefit</p>
-          <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.9rem', lineHeight: '1.4', maxWidth: '600px', margin: '0 auto 28px' }}
-            className="font-normal">This program gives you:</h3>
-          <div className="flex flex-wrap justify-center gap-5 mb-16">
-            {[
-              'Clarity on your reproductive health',
-              'Confidence in your optimization strategy',
-              'A proactive approach instead of reactive decisions',
-              'A structured path toward long-term fertility support',
-            ].map((item, i) => (
-              <div key={item} style={{
-                backgroundColor: i % 2 === 0 ? '#B8A4D4' : '#161620',
-                border: i % 2 === 0 ? 'none' : '1px solid #2A2A3A',
-                padding: '14px 24px',
-                maxWidth: '280px',
-              }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: i % 2 === 0 ? '#FFFFFF' : '#6A6A7A', fontSize: '13px', letterSpacing: '0.06em', textAlign: 'center' }}>{item}</p>
-              </div>
-            ))}
-          </div>
-          <p style={{ fontFamily: 'Georgia, serif', color: '#7A7A8A', fontSize: '1.1rem', fontStyle: 'italic', maxWidth: '480px', margin: '0 auto 32px' }}>
-            "If you're serious about optimizing your future, this is where you start."
+      {/* CTA */}
+      <section style={{ backgroundColor: '#0A0812', padding: '80px 0', borderTop: '1px solid #181420' }}>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.8rem', lineHeight: '1.4', maxWidth: '560px', margin: '0 auto 28px' }} className="font-normal">
+            Ready to take a proactive, data-driven approach to your reproductive health?
+          </p>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A2A5A', fontSize: '14px', lineHeight: '1.8', marginBottom: '36px' }}>
+            Application required. Limited intake. Every protocol is built personally.
           </p>
           <Link to="/apply?program=fertility"
-            style={{
-              display: 'inline-block',
-              backgroundColor: '#B8A4D4',
-              color: '#FFFFFF',
-              fontFamily: 'Helvetica Neue, Arial, sans-serif',
-              fontSize: '12px',
-              letterSpacing: '0.2em',
-              padding: '18px 48px',
-              textDecoration: 'none',
-            }}
+            style={{ display: 'inline-block', backgroundColor: '#B8A4D4', color: '#fff', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.2em', padding: '20px 56px', textDecoration: 'none' }}
             className="uppercase hover:opacity-90 transition-opacity">
-            Apply / Get Started Now →
+            Apply for This Program →
           </Link>
         </div>
-
-        {/* Disclaimer */}
-        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2E2E3A', fontSize: '11px', lineHeight: '1.8', textAlign: 'center', maxWidth: '700px', margin: '0 auto' }}>
-          The information provided in this program is for educational and informational purposes only and is not intended as medical advice. This program is not designed to diagnose, treat, cure, or prevent any disease. Always consult with a qualified healthcare professional before making any health-related decisions.
+        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#1A1228', fontSize: '11px', lineHeight: '1.8', textAlign: 'center', maxWidth: '640px', margin: '48px auto 0', padding: '0 24px' }}>
+          The information provided is for educational and informational purposes only and is not intended as medical advice. Always consult with a qualified healthcare professional before making health-related decisions.
         </p>
-      </div>
-    </section>
+      </section>
+    </div>
   )
 }
