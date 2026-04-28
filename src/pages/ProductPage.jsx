@@ -129,6 +129,70 @@ export default function ProductPage() {
         </div>
       </section>
 
+      {/* What you'll notice + Timeline */}
+      <section style={{ backgroundColor: '#080808', padding: '80px 0', borderTop: '1px solid #141414' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-px" style={{ backgroundColor: '#141414' }}>
+
+            {/* What You'll Notice */}
+            <div style={{ backgroundColor: '#080808', padding: '48px 40px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">
+                What You'll Actually Notice
+              </p>
+              <ul className="space-y-4">
+                {(p.whatYouNotice || p.benefits.map(b => b.title)).map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span style={{ color: p.accent, fontSize: '13px', flexShrink: 0, marginTop: '1px' }}>✔</span>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.7' }}>{item}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Results Timeline */}
+            {p.timeline && (
+              <div style={{ backgroundColor: '#080808', padding: '48px 40px' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">
+                  What to Expect &amp; When
+                </p>
+                <ol className="space-y-6">
+                  {p.timeline.map((t, i) => (
+                    <li key={i} className="flex items-start gap-4">
+                      <div style={{ flexShrink: 0 }}>
+                        <div style={{ width: '1px', backgroundColor: `${p.accent}33`, height: i < p.timeline.length - 1 ? '100%' : '0', position: 'absolute', marginLeft: '14px', marginTop: '28px' }}></div>
+                        <div style={{ width: '28px', height: '28px', border: `1px solid ${p.accent}55`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: '10px' }}>{i + 1}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '10px', letterSpacing: '0.15em', marginBottom: '4px' }} className="uppercase">{t.period}</p>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', lineHeight: '1.7' }}>{t.result}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Who it's for */}
+      {p.whoItsFor && (
+        <section style={{ backgroundColor: '#0A0A0A', padding: '60px 0', borderTop: '1px solid #141414' }}>
+          <div className="max-w-7xl mx-auto px-6">
+            <div style={{ backgroundColor: '#080808', border: `1px solid ${p.accent}18`, padding: '40px 48px' }}
+              className="flex flex-col md:flex-row items-start md:items-center gap-8">
+              <div style={{ flexShrink: 0 }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '8px' }} className="uppercase">Who This Is For</p>
+                <div style={{ width: '32px', height: '1px', backgroundColor: p.accent }}></div>
+              </div>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '15px', lineHeight: '1.8' }}>{p.whoItsFor}</p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Details */}
       <section style={{ backgroundColor: '#050505', padding: '80px 0', borderTop: '1px solid #141414' }}>
         <div className="max-w-7xl mx-auto px-6">

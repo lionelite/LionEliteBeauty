@@ -10,26 +10,26 @@ export default function BrandManifesto() {
 
             {/* Left — Statement */}
             <div>
-              <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">Our Philosophy</p>
+              <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">Why It Works</p>
               <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.6rem', lineHeight: '1.2', marginBottom: '32px' }} className="font-normal">
-                Optimization, not<br />just appearance.
+                Your skin can repair itself.<br />We help it do that.
               </h2>
               <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '32px' }}></div>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '16px', lineHeight: '1.9', marginBottom: '24px' }}>
-                Most brands sell products. We build systems. Every program and product in the Lion Elite ecosystem is designed around one principle — working with your biology, not against it.
+                Most skincare masks the problem. Ours addresses it at the source. GHK-Cu peptide — the core of every Lion Elite Beauty formulation — is clinically studied to activate over 4,000 genes involved in skin repair, collagen production, and cellular renewal. The result isn't coverage. It's genuine change.
               </p>
               <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1rem', fontStyle: 'italic', lineHeight: '1.7' }}>
-                "Built for results, not hype."
+                "Not skincare that hides aging — skincare that reverses it."
               </p>
             </div>
 
             {/* Right — 4 pillars */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { icon: '🧬', title: 'Peptide-Powered', desc: 'Copper peptide and bioactive skincare science at the core of every formulation.' },
-                { icon: '📊', title: 'Data-Driven', desc: 'Personalized skincare systems backed by biomarker testing, not guesswork.' },
-                { icon: '⚕️', title: 'Clinical Grade', desc: 'Medical-grade, anti-inflammatory skincare formulations — built for real results.' },
-                { icon: '🎯', title: 'Precision First', desc: 'Skin optimization protocols tailored to your unique biology and performance goals.' },
+                { icon: '🧬', title: 'Peptide-Powered', desc: 'GHK-Cu shown to visibly improve skin repair, elasticity, and collagen production.' },
+                { icon: '✔', title: 'Results You See', desc: 'Visible improvement in texture, tone, and firmness — not just how it feels on day one.' },
+                { icon: '⚕️', title: 'Clinical Concentration', desc: 'Formulated at the concentrations shown to work in studies — not trace amounts.' },
+                { icon: '🎯', title: 'No Filler. No Hype.', desc: 'Every ingredient earns its place. Nothing is added for marketing. Everything is added for results.' },
               ].map(p => (
                 <div key={p.title} style={{ backgroundColor: '#0A0A0A', border: '1px solid #1E1E1E', padding: '28px 24px' }}>
                   <span style={{ fontSize: '20px', display: 'block', marginBottom: '12px' }}>{p.icon}</span>
