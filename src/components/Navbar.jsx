@@ -161,10 +161,16 @@ export default function Navbar() {
             )}
           </div>
 
-          <Link to="/start-here"
+          <Link to="/skin-system"
             style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
             className="text-sm uppercase tracking-wider hover:text-[#C9A96E] transition-colors">
-            Start Here
+            Skin System
+          </Link>
+
+          <Link to="/ingredients"
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
+            className="text-sm uppercase tracking-wider hover:text-[#C9A96E] transition-colors">
+            Ingredients
           </Link>
 
           <Link to="/programs/optimization"
@@ -230,9 +236,12 @@ export default function Navbar() {
           ))}
 
           <div style={{ paddingTop: '16px' }} className="flex flex-col gap-4">
-            <Link to="/start-here" onClick={() => setMenuOpen(false)}
+            <Link to="/skin-system" onClick={() => setMenuOpen(false)}
               style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
-              className="text-sm uppercase">Start Here</Link>
+              className="text-sm uppercase">Skin System</Link>
+            <Link to="/ingredients" onClick={() => setMenuOpen(false)}
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
+              className="text-sm uppercase">Ingredients</Link>
           </div>
 
           <Link to="/programs/optimization"

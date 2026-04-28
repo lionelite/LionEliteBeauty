@@ -338,17 +338,47 @@ export default function StartHerePage() {
 
       {/* Hero */}
       <section style={{ backgroundColor: '#080808', paddingTop: '140px', paddingBottom: '80px', borderBottom: '1px solid #141414' }}>
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.3em', fontSize: '10px' }}
-            className="uppercase mb-5">New to Peptide Skincare?</p>
-          <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '3rem', lineHeight: '1.12', letterSpacing: '-0.02em' }}
-            className="font-normal mb-6">
-            Understand what's in<br />your skincare. And why.
-          </h1>
-          <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '16px', lineHeight: '1.9', maxWidth: '540px', margin: '0 auto' }}>
-            Every ingredient in the Lion Elite Beauty range is here for a reason. This page breaks down all 15 active ingredients across our 6 products — what each one is, what it supports, and exactly which product it appears in.
-          </p>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16 items-end">
+            <div>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.35em', fontSize: '10px', marginBottom: '20px' }}
+                className="uppercase">Ingredient Transparency</p>
+              <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '3.2rem', lineHeight: '1.1', letterSpacing: '-0.02em' }}
+                className="font-normal mb-8">
+                What's Inside.<br />And Why It's There.
+              </h1>
+              <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '28px' }}></div>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.9', maxWidth: '480px' }}>
+                Every ingredient in the Lion Elite Beauty range earns its place. No filler. No fluff. Here's the full breakdown — what each one is, what it supports, and exactly which product it's in.
+              </p>
+            </div>
+            <div>
+              <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #141414', padding: '36px' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '20px' }} className="uppercase">At a Glance</p>
+                {[
+                  { label: '15 active ingredients', sub: 'across 6 products' },
+                  { label: '3 core peptides', sub: 'GHK-Cu · KPV · Palmitoyl Tripeptide-1' },
+                  { label: 'Zero synthetic fragrance', sub: 'except Hydra Boost Body Wash aromatics' },
+                  { label: 'No ingredient is decorative', sub: 'every one has a documented function' },
+                ].map(item => (
+                  <div key={item.label} className="flex items-start gap-3 mb-4 last:mb-0">
+                    <span style={{ color: '#C9A96E', fontSize: '10px', flexShrink: 0, marginTop: '3px' }}>→</span>
+                    <div>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px' }}>{item.label}</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px', marginTop: '2px' }}>{item.sub}</p>
+                    </div>
+                  </div>
+                ))}
+                <div style={{ borderTop: '1px solid #1A1A1A', marginTop: '24px', paddingTop: '20px' }}>
+                  <Link to="/skin-system"
+                    style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '10px', letterSpacing: '0.18em', textDecoration: 'none' }}
+                    className="uppercase hover:opacity-70 transition-opacity">
+                    See the full routine instead →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -450,93 +480,45 @@ export default function StartHerePage() {
         </section>
       ))}
 
-      {/* Your first routine */}
-      <section style={{ backgroundColor: '#080808', padding: '80px 0', borderBottom: '1px solid #111' }}>
+      {/* CTA */}
+      <section style={{ backgroundColor: '#050505', padding: '80px 0' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-start">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
-                className="uppercase">Now That You Know — Start Here</p>
-              <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.2', marginBottom: '20px' }}
-                className="font-normal">Your first routine.<br />Three products. Every day.</h2>
+                className="uppercase">Now You Know</p>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem', lineHeight: '1.15', marginBottom: '20px' }}
+                className="font-normal">You know what's in it.<br />Now put it to work.</h2>
               <div style={{ width: '32px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '24px' }}></div>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '15px', lineHeight: '1.9', marginBottom: '32px' }}>
-                Start with the core three. Build the habit. Add more as needed.
+                The ingredients are only half the story. See the full daily routine — how to use each product, in what order, and exactly what to expect.
               </p>
-              <div className="space-y-6">
-                <Step number="01" title="Cleanse — GHK-Cu Peptide Face Wash"
-                  desc="Morning and evening. Helps nourish and support skin health from the first step. Primes skin to absorb everything that follows." />
-                <Step number="02" title="Treat — Rejuvenate Serum"
-                  desc="The core product. GHK-Cu + Niacinamide + Hyaluronic Acid (3 weights) — supports the appearance of smoother, firmer, more even skin." />
-                <Step number="03" title="Protect — KPV Recovery Moisturizer"
-                  desc="Nourish, calm and support. KPV + Centella Asiatica help support the appearance of a healthy, comfortable complexion." />
-              </div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px', letterSpacing: '0.15em', marginTop: '28px' }} className="uppercase">
-                Visible difference expected in 2–4 weeks of consistent use.
-              </p>
-            </div>
-
-            <div className="space-y-px" style={{ backgroundColor: '#141414' }}>
-              {[
-                { name: 'GHK-Cu Peptide Face Wash', price: '$69.99', size: '150ml', slug: 'ghk-cu-face-wash', accent: '#C9A96E', tag: 'Step 01 · Cleanse', key: 'GHK-Cu' },
-                { name: 'Rejuvenate Serum', price: '$119.99', size: '30ml', slug: 'rejuvenate-serum', accent: '#8A9E85', tag: 'Step 02 · Treat', key: 'GHK-Cu · Niacinamide · HA' },
-                { name: 'KPV Recovery Moisturizer', price: '$79.99', size: '50ml', slug: 'kpv-moisturizer', accent: '#8A7AB0', tag: 'Step 03 · Protect', key: 'KPV · Cica · Beta-Glucan' },
-              ].map(prod => (
-                <div key={prod.slug} style={{ backgroundColor: '#080808', padding: '28px 32px' }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: prod.accent, fontSize: '9px', letterSpacing: '0.2em', marginBottom: '8px' }} className="uppercase">{prod.tag}</p>
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '15px', marginBottom: '4px' }}>{prod.name}</p>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '11px', marginBottom: '4px' }}>{prod.key}</p>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px' }}>{prod.price} · {prod.size}</p>
-                    </div>
-                    <Link to={`/skincare/${prod.slug}`}
-                      style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: prod.accent, fontSize: '10px', letterSpacing: '0.15em', textDecoration: 'none', flexShrink: 0 }}
-                      className="uppercase hover:opacity-70 transition-opacity">
-                      View →
-                    </Link>
-                  </div>
-                </div>
-              ))}
-              <div style={{ backgroundColor: '#0A0A0A', padding: '28px 32px' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '8px' }} className="uppercase">Best Value</p>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '15px', marginBottom: '4px' }}>Daily Essentials Duo</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', marginBottom: '16px' }}>
-                  Face Wash + Serum · <span style={{ textDecoration: 'line-through' }}>$189.99</span> → <span style={{ color: '#C9A96E' }}>$159.99</span>
-                </p>
-                <Link to="/skincare"
-                  style={{ display: 'inline-block', backgroundColor: '#C9A96E', color: '#000', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.18em', padding: '12px 24px', textDecoration: 'none' }}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/skin-system"
+                  style={{ backgroundColor: '#C9A96E', color: '#000', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em', padding: '18px 40px', textDecoration: 'none', textAlign: 'center' }}
                   className="uppercase hover:opacity-90 transition-opacity">
-                  Shop the Bundle →
+                  See the Skin System →
+                </Link>
+                <Link to="/skincare"
+                  style={{ border: '1px solid #2A2A2A', color: '#5A5A5A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em', padding: '18px 32px', textDecoration: 'none', textAlign: 'center' }}
+                  className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-colors">
+                  Shop All Products
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section style={{ backgroundColor: '#050505', padding: '80px 0' }}>
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
-            className="uppercase">Ready?</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem', lineHeight: '1.15', marginBottom: '20px' }}
-            className="font-normal">You now know more about<br />your skincare than most people ever will.</h2>
-          <div style={{ width: '32px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 24px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '15px', lineHeight: '1.9', maxWidth: '440px', margin: '0 auto 36px' }}>
-            Put it to work. Start with the core routine and see the difference in your skin within weeks.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/skincare"
-              style={{ backgroundColor: '#C9A96E', color: '#000', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em', padding: '18px 48px', textDecoration: 'none' }}
-              className="uppercase hover:opacity-90 transition-opacity">
-              Shop All Products →
-            </Link>
-            <Link to="/skincare/rejuvenate-serum"
-              style={{ border: '1px solid #2A2A2A', color: '#5A5A5A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em', padding: '18px 36px', textDecoration: 'none' }}
-              className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-colors">
-              View Flagship Serum
-            </Link>
+            <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #141414', padding: '40px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '20px' }} className="uppercase">The Core Peptides — Quick Ref</p>
+              {[
+                { name: 'GHK-Cu', role: 'Foundation peptide — in 5 of 6 products', accent: '#C9A96E' },
+                { name: 'KPV', role: 'Calming peptide — KPV Moisturizer & Recovery Kit', accent: '#8A7AB0' },
+                { name: 'Palmitoyl Tripeptide-1', role: 'Firming peptide — Rejuvenate Serum & Collagen Boost Cream', accent: '#8A9E85' },
+              ].map(p => (
+                <div key={p.name} style={{ borderBottom: '1px solid #141414', paddingBottom: '16px', marginBottom: '16px' }} className="last:border-0 last:mb-0 last:pb-0">
+                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '15px', marginBottom: '4px' }}>{p.name}</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px' }}>{p.role}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

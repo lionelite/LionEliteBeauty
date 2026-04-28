@@ -18,6 +18,7 @@ import LongevityPage from './pages/LongevityPage'
 import SkincarePage from './pages/SkincarePage'
 import ProductPage from './pages/ProductPage'
 import StartHerePage from './pages/StartHerePage'
+import SkinSystemPage from './pages/SkinSystemPage'
 
 function HomePage() {
   return (
@@ -50,6 +51,8 @@ export default function App() {
         <Route path="/skincare" element={<SkincarePage />} />
         <Route path="/skincare/:slug" element={<ProductPage />} />
         <Route path="/start-here" element={<StartHerePage />} />
+        <Route path="/ingredients" element={<StartHerePage />} />
+        <Route path="/skin-system" element={<SkinSystemPage />} />
       </Routes>
     </BrowserRouter>
   )
