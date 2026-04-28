@@ -44,7 +44,7 @@ export default function ServicesOverview() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px" style={{ backgroundColor: '#1A1A1A' }}>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-px" style={{ backgroundColor: '#1A1A1A' }}>
             {skincare.map((product) => (
               <div key={product.name}
                 style={{ backgroundColor: '#0A0A0A', padding: '32px' }}
@@ -95,7 +95,7 @@ export default function ServicesOverview() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px" style={{ backgroundColor: '#1A1A1A' }}>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-px" style={{ backgroundColor: '#1A1A1A' }}>
             {programs.map((program) => (
               <Link key={program.name} to={program.href}
                 style={{ backgroundColor: '#0A0A0A', padding: '32px', textDecoration: 'none', display: 'block' }}
