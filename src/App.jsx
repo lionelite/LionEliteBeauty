@@ -17,6 +17,7 @@ import WeightPage from './pages/WeightPage'
 import LongevityPage from './pages/LongevityPage'
 import SkincarePage from './pages/SkincarePage'
 import ProductPage from './pages/ProductPage'
+import StartHerePage from './pages/StartHerePage'
 
 function HomePage() {
   return (
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/programs/longevity" element={<LongevityPage />} />
         <Route path="/skincare" element={<SkincarePage />} />
         <Route path="/skincare/:slug" element={<ProductPage />} />
+        <Route path="/start-here" element={<StartHerePage />} />
       </Routes>
     </BrowserRouter>
   )

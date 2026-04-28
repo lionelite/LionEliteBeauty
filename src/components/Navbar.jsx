@@ -160,10 +160,10 @@ export default function Navbar() {
             )}
           </div>
 
-          <Link to="/#pricing"
+          <Link to="/start-here"
             style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
             className="text-sm uppercase tracking-wider hover:text-[#C9A96E] transition-colors">
-            Pricing
+            Start Here
           </Link>
 
           <Link to="/programs/optimization"
@@ -229,9 +229,9 @@ export default function Navbar() {
           ))}
 
           <div style={{ paddingTop: '16px' }} className="flex flex-col gap-4">
-            <Link to="/#pricing" onClick={() => setMenuOpen(false)}
+            <Link to="/start-here" onClick={() => setMenuOpen(false)}
               style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
-              className="text-sm uppercase">Pricing</Link>
+              className="text-sm uppercase">Start Here</Link>
           </div>
 
           <Link to="/programs/optimization"
