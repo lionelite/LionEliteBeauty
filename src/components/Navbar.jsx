@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 const programs = [
-  { label: 'Muscle & Recovery Program', href: '/programs/optimization', accent: '#C9A96E', desc: 'Strength & performance' },
+  { label: 'Muscle & Recovery Program', href: '/programs/muscle', accent: '#C9A96E', desc: 'Strength & performance' },
   { label: 'Neuro Program', href: '/programs/neuro', accent: '#8A9E85', desc: 'Cognitive performance' },
   { label: 'Fertility Program', href: '/programs/fertility', accent: '#B8A4D4', desc: 'Reproductive health' },
   { label: 'Hair Program', href: '/programs/hair', accent: '#C4A265', desc: 'Hair restoration & density' },
@@ -244,10 +244,10 @@ export default function Navbar() {
               className="text-sm uppercase">Ingredients</Link>
           </div>
 
-          <Link to="/programs/optimization"
+          <Link to="/apply"
             style={{
               backgroundColor: '#C9A96E', color: '#FFFFFF',
-              fontFamily: 'Helvetica Neue, Arial, sans-serif',
+              fontFamily: 'Helvetica Neue, neue, Arial, sans-serif',
               letterSpacing: '0.15em', fontSize: '12px',
               padding: '16px', textAlign: 'center',
               textDecoration: 'none', marginTop: '16px',

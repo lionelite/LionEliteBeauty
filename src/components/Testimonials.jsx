@@ -10,7 +10,7 @@ export default function Testimonials() {
       price: '$1,000',
       priceNote: 'One-Time Investment',
       accent: '#C9A96E',
-      href: '/programs/optimization',
+      href: '/programs/muscle',
       includes: [
         'Full performance & recovery biomarker kit (shipped to you)',
         'Complete data analysis & breakdown',

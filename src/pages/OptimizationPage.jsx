@@ -12,7 +12,7 @@ const allPrograms = [
     accent: '#C9A96E',
     bg: '#0C0A08',
     border: '#C9A96E30',
-    href: '/programs/optimization',
+    href: '/programs/muscle',
     price: '$1,000',
     icon: '💪',
   },

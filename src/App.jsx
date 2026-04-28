@@ -10,6 +10,7 @@ import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
 import OptimizationPage from './pages/OptimizationPage'
+import MusclePage from './pages/MusclePage'
 import NeuroPage from './pages/NeuroPage'
 import FertilityPage from './pages/FertilityPage'
 import HairPage from './pages/HairPage'
@@ -44,6 +45,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/programs/optimization" element={<OptimizationPage />} />
+        <Route path="/programs/muscle" element={<MusclePage />} />
         <Route path="/programs/neuro" element={<NeuroPage />} />
         <Route path="/programs/fertility" element={<FertilityPage />} />
         <Route path="/programs/hair" element={<HairPage />} />

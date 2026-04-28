@@ -10,7 +10,7 @@ const skincare = [
 ]
 
 const programs = [
-  { name: 'Muscle & Recovery', tagline: 'Build strength, recover faster, perform at a higher level.', accent: '#C9A96E', href: '/programs/optimization' },
+  { name: 'Muscle & Recovery', tagline: 'Build strength, recover faster, perform at a higher level.', accent: '#C9A96E', href: '/programs/muscle' },
   { name: 'Neuro Program', tagline: 'Unlock elite cognitive focus, clarity, and mental endurance.', accent: '#8A9E85', href: '/programs/neuro' },
   { name: 'Fertility Program', tagline: 'Data-driven hormonal and reproductive health optimization.', accent: '#B8A4D4', href: '/programs/fertility' },
   { name: 'Hair Program', tagline: 'Restore density, strengthen follicles, rebuild confidence.', accent: '#C4A265', href: '/programs/hair' },
