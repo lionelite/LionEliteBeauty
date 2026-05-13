@@ -42,7 +42,7 @@ export default function CTASection() {
               className="uppercase hover:opacity-90 transition-opacity">
               Apply Now →
             </Link>
-            <a href="mailto:info@lionelitewellness.com"
+            <a href="mailto:info@lionelitebeauty.com"
               style={{
                 display: 'inline-block', border: '1px solid #2A2A2A', color: '#6A6A6A',
                 fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px',

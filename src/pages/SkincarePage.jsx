@@ -170,7 +170,7 @@ export default function SkincarePage() {
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '11px', letterSpacing: '0.1em', marginBottom: '6px' }} className="uppercase">Save {b.savings}</p>
                   </div>
 
-                  <a href="mailto:info@lionelitewellness.com"
+                  <a href="mailto:orders@lionelitebeauty.com"
                     style={{
                       display: 'block', backgroundColor: b.accent, color: '#000',
                       fontFamily: 'Helvetica Neue, Arial, sans-serif',

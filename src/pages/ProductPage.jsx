@@ -109,7 +109,7 @@ export default function ProductPage() {
                   )}
                   <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem' }}>{p.price}</p>
                 </div>
-                <a href="mailto:info@lionelitewellness.com"
+                <a href="mailto:orders@lionelitebeauty.com"
                   style={{
                     backgroundColor: p.accent, color: '#000',
                     fontFamily: 'Helvetica Neue, Arial, sans-serif',
@@ -122,7 +122,7 @@ export default function ProductPage() {
               </div>
 
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '12px' }}>
-                Questions? Email <a href="mailto:info@lionelitewellness.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitewellness.com</a>
+                Questions? Email <a href="mailto:info@lionelitebeauty.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitebeauty.com</a>
               </p>
             </div>
           </div>
@@ -292,7 +292,7 @@ export default function ProductPage() {
             className="uppercase hover:text-[#C9A96E] transition-colors flex items-center gap-2">
             ← Back to All Products
           </Link>
-          <a href="mailto:info@lionelitewellness.com"
+          <a href="mailto:info@lionelitebeauty.com"
             style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:opacity-70 transition-opacity">
             Questions? Contact Us →

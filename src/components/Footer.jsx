@@ -60,7 +60,7 @@ export default function Footer() {
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '20px' }} className="uppercase">Company</p>
             {[
               { label: 'About Us', href: '#' },
-              { label: 'Contact', href: 'mailto:info@lionelitewellness.com' },
+              { label: 'Contact', href: 'mailto:info@lionelitebeauty.com' },
               { label: 'lionelitewellness.com', href: 'https://lionelitewellness.com', external: true },
             ].map(item => (
               <a key={item.label} href={item.href}
@@ -81,7 +81,7 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row items-center justify-between pt-8 gap-4">
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#282828', fontSize: '11px', letterSpacing: '0.08em' }}>
-            © {new Date().getFullYear()} Lion Elite Beauty · info@lionelitewellness.com
+            © {new Date().getFullYear()} Lion Elite Beauty · info@lionelitebeauty.com
           </p>
           <div className="flex gap-6">
             {['Privacy Policy', 'Terms of Service'].map(link => (
