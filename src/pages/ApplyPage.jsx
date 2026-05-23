@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import emailjs from '@emailjs/browser'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID
+const SERVICE_ID   = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const TMPL_ADMIN   = import.meta.env.VITE_EMAILJS_TEMPLATE_ADMIN
+const TMPL_CLIENT  = import.meta.env.VITE_EMAILJS_TEMPLATE_CLIENT
+const PUBLIC_KEY   = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 const programs = [
   { value: 'muscle', label: 'Muscle & Recovery', accent: '#C9A96E' },
@@ -67,9 +71,9 @@ export default function ApplyPage() {
 
     const goalLabel = programs.find(p => p.value === form.goal)?.label || form.goal
 
-    const payload = {
-      name:        form.name,
-      email:       form.email,
+    const templateVars = {
+      from_name:   form.name,
+      from_email:  form.email,
       phone:       form.phone || 'Not provided',
       program:     goalLabel,
       experience:  form.experience,
@@ -78,17 +82,14 @@ export default function ApplyPage() {
       investment:  form.investment,
       commitment:  form.commitment,
       health:      form.health || 'Not provided',
-      _replyto:    form.email,
-      _subject:    `New Application: ${goalLabel} — ${form.name}`,
+      reply_to:    form.email,
     }
 
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      if (!res.ok) throw new Error('Formspree error')
+      // 1. Notify admin (info@lionelitebeauty.com receives full application)
+      await emailjs.send(SERVICE_ID, TMPL_ADMIN, templateVars, PUBLIC_KEY)
+      // 2. Send confirmation to applicant
+      await emailjs.send(SERVICE_ID, TMPL_CLIENT, templateVars, PUBLIC_KEY)
       setSubmitted(true)
       window.scrollTo(0, 0)
     } catch (err) {
