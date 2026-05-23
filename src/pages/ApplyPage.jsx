@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import emailjs from '@emailjs/browser'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID
-const ADMIN_TID   = import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID
-const CLIENT_TID  = import.meta.env.VITE_EMAILJS_CLIENT_TEMPLATE_ID
-const PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID
 
 const programs = [
   { value: 'muscle', label: 'Muscle & Recovery', accent: '#C9A96E' },
@@ -71,29 +67,32 @@ export default function ApplyPage() {
 
     const goalLabel = programs.find(p => p.value === form.goal)?.label || form.goal
 
-    const templateParams = {
-      client_name:    form.name,
-      client_email:   form.email,
-      client_phone:   form.phone || 'Not provided',
-      goal:           goalLabel,
-      experience:     form.experience,
-      struggle:       form.struggle || 'Not provided',
-      timeline:       form.timeline,
-      investment:     form.investment,
-      commitment:     form.commitment,
-      health:         form.health || 'Not provided',
-      reply_to:       form.email,
+    const payload = {
+      name:        form.name,
+      email:       form.email,
+      phone:       form.phone || 'Not provided',
+      program:     goalLabel,
+      experience:  form.experience,
+      struggle:    form.struggle || 'Not provided',
+      timeline:    form.timeline,
+      investment:  form.investment,
+      commitment:  form.commitment,
+      health:      form.health || 'Not provided',
+      _replyto:    form.email,
+      _subject:    `New Application: ${goalLabel} — ${form.name}`,
     }
 
     try {
-      // Notify admin
-      await emailjs.send(SERVICE_ID, ADMIN_TID, templateParams, PUBLIC_KEY)
-      // Confirmation to client
-      await emailjs.send(SERVICE_ID, CLIENT_TID, templateParams, PUBLIC_KEY)
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) throw new Error('Formspree error')
       setSubmitted(true)
       window.scrollTo(0, 0)
     } catch (err) {
-      console.error('EmailJS error:', err)
+      console.error('Submission error:', err)
       setSendError(true)
     } finally {
       setSending(false)
