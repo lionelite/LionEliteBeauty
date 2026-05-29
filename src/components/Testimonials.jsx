@@ -173,26 +173,56 @@ export default function Testimonials() {
 
         {/* Testimonials */}
         <div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '40px' }}
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '16px' }}
             className="uppercase">What Clients Say</p>
-          <div className="grid md:grid-cols-2 gap-5">
+          <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.8rem', textAlign: 'center', marginBottom: '48px', lineHeight: '1.3' }}
+            className="font-normal">Real people. Real results.</p>
+          <div className="grid md:grid-cols-3 gap-5">
             {[
-              { quote: 'This showed me what my body actually needed. First time I had a real roadmap instead of just guessing.', name: 'J. Thornton', detail: 'Muscle & Recovery Client', accent: '#C9A96E' },
-              { quote: "First time I wasn't guessing with my supplements and protocols. The data changed everything for me.", name: 'M. Rodriguez', detail: 'Muscle & Recovery Client', accent: '#C9A96E' },
+              {
+                quote: 'This showed me what my body actually needed. First time I had a real roadmap — and I genuinely feel amazing.',
+                name: 'James T.',
+                detail: 'Muscle & Recovery Program',
+                accent: '#C9A96E',
+                photo: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=200&q=80',
+              },
+              {
+                quote: "My skin has never looked better. I wake up confident now — it's become part of how I take care of myself.",
+                name: 'Sofia R.',
+                detail: 'Lion Elite Skincare',
+                accent: '#B8A4D4',
+                photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80',
+              },
+              {
+                quote: "The data changed everything. No more guessing. I finally have a protocol that actually fits my body.",
+                name: 'Marcus L.',
+                detail: 'Longevity & Anti-Aging Program',
+                accent: '#7A9FBF',
+                photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
+              },
             ].map((t) => (
-              <div key={t.name} style={{ backgroundColor: '#111111', border: '1px solid #1E1E1E', padding: '36px' }}>
+              <div key={t.name} style={{ backgroundColor: '#111111', border: '1px solid #1E1E1E', padding: '36px', display: 'flex', flexDirection: 'column' }}>
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <span key={i} style={{ color: t.accent, fontSize: '13px' }}>★</span>
                   ))}
                 </div>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#CACACA', fontSize: '0.95rem', lineHeight: '1.8', fontStyle: 'italic', marginBottom: '24px' }}>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#CACACA', fontSize: '0.95rem', lineHeight: '1.8', fontStyle: 'italic', marginBottom: '28px', flex: 1 }}>
                   "{t.quote}"
                 </p>
-                <div style={{ width: '28px', height: '1px', backgroundColor: t.accent, marginBottom: '16px' }}></div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px' }}>{t.name}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', letterSpacing: '0.12em', marginTop: '4px' }}
-                  className="uppercase">{t.detail}</p>
+                <div style={{ width: '28px', height: '1px', backgroundColor: t.accent, marginBottom: '20px' }}></div>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={t.photo}
+                    alt={t.name}
+                    style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${t.accent}44` }}
+                  />
+                  <div>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px' }}>{t.name}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', letterSpacing: '0.1em', marginTop: '2px' }}
+                      className="uppercase">{t.detail}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
