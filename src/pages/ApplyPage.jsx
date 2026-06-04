@@ -352,7 +352,7 @@ export default function ApplyPage() {
               {sendError && (
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '13px', marginBottom: '20px', lineHeight: '1.7' }}>
                   Something went wrong sending your application. Please try again or email us directly at{' '}
-                  <a href="mailto:info@lionelitebeauty.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitebeauty.com</a>.
+                  <a href="mailto:orders@lionelitebeauty.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>orders@lionelitebeauty.com</a>.
                 </p>
               )}
 
