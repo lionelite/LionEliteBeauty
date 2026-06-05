@@ -26,11 +26,11 @@ export default function CTASection() {
         <div style={{ border: '1px solid #1E1E1E', padding: '60px 48px', textAlign: 'center', backgroundColor: '#0A0A0A' }}>
           <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '20px' }} className="uppercase">Ready to Begin</p>
           <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.4rem', lineHeight: '1.2', maxWidth: '560px', margin: '0 auto 20px' }} className="font-normal">
-            Stop guessing.<br /><span style={{ color: '#C9A96E' }}>Start optimizing.</span>
+            Stop guessing.<br /><span style={{ color: '#C9A96E' }}>Start feeling your best.</span>
           </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '15px', lineHeight: '1.9', maxWidth: '440px', margin: '0 auto 40px' }}>
-            Every Lion Elite program is built on precision testing, personalized strategy, and guided implementation. Your biology is the blueprint.
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.9', maxWidth: '440px', margin: '0 auto 40px' }}>
+            Every Lion Elite program is built on precision testing, personalized strategy, and guided implementation — designed to help you look, feel, and perform at your best.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Link to="/apply"
@@ -44,7 +44,7 @@ export default function CTASection() {
             </Link>
             <a href="mailto:info@lionelitebeauty.com"
               style={{
-                display: 'inline-block', border: '1px solid #2A2A2A', color: '#6A6A6A',
+                display: 'inline-block', border: '1px solid #2A2A2A', color: '#CACACA',
                 fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px',
                 letterSpacing: '0.2em', padding: '18px 36px', textDecoration: 'none',
               }}

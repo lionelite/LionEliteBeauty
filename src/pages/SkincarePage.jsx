@@ -37,8 +37,8 @@ export default function SkincarePage() {
               Advanced Peptide<br />Skincare Collection.
             </h1>
             <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '24px' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.8', maxWidth: '480px' }}>
-              Peptide-powered formulations designed to support the appearance of healthier, more nourished skin. Premium ingredients, purposefully formulated — built to deliver a visible difference.
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.8', maxWidth: '480px' }}>
+              Peptide-powered formulations designed to support the appearance of healthier, more radiant skin. Premium ingredients, purposefully formulated — to help you feel confident in your own skin.
             </p>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function SkincarePage() {
 
                       <div style={{ width: '32px', height: '1px', backgroundColor: p.accent, marginBottom: '20px' }}></div>
 
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#5A5A5A' : '#6A6A6A', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px', maxWidth: '400px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#CACACA' : '#6A6A6A', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px', maxWidth: '400px' }}>
                         {p.description}
                       </p>
 
@@ -94,18 +94,37 @@ export default function SkincarePage() {
                       </ul>
 
                       <div className="flex items-center gap-6">
-                        <p style={{ fontFamily: 'Georgia, serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '1.8rem' }}>{p.price}</p>
-                        <Link to={`/skincare/${p.slug}`}
-                          style={{
-                            backgroundColor: p.accent,
-                            color: '#FFFFFF',
-                            fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                            fontSize: '11px', letterSpacing: '0.18em',
-                            padding: '14px 28px', textDecoration: 'none',
-                          }}
-                          className="uppercase hover:opacity-90 transition-opacity">
-                          View Details →
-                        </Link>
+                        {p.badge === 'Coming Soon' ? (
+                          <>
+                            <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: '1.3rem', letterSpacing: '0.1em' }}>Coming Soon</p>
+                            <Link to={`/skincare/${p.slug}`}
+                              style={{
+                                border: `1px solid ${p.accent}`,
+                                color: p.accent,
+                                fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                                fontSize: '11px', letterSpacing: '0.18em',
+                                padding: '14px 28px', textDecoration: 'none',
+                              }}
+                              className="uppercase hover:opacity-90 transition-opacity">
+                              Learn More →
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <p style={{ fontFamily: 'Georgia, serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '1.8rem' }}>{p.price}</p>
+                            <Link to={`/skincare/${p.slug}`}
+                              style={{
+                                backgroundColor: p.accent,
+                                color: '#FFFFFF',
+                                fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                                fontSize: '11px', letterSpacing: '0.18em',
+                                padding: '14px 28px', textDecoration: 'none',
+                              }}
+                              className="uppercase hover:opacity-90 transition-opacity">
+                              View Details →
+                            </Link>
+                          </>
+                        )}
                       </div>
                     </div>
 

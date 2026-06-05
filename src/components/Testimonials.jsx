@@ -136,13 +136,13 @@ export default function Testimonials() {
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '9px', letterSpacing: '0.3em', marginBottom: '10px' }}
                   className="uppercase">{p.eyebrow}</p>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '0.9rem', lineHeight: '1.4', marginBottom: '14px' }}>{p.name}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px', letterSpacing: '0.15em' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.15em' }}>
                   Premium Access
                 </p>
               </div>
               <div style={{ padding: '22px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '14px' }}
-                  className="uppercase">Includes</p>
+                  className="uppercase">What's Included</p>
                 <ul className="space-y-2.5 mb-6 flex-1">
                   {p.includes.map(item => (
                     <li key={item} className="flex items-start gap-2">

@@ -15,8 +15,8 @@ export default function BrandManifesto() {
                 Your skin can repair itself.<br />We help it do that.
               </h2>
               <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '32px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '16px', lineHeight: '1.9', marginBottom: '24px' }}>
-                Most skincare masks the problem. Ours is formulated differently. GHK-Cu peptide — the core of every Lion Elite Beauty formulation — is one of the most researched compounds in dermatology, studied alongside thousands of genes involved in skin renewal, collagen support, and barrier health. The result isn't coverage. It's genuine support for how your skin looks and feels.
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.9', marginBottom: '24px' }}>
+                GHK-Cu peptide — the core of every Lion Elite Beauty formulation — is one of the most researched compounds in dermatology, studied alongside thousands of genes involved in skin renewal, collagen support, and barrier health. The result isn't coverage. It's genuine support for how your skin looks and feels — so you can feel confident in your own skin.
               </p>
               <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1rem', fontStyle: 'italic', lineHeight: '1.7' }}>
                 "Not skincare that hides aging — skincare that supports your skin's natural renewal."
@@ -34,7 +34,7 @@ export default function BrandManifesto() {
                 <div key={p.title} style={{ backgroundColor: '#0A0A0A', border: '1px solid #1E1E1E', padding: '28px 24px' }}>
                   <span style={{ fontSize: '20px', display: 'block', marginBottom: '12px' }}>{p.icon}</span>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '12px', letterSpacing: '0.1em', marginBottom: '8px' }} className="uppercase">{p.title}</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '12px', lineHeight: '1.7' }}>{p.desc}</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7' }}>{p.desc}</p>
                 </div>
               ))}
             </div>
@@ -68,7 +68,7 @@ export default function BrandManifesto() {
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '9px', letterSpacing: '0.3em', marginBottom: '12px' }} className="uppercase">Step {item.step}</p>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.4rem', marginBottom: '12px' }} className="font-normal">{item.title}</p>
                 <div style={{ width: '24px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '14px' }}></div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
               </div>
             ))}
           </div>

@@ -1,6 +1,54 @@
 export const skincareProducts = [
   {
+    slug: 'ghk-cu-serum',
+    name: 'GHK-Cu Intensive Serum',
+    shortName: 'GHK-Cu Serum',
+    price: 'Coming Soon',
+    size: 'Coming 2025',
+    badge: 'Coming Soon',
+    badgeColor: '#C9A96E',
+    tagline: 'High-concentration copper peptide serum — pure, potent, precise',
+    accent: '#C9A96E',
+    bg: '#1A1A1A',
+    label: 'GHK-Cu',
+    headline: 'Pure copper peptide. No filler. No shortcuts.',
+    description:
+      'We\'re formulating the most concentrated GHK-Cu serum we\'ve ever created. No vitamin C. No unnecessary additives — just a high-potency copper peptide complex designed to support the appearance of firmer, smoother, more youthful-looking skin. Purpose-built for those who want maximum peptide density in every drop.',
+    whatYouNotice: [
+      'Pure GHK-Cu complex — no vitamin C, no dilution',
+      'Designed to support the appearance of skin firmness and density',
+      'Formulated for daily use alongside your existing routine',
+      'Premium concentration for visible results',
+    ],
+    benefits: [
+      { title: 'High-Potency GHK-Cu Complex', desc: 'Maximum copper peptide density in every drop — no unnecessary additives.' },
+      { title: 'No Vitamin C', desc: 'Formulated without vitamin C — a pure peptide-first approach to skin support.' },
+      { title: 'Supports Appearance of Firmness', desc: 'Designed to help support the appearance of firmer, denser-looking skin over time.' },
+      { title: 'Pairs With Any Routine', desc: 'Lightweight, fast-absorbing — fits seamlessly into your existing morning and evening regimen.' },
+    ],
+    howToUse: [
+      'Apply 2–3 drops to clean, dry skin after cleansing.',
+      'Gently press into skin — do not rub.',
+      'Allow 60 seconds to absorb before applying moisturiser.',
+      'Use morning and evening for best results.',
+    ],
+    keyIngredients: [
+      { name: 'GHK-Cu (Copper Peptide) — High Concentration', role: 'Maximum-potency copper peptide complex for supporting skin renewal and firmness' },
+      { name: 'Hyaluronic Acid (Multi-Weight)', role: 'Helps nourish and hydrate across multiple skin depths for a plumper appearance' },
+      { name: 'Aloe Vera', role: 'Helps calm and soothe; supports comfortable daily use at high peptide concentration' },
+    ],
+    timeline: [
+      { period: 'Week 1–2', result: 'Skin feels more hydrated; appearance of fine lines may begin to soften' },
+      { period: 'Week 3–4', result: 'Skin may appear firmer and more even-toned with consistent use' },
+      { period: 'Month 2+', result: 'Sustained improvement in the appearance of skin density and radiance' },
+    ],
+    whoItsFor: 'For those who want maximum copper peptide concentration without unnecessary additives. Ideal for anyone already familiar with peptide skincare who wants to level up to a higher-potency formula.',
+    pairsWith: ['ghk-cu-face-wash', 'collagen-boost-cream'],
+    position: 0,
+  },
+  {
     slug: 'ghk-cu-face-wash',
+    name: 'GHK-Cu Peptide Face Wash',
     name: 'GHK-Cu Peptide Face Wash',
     shortName: 'GHK-Cu Face Wash',
     price: '$69.99',
@@ -45,7 +93,7 @@ export const skincareProducts = [
     ],
     whoItsFor: 'Anyone who wants to support their skin without a complicated routine. Ideal as a daily first step for all skin types — especially if your skin looks dull, feels congested, or appears uneven.',
     pairsWith: ['rejuvenate-serum', 'collagen-boost-cream'],
-    position: 0,
+    position: 1,
   },
   {
     slug: 'rejuvenate-serum',
@@ -93,7 +141,7 @@ export const skincareProducts = [
     ],
     whoItsFor: 'Anyone looking to support the appearance of youthful, healthy skin. The flagship product of the Lion Elite Beauty line — most effective when paired with the Face Wash and Moisturizer.',
     pairsWith: ['ghk-cu-face-wash', 'collagen-boost-cream'],
-    position: 1,
+    position: 2,
   },
   {
     slug: 'collagen-boost-cream',
@@ -141,7 +189,7 @@ export const skincareProducts = [
     ],
     whoItsFor: 'Anyone looking to support the appearance of firmer, more youthful skin while they sleep. Pairs with the Rejuvenate Serum for a complete morning and evening routine.',
     pairsWith: ['rejuvenate-serum', 'ghk-cu-face-wash'],
-    position: 2,
+    position: 3,
   },
   {
     slug: 'kpv-moisturizer',
@@ -189,7 +237,7 @@ export const skincareProducts = [
     ],
     whoItsFor: 'Those with sensitive, reactive or redness-prone skin. Also ideal for anyone looking to support skin comfort after procedures, or for daily use on all skin types.',
     pairsWith: ['rejuvenate-serum', 'recovery-kit'],
-    position: 3,
+    position: 4,
   },
   {
     slug: 'hydra-boost-body-wash',
@@ -237,7 +285,7 @@ export const skincareProducts = [
     ],
     whoItsFor: 'Anyone who wants to extend peptide skincare benefits beyond the face. Ideal for daily use by all skin types — especially those who want a premium, nourishing body wash without harsh chemicals.',
     pairsWith: ['ghk-cu-face-wash', 'rejuvenate-serum'],
-    position: 4,
+    position: 5,
   },
   {
     slug: 'recovery-kit',
@@ -290,7 +338,7 @@ export const skincareProducts = [
     ],
     whoItsFor: 'Anyone who has had or is planning a cosmetic skin procedure. Also suitable for anyone whose skin barrier feels compromised and needs gentle, supportive daily care.',
     pairsWith: ['ghk-cu-face-wash', 'rejuvenate-serum', 'kpv-moisturizer'],
-    position: 5,
+    position: 6,
   },
 ]
 

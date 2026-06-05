@@ -31,8 +31,8 @@ export default function ServicesOverview() {
             className="font-normal mb-6">
             Skincare &amp; Wellness,<br />Built Around Your Biology.
           </h2>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '15px', lineHeight: '1.8', maxWidth: '520px', margin: '0 auto' }}>
-            From clinical-grade peptide skincare to targeted optimization programs — everything is designed to deliver real, measurable results.
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.8', maxWidth: '520px', margin: '0 auto' }}>
+            From clinical-grade peptide skincare to targeted wellness programs — everything designed to help you look, feel, and perform at your best.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function ServicesOverview() {
                 <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px', lineHeight: '1.3', marginBottom: '8px' }}>
                   {product.name}
                 </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '12px', lineHeight: '1.7', marginBottom: '20px' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', marginBottom: '20px' }}>
                   {product.tagline}
                 </p>
                 <div className="flex items-center justify-between">
@@ -71,7 +71,7 @@ export default function ServicesOverview() {
 
           <div style={{ backgroundColor: '#0F0F0F', border: '1px solid #1A1A1A', padding: '20px 32px', marginTop: '1px' }}
             className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '12px', letterSpacing: '0.1em' }} className="uppercase">
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.1em' }} className="uppercase">
               Complete Skincare Bundle — All Products
             </p>
             <a href="#skincare"
@@ -105,7 +105,7 @@ export default function ServicesOverview() {
                 <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px', lineHeight: '1.3', marginBottom: '8px' }}>
                   {program.name}
                 </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '12px', lineHeight: '1.7', marginBottom: '20px' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', marginBottom: '20px' }}>
                   {program.tagline}
                 </p>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: program.accent, fontSize: '10px', letterSpacing: '0.15em' }}
