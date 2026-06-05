@@ -50,7 +50,6 @@ export const skincareProducts = [
   {
     slug: 'ghk-cu-face-wash',
     name: 'GHK-Cu Peptide Face Wash',
-    name: 'GHK-Cu Peptide Face Wash',
     shortName: 'GHK-Cu Face Wash',
     price: '$69.99',
     size: '150ml',

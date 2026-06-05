@@ -1,21 +1,21 @@
 import { Link } from 'react-router-dom'
 
 const skincare = [
-  { name: 'GHK-Cu Peptide Face Wash', tagline: 'Helps nourish & support daily skin health', price: '$69.99', accent: '#C9A96E' },
-  { name: 'Rejuvenate Serum', tagline: 'Supports the appearance of firmer, smoother skin', price: '$119.99', accent: '#8A9E85' },
-  { name: 'Collagen Boost Face Cream', tagline: 'Supports the appearance of skin firmness overnight', price: '$99.99', accent: '#C9A96E' },
-  { name: 'KPV Recovery Moisturizer', tagline: 'Helps calm the appearance of redness & sensitivity', price: '$79.99', accent: '#8A7AB0' },
-  { name: 'Hydra Boost Body Wash', tagline: 'Helps nourish & hydrate skin all over', price: '$49.99', accent: '#7A9FBF' },
-  { name: 'Post-Procedure Recovery Kit', tagline: 'Supports recovery appearance & skin comfort', price: '$189.99', accent: '#C9A96E' },
+  { name: 'GHK-Cu Peptide Face Wash', tagline: 'Helps nourish & support daily skin health', price: '$69.99', accent: '#C9A96E', slug: 'ghk-cu-face-wash' },
+  { name: 'Rejuvenate Serum', tagline: 'Supports the appearance of firmer, smoother skin', price: '$119.99', accent: '#8A9E85', slug: 'rejuvenate-serum' },
+  { name: 'Collagen Boost Face Cream', tagline: 'Supports the appearance of skin firmness overnight', price: '$99.99', accent: '#C9A96E', slug: 'collagen-boost-cream' },
+  { name: 'KPV Recovery Moisturizer', tagline: 'Helps calm the appearance of redness & sensitivity', price: '$79.99', accent: '#8A7AB0', slug: 'kpv-moisturizer' },
+  { name: 'Hydra Boost Body Wash', tagline: 'Helps nourish & hydrate skin all over', price: '$49.99', accent: '#7A9FBF', slug: 'hydra-boost-body-wash' },
+  { name: 'Post-Procedure Recovery Kit', tagline: 'Supports recovery appearance & skin comfort', price: '$189.99', accent: '#C9A96E', slug: 'recovery-kit' },
 ]
 
 const programs = [
-  { name: 'Muscle & Recovery', tagline: 'Build strength, recover faster, perform at a higher level.', accent: '#C9A96E', href: '/programs/muscle' },
-  { name: 'Neuro Program', tagline: 'Unlock elite cognitive focus, clarity, and mental endurance.', accent: '#8A9E85', href: '/programs/neuro' },
-  { name: 'Fertility Program', tagline: 'Data-driven hormonal and reproductive health optimization.', accent: '#B8A4D4', href: '/programs/fertility' },
-  { name: 'Hair Program', tagline: 'Restore density, strengthen follicles, rebuild confidence.', accent: '#C4A265', href: '/programs/hair' },
-  { name: 'Weight Program', tagline: 'Precision fat loss, hunger control, and metabolic health.', accent: '#5BA87A', href: '/programs/weight' },
-  { name: 'Longevity Program', tagline: 'Cellular repair, anti-aging, and long-term resilience.', accent: '#7A9FBF', href: '/programs/longevity' },
+  { name: 'Muscle & Recovery', tagline: 'Build strength, recover faster, perform at a higher level.', accent: '#C9A96E', href: '/programs/muscle', applyHref: '/apply?program=muscle' },
+  { name: 'Neuro Program', tagline: 'Unlock elite cognitive focus, clarity, and mental endurance.', accent: '#8A9E85', href: '/programs/neuro', applyHref: '/apply?program=neuro' },
+  { name: 'Fertility Program', tagline: 'Data-driven hormonal and reproductive health optimization.', accent: '#B8A4D4', href: '/programs/fertility', applyHref: '/apply?program=fertility' },
+  { name: 'Hair Program', tagline: 'Restore density, strengthen follicles, rebuild confidence.', accent: '#C4A265', href: '/programs/hair', applyHref: '/apply?program=hair' },
+  { name: 'Weight Program', tagline: 'Precision fat loss, hunger control, and metabolic health.', accent: '#5BA87A', href: '/programs/weight', applyHref: '/apply?program=weight' },
+  { name: 'Longevity Program', tagline: 'Cellular repair, anti-aging, and long-term resilience.', accent: '#7A9FBF', href: '/programs/longevity', applyHref: '/apply?program=longevity' },
 ]
 
 export default function ServicesOverview() {
@@ -59,11 +59,11 @@ export default function ServicesOverview() {
                 </p>
                 <div className="flex items-center justify-between">
                   <p style={{ fontFamily: 'Georgia, serif', color: product.accent, fontSize: '15px' }}>{product.price}</p>
-                  <a href="#skincare"
+                  <Link to={`/skincare/${product.slug}`}
                     style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: product.accent, fontSize: '10px', letterSpacing: '0.15em', textDecoration: 'none' }}
                     className="uppercase opacity-0 group-hover:opacity-100 transition-opacity">
                     View →
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -74,7 +74,7 @@ export default function ServicesOverview() {
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.1em' }} className="uppercase">
               Complete Skincare Bundle — All Products
             </p>
-            <a href="#skincare"
+            <Link to="/skincare"
               style={{
                 backgroundColor: '#C9A96E', color: '#000',
                 fontFamily: 'Helvetica Neue, Arial, sans-serif',
@@ -83,7 +83,7 @@ export default function ServicesOverview() {
               }}
               className="uppercase hover:opacity-90 transition-opacity whitespace-nowrap">
               Shop the Bundle — $499.99
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -98,21 +98,33 @@ export default function ServicesOverview() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-px" style={{ backgroundColor: '#1A1A1A' }}>
             {programs.map((program) => (
-              <Link key={program.name} to={program.href}
-                style={{ backgroundColor: '#0A0A0A', padding: '32px', textDecoration: 'none', display: 'block' }}
+              <div key={program.name}
+                style={{ backgroundColor: '#0A0A0A', padding: '32px', display: 'flex', flexDirection: 'column' }}
                 className="group hover:bg-[#0F0F0F] transition-colors">
                 <div style={{ width: '8px', height: '8px', backgroundColor: program.accent, borderRadius: '50%', marginBottom: '20px' }}></div>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px', lineHeight: '1.3', marginBottom: '8px' }}>
-                  {program.name}
-                </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', marginBottom: '20px' }}>
-                  {program.tagline}
-                </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: program.accent, fontSize: '10px', letterSpacing: '0.15em' }}
-                  className="uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                  Learn More →
-                </p>
-              </Link>
+                <Link to={program.href} style={{ textDecoration: 'none', flex: 1 }}>
+                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px', lineHeight: '1.3', marginBottom: '8px' }}>
+                    {program.name}
+                  </p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', marginBottom: '20px' }}>
+                    {program.tagline}
+                  </p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: program.accent, fontSize: '10px', letterSpacing: '0.15em' }}
+                    className="uppercase opacity-100 transition-opacity mb-4">
+                    Learn More →
+                  </p>
+                </Link>
+                <Link to={program.applyHref}
+                  style={{
+                    display: 'block', backgroundColor: program.accent, color: '#000', textAlign: 'center',
+                    fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                    fontSize: '10px', letterSpacing: '0.2em',
+                    padding: '12px', textDecoration: 'none',
+                  }}
+                  className="uppercase hover:opacity-90 transition-opacity">
+                  Apply Now →
+                </Link>
+              </div>
             ))}
           </div>
         </div>
