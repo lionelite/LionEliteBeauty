@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 
 const programs = [
   { label: 'Muscle & Recovery Program', href: '/programs/muscle', accent: '#C9A96E', desc: 'Strength & performance' },
@@ -20,6 +21,7 @@ const skincareItems = [
 ]
 
 export default function Navbar() {
+  const { itemCount } = useCart()
   const [menuOpen, setMenuOpen] = useState(false)
   const [programsOpen, setProgramsOpen] = useState(false)
   const [skincareOpen, setSkincareOpen] = useState(false)
@@ -173,6 +175,23 @@ export default function Navbar() {
             Ingredients
           </Link>
 
+          <Link to="/cart"
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none', position: 'relative', padding: '8px 4px' }}
+            className="text-sm uppercase tracking-wider hover:text-[#C9A96E] transition-colors">
+            Cart
+            {itemCount > 0 && (
+              <span style={{
+                position: 'absolute', top: '0', right: '-8px',
+                backgroundColor: '#C9A96E', color: '#000',
+                fontSize: '9px', fontWeight: 'bold',
+                width: '18px', height: '18px',
+                borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'Helvetica Neue, Arial, sans-serif',
+              }}>{itemCount}</span>
+            )}
+          </Link>
+
           <Link to="/apply"
             style={{
               backgroundColor: '#C9A96E', color: '#FFFFFF',
@@ -236,6 +255,11 @@ export default function Navbar() {
           ))}
 
           <div style={{ paddingTop: '16px' }} className="flex flex-col gap-4">
+            <Link to="/cart" onClick={() => setMenuOpen(false)}
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
+              className="text-sm uppercase flex items-center gap-2">
+              Cart{itemCount > 0 ? ` (${itemCount})` : ''}
+            </Link>
             <Link to="/skin-system" onClick={() => setMenuOpen(false)}
               style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
               className="text-sm uppercase">Skin System</Link>

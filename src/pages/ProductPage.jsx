@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams, Navigate } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { skincareProducts } from '../data/skincareProducts'
@@ -35,52 +36,31 @@ export default function ProductPage() {
     .map(s => skincareProducts.find(x => x.slug === s))
     .filter(Boolean)
 
-  const [showOrderForm, setShowOrderForm] = useState(false)
-  const [orderName, setOrderName] = useState('')
-  const [orderEmail, setOrderEmail] = useState('')
-  const [orderPhone, setOrderPhone] = useState('')
-  const [orderSending, setOrderSending] = useState(false)
-  const [orderSent, setOrderSent] = useState(false)
-  const [orderError, setOrderError] = useState(false)
+  const { addItem } = useCart()
+  const [addedToCart, setAddedToCart] = useState(false)
 
   // Coming Soon notify form
   const [notifyEmail, setNotifyEmail] = useState('')
   const [notifySent, setNotifySent] = useState(false)
+  const [notifySending, setNotifySending] = useState(false)
 
-  async function handleOrder(e) {
-    e.preventDefault()
-    if (!orderName.trim() || !orderEmail.trim()) return
-    setOrderSending(true)
-    setOrderError(false)
-    try {
-      const res = await fetch('/api/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'order',
-          name: orderName,
-          email: orderEmail,
-          phone: orderPhone,
-          products: [p.name],
-        }),
-      })
-      if (!res.ok) throw new Error('API error')
-      setOrderSent(true)
-    } catch (err) {
-      console.error('Order error:', err)
-      setOrderError(true)
-    } finally {
-      setOrderSending(false)
-    }
+  async function handleAddToCart() {
+    addItem({
+      slug: p.slug,
+      name: p.name,
+      size: p.size,
+      priceNum: p.priceNum || 0,
+    })
+    setAddedToCart(true)
+    setTimeout(() => setAddedToCart(false), 2500)
   }
 
   async function handleNotify(e) {
     e.preventDefault()
     if (!notifyEmail.trim()) return
-    setOrderSending(true)
-    setOrderError(false)
+    setNotifySending(true)
     try {
-      const res = await fetch('/api/send', {
+      await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -90,13 +70,11 @@ export default function ProductPage() {
           products: [`${p.name} — Coming Soon Interest`],
         }),
       })
-      if (!res.ok) throw new Error('API error')
-      setNotifySent(true)
     } catch (err) {
       console.error('Notify error:', err)
-      setOrderError(true)
     } finally {
-      setOrderSending(false)
+      setNotifySending(false)
+      setNotifySent(true)
     }
   }
 
@@ -183,16 +161,16 @@ export default function ProductPage() {
                           fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '13px', outline: 'none',
                         }}
                         required />
-                      <button type="submit" disabled={orderSending}
+                      <button type="submit" disabled={notifySending}
                         style={{
                           backgroundColor: '#C9A96E', color: '#000', border: 'none',
                           fontFamily: 'Helvetica Neue, Arial, sans-serif',
                           fontSize: '11px', letterSpacing: '0.15em',
-                          padding: '14px 28px', cursor: orderSending ? 'not-allowed' : 'pointer',
+                          padding: '14px 28px', cursor: notifySending ? 'not-allowed' : 'pointer',
                           whiteSpace: 'nowrap',
                         }}
                         className="uppercase hover:opacity-90 transition-opacity">
-                        {orderSending ? 'Sending…' : 'Notify Me →'}
+                        {notifySending ? 'Sending…' : 'Notify Me →'}
                       </button>
                     </form>
                   ) : (
@@ -200,20 +178,8 @@ export default function ProductPage() {
                       You're on the list. We'll let you know when it launches.
                     </p>
                   )}
-                  {orderError && (
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '13px', marginTop: '12px' }}>
-                      Something went wrong. Please try again.
-                    </p>
-                  )}
                 </div>
-              ) : orderSent ? (
-                <div style={{ backgroundColor: '#111', border: '1px solid #5BA87A33', padding: '24px', marginBottom: '28px' }}>
-                  <p style={{ fontFamily: 'Georgia, serif', color: '#5BA87A', fontSize: '1.1rem', marginBottom: '8px' }}>Order confirmed ✓</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.7' }}>
-                    We've received your order for <strong style={{ color: '#FAFAF8' }}>{p.name}</strong> and will be in touch within 24 hours to confirm shipping.
-                  </p>
-                </div>
-              ) : !showOrderForm ? (
+              ) : (
                 <div className="flex items-center gap-5 mb-8">
                   <div>
                     {p.originalPrice && (
@@ -221,63 +187,24 @@ export default function ProductPage() {
                     )}
                     <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem' }}>{p.price}</p>
                   </div>
-                  <button onClick={() => setShowOrderForm(true)}
+                  <button onClick={handleAddToCart}
                     style={{
-                      backgroundColor: p.accent, color: '#000',
+                      backgroundColor: addedToCart ? '#5BA87A' : p.accent, color: '#000',
                       fontFamily: 'Helvetica Neue, Arial, sans-serif',
                       fontSize: '12px', letterSpacing: '0.18em',
                       padding: '18px 36px', border: 'none', cursor: 'pointer',
                     }}
                     className="uppercase hover:opacity-90 transition-opacity">
-                    Order Now →
+                    {addedToCart ? '✓ Added to Cart' : 'Add to Cart →'}
                   </button>
-                </div>
-              ) : (
-                <div style={{ backgroundColor: '#111', border: `1px solid ${p.accent}22`, padding: '28px', marginBottom: '28px' }}>
-                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.1rem', marginBottom: '20px' }}>
-                    Order {p.name}
-                  </p>
-                  <form onSubmit={handleOrder} className="space-y-4">
-                    <input type="text" value={orderName} onChange={e => setOrderName(e.target.value)}
-                      placeholder="Full Name *" required
-                      style={{ width: '100%', padding: '14px 18px', backgroundColor: '#0A0A0A', border: '1px solid #2A2A2A', color: '#FAFAF8', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '13px', outline: 'none' }} />
-                    <input type="email" value={orderEmail} onChange={e => setOrderEmail(e.target.value)}
-                      placeholder="Email Address *" required
-                      style={{ width: '100%', padding: '14px 18px', backgroundColor: '#0A0A0A', border: '1px solid #2A2A2A', color: '#FAFAF8', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '13px', outline: 'none' }} />
-                    <input type="tel" value={orderPhone} onChange={e => setOrderPhone(e.target.value)}
-                      placeholder="Phone (optional)"
-                      style={{ width: '100%', padding: '14px 18px', backgroundColor: '#0A0A0A', border: '1px solid #2A2A2A', color: '#FAFAF8', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '13px', outline: 'none' }} />
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px' }}>
-                      You'll receive order confirmation at your email.
-                    </p>
-                    {orderError && (
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '13px' }}>
-                        Something went wrong. Please try again or email{' '}
-                        <a href="mailto:orders@lionelitebeauty.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>orders@lionelitebeauty.com</a>
-                      </p>
-                    )}
-                    <div className="flex gap-3">
-                      <button type="submit" disabled={orderSending}
-                        style={{
-                          flex: 1, backgroundColor: orderSending ? '#6A5A3A' : p.accent, color: '#000', border: 'none',
-                          fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                          fontSize: '12px', letterSpacing: '0.18em',
-                          padding: '16px', cursor: orderSending ? 'not-allowed' : 'pointer',
-                        }}
-                        className="uppercase hover:opacity-90 transition-opacity">
-                        {orderSending ? 'Sending…' : 'Place Order →'}
-                      </button>
-                      <button type="button" onClick={() => setShowOrderForm(false)}
-                        style={{
-                          padding: '16px 24px', backgroundColor: 'transparent', border: '1px solid #2A2A2A',
-                          color: '#6A6A6A', fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                          fontSize: '11px', letterSpacing: '0.15em', cursor: 'pointer',
-                        }}
-                        className="uppercase hover:border-[#C9A96E] transition-colors">
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
+                  <Link to="/cart"
+                    style={{
+                      fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px',
+                      letterSpacing: '0.12em', textDecoration: 'none', borderBottom: '1px solid #2A2A2A', paddingBottom: '2px',
+                    }}
+                    className="uppercase hover:text-[#C9A96E] transition-colors">
+                    View Cart
+                  </Link>
                 </div>
               )}
 

@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { skincareProducts, bundles } from '../data/skincareProducts'
@@ -20,6 +21,8 @@ function ProductBottle({ accent, label, isDark }) {
 }
 
 export default function SkincarePage() {
+  const { addItem } = useCart()
+  const [bundleAdded, setBundleAdded] = useState('')
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
@@ -189,16 +192,30 @@ export default function SkincarePage() {
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '11px', letterSpacing: '0.1em', marginBottom: '6px' }} className="uppercase">Save {b.savings}</p>
                   </div>
 
-                  <a href="mailto:orders@lionelitebeauty.com"
-                    style={{
-                      display: 'block', backgroundColor: b.accent, color: '#000',
-                      fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                      fontSize: '11px', letterSpacing: '0.18em',
-                      padding: '14px', textAlign: 'center', textDecoration: 'none',
+                  <button onClick={() => {
+                      bundleProducts.forEach(p => addItem({ slug: p.slug, name: p.name, size: p.size, priceNum: p.priceNum || 0 }))
+                      setBundleAdded(b.slug)
+                      setTimeout(() => setBundleAdded(''), 2500)
                     }}
-                    className="uppercase hover:opacity-90 transition-opacity">
-                    Order Bundle →
-                  </a>
+                      style={{
+                        display: 'block', width: '100%', backgroundColor: bundleAdded === b.slug ? '#5BA87A' : b.accent, color: '#000', border: 'none',
+                        fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                        fontSize: '11px', letterSpacing: '0.18em',
+                        padding: '14px', textAlign: 'center', cursor: 'pointer',
+                      }}
+                      className="uppercase hover:opacity-90 transition-opacity">
+                      {bundleAdded === b.slug ? '✓ Added to Cart' : 'Add Bundle to Cart →'}
+                    </button>
+                    <Link to="/cart"
+                      style={{
+                        display: 'block', marginTop: '10px',
+                        fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                        color: b.accent, fontSize: '10px', letterSpacing: '0.15em',
+                        textAlign: 'center', textDecoration: 'none',
+                      }}
+                      className="uppercase hover:opacity-70 transition-opacity">
+                      View Cart →
+                    </Link>
                 </div>
               )
             })}
