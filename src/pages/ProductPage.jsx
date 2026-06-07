@@ -86,10 +86,10 @@ export default function ProductPage() {
       <div style={{ paddingTop: '100px', paddingBottom: '16px', borderBottom: '1px solid #141414' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2">
-            <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
+            <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
               className="uppercase hover:text-[#C9A96E] transition-colors">Home</Link>
             <span style={{ color: '#2A2A2A', fontSize: '11px' }}>·</span>
-            <Link to="/skincare" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
+            <Link to="/skincare" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
               className="uppercase hover:text-[#C9A96E] transition-colors">Skincare</Link>
             <span style={{ color: '#2A2A2A', fontSize: '11px' }}>·</span>
             <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.12em' }} className="uppercase">{p.shortName}</span>
@@ -133,7 +133,7 @@ export default function ProductPage() {
               {/* Kit includes */}
               {p.kitIncludes && (
                 <div style={{ backgroundColor: '#111', border: `1px solid ${p.accent}22`, padding: '20px 24px', marginBottom: '28px' }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '12px' }} className="uppercase">Kit Includes</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '12px' }} className="uppercase">Kit Includes</p>
                   <ul className="space-y-2">
                     {p.kitIncludes.map(item => (
                       <li key={item} className="flex items-center gap-3">
@@ -183,7 +183,7 @@ export default function ProductPage() {
                 <div className="flex items-center gap-5 mb-8">
                   <div>
                     {p.originalPrice && (
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', textDecoration: 'line-through' }}>{p.originalPrice}</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', textDecoration: 'line-through' }}>{p.originalPrice}</p>
                     )}
                     <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem' }}>{p.price}</p>
                   </div>
@@ -208,7 +208,7 @@ export default function ProductPage() {
                 </div>
               )}
 
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px' }}>
                 Questions? Email <a href="mailto:info@lionelitebeauty.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitebeauty.com</a>
               </p>
             </div>
@@ -375,7 +375,7 @@ export default function ProductPage() {
       <section style={{ backgroundColor: '#050505', padding: '48px 0', borderTop: '1px solid #141414' }}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between flex-wrap gap-4">
           <Link to="/skincare"
-            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.15em', textDecoration: 'none' }}
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:text-[#C9A96E] transition-colors flex items-center gap-2">
             ← Back to All Products
           </Link>

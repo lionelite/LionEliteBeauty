@@ -11,7 +11,7 @@ export default function BeforeAfterResults() {
             className="font-normal mb-6">
             What Our Clients Achieve.
           </h2>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '14px', lineHeight: '1.8', maxWidth: '480px', margin: '0 auto' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '14px', lineHeight: '1.8', maxWidth: '480px', margin: '0 auto' }}>
             These are real clients using Lion Elite Beauty skincare and wellness programs. Results speak for themselves.
           </p>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
@@ -34,7 +34,7 @@ export default function BeforeAfterResults() {
                     style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover', objectPosition: 'top', display: 'block', filter: 'grayscale(20%)' }}
                   />
                 </div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.2em' }} className="uppercase text-center">Before</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.2em' }} className="uppercase text-center">Before</p>
               </div>
               <div>
                 <div style={{ backgroundColor: '#111', marginBottom: '10px', overflow: 'hidden' }}>
@@ -49,7 +49,7 @@ export default function BeforeAfterResults() {
             </div>
 
             <div style={{ borderTop: '1px solid #1A1A1A', marginTop: '24px', paddingTop: '20px' }}>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', lineHeight: '1.7' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px', lineHeight: '1.7' }}>
                 Visible improvement in skin tone, texture, and clarity using the Lion Elite Beauty peptide skincare line.
               </p>
             </div>
@@ -80,7 +80,7 @@ export default function BeforeAfterResults() {
             </div>
 
             <div style={{ borderTop: '1px solid #1A1A1A', marginTop: '24px', paddingTop: '20px' }}>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', lineHeight: '1.7' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px', lineHeight: '1.7' }}>
                 Significant reduction in redness and uneven skin tone. Results achieved through consistent use of the peptide protocol.
               </p>
             </div>
@@ -89,7 +89,7 @@ export default function BeforeAfterResults() {
         </div>
 
         {/* Disclaimer */}
-        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '11px', lineHeight: '1.7', textAlign: 'center', marginTop: '24px' }}>
+        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', lineHeight: '1.7', textAlign: 'center', marginTop: '24px' }}>
           Individual results vary. These clients used Lion Elite Beauty products consistently as directed.
         </p>
 

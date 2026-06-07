@@ -64,7 +64,7 @@ export default function SkinSystemPage() {
                 The Lion Elite<br />Skin System.
               </h1>
               <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '28px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '17px', lineHeight: '1.85' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '17px', lineHeight: '1.85' }}>
                 A simple, peptide-powered daily routine designed to visibly improve skin appearance — not just hydrate it. Three products. Every day. Real results.
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function SkinSystemPage() {
                 ].map(s => (
                   <div key={s.label} style={{ backgroundColor: '#0A0A0A', padding: '28px 24px' }}>
                     <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '2rem', marginBottom: '6px' }}>{s.stat}</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px', letterSpacing: '0.1em', lineHeight: '1.5' }} className="uppercase">{s.label}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', lineHeight: '1.5' }} className="uppercase">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -113,7 +113,7 @@ export default function SkinSystemPage() {
                 ].map((point, i) => (
                   <div key={i} className="flex items-start gap-4">
                     <span style={{ color: '#C9A96E', fontSize: '16px', flexShrink: 0, marginTop: '1px' }}>→</span>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '15px', lineHeight: '1.75' }}>{point}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.75' }}>{point}</p>
                   </div>
                 ))}
               </div>
@@ -146,18 +146,18 @@ export default function SkinSystemPage() {
                       <span style={{ fontFamily: 'Georgia, serif', color: s.accent, fontSize: '16px' }}>{s.number}</span>
                     </div>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: s.accent, letterSpacing: '0.25em', fontSize: '10px' }} className="uppercase">{s.action}</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '11px', marginTop: '8px', lineHeight: '1.6' }}>{s.directive}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', marginTop: '8px', lineHeight: '1.6' }}>{s.directive}</p>
                   </div>
 
                   {/* Product info */}
                   <div className="md:col-span-2" style={{ padding: '48px 40px', borderRight: '1px solid #111' }}>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '10px', letterSpacing: '0.18em', marginBottom: '12px' }} className="uppercase">Product</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '10px', letterSpacing: '0.18em', marginBottom: '12px' }} className="uppercase">Product</p>
                     <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem', lineHeight: '1.3', marginBottom: '10px' }}>
                       {s.product}
                     </h3>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: s.accent, fontSize: '10px', letterSpacing: '0.12em', marginBottom: '16px' }} className="uppercase">{s.key}</p>
                     <div style={{ width: '24px', height: '1px', backgroundColor: s.accent, marginBottom: '16px' }}></div>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', marginBottom: '20px' }}>{s.price} · {s.size}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', marginBottom: '20px' }}>{s.price} · {s.size}</p>
                     <Link to={`/skincare/${s.slug}`}
                       style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: s.accent, fontSize: '10px', letterSpacing: '0.15em', textDecoration: 'none' }}
                       className="uppercase hover:opacity-70 transition-opacity">
@@ -167,7 +167,7 @@ export default function SkinSystemPage() {
 
                   {/* How to use */}
                   <div style={{ padding: '48px 40px', borderRight: '1px solid #111' }}>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '10px', letterSpacing: '0.18em', marginBottom: '12px' }} className="uppercase">How to Use It</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '10px', letterSpacing: '0.18em', marginBottom: '12px' }} className="uppercase">How to Use It</p>
                     <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px', lineHeight: '1.7', fontStyle: 'italic' }}>
                       "{s.instruction}"
                     </p>
@@ -175,8 +175,8 @@ export default function SkinSystemPage() {
 
                   {/* Why it's there */}
                   <div style={{ padding: '48px 40px' }}>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '10px', letterSpacing: '0.18em', marginBottom: '12px' }} className="uppercase">Why It's Here</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.85' }}>{s.why}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '10px', letterSpacing: '0.18em', marginBottom: '12px' }} className="uppercase">Why It's Here</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.85' }}>{s.why}</p>
                   </div>
                 </div>
               </div>
@@ -191,15 +191,15 @@ export default function SkinSystemPage() {
                 <div style={{ backgroundColor: '#C9A96E', padding: '4px 12px' }}>
                   <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#000', fontSize: '8px', letterSpacing: '0.2em' }} className="uppercase">Evening Upgrade</span>
                 </div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '10px', letterSpacing: '0.15em' }} className="uppercase">Optional · Highly Recommended</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '10px', letterSpacing: '0.15em' }} className="uppercase">Optional · Highly Recommended</p>
               </div>
               <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.2rem', marginBottom: '10px' }}>Add the Collagen Boost Face Cream on evenings.</h3>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '14px', lineHeight: '1.8', maxWidth: '560px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '14px', lineHeight: '1.8', maxWidth: '560px' }}>
                 Apply after your serum, before moisturizer. Matrixyl 3000 + GHK-Cu + Ceramides work overnight while you sleep — supporting the appearance of firmer, more nourished skin by morning. This is the full system.
               </p>
             </div>
             <div className="flex flex-col items-start gap-3 flex-shrink-0">
-              <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem' }}>$99.99 <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px' }}>· 50ml</span></p>
+              <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem' }}>$99.99 <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px' }}>· 50ml</span></p>
               <Link to="/skincare/collagen-boost-cream"
                 style={{ border: '1px solid #C9A96E44', color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.18em', padding: '12px 24px', textDecoration: 'none' }}
                 className="uppercase hover:bg-[#C9A96E11] transition-colors">
@@ -267,7 +267,7 @@ export default function SkinSystemPage() {
                   {t.points.map(p => (
                     <li key={p} className="flex items-start gap-3">
                       <span style={{ color: t.accent, fontSize: '11px', flexShrink: 0, marginTop: '3px' }}>✔</span>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.7' }}>{p}</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>{p}</p>
                     </li>
                   ))}
                 </ul>
@@ -278,7 +278,7 @@ export default function SkinSystemPage() {
           <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #141414', marginTop: '1px', padding: '28px 40px' }}
             className="flex items-center gap-4">
             <div style={{ width: '5px', height: '5px', backgroundColor: '#C9A96E', borderRadius: '50%', flexShrink: 0 }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '13px', lineHeight: '1.7' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
               Results vary by individual. Consistent daily use — morning and evening — is required to see the full effect of the system. Most users begin noticing a difference within 2–4 weeks.
             </p>
           </div>
@@ -298,7 +298,7 @@ export default function SkinSystemPage() {
                 Start your skin system.<br />Use it daily.<br />Watch it work.
               </h2>
               <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '28px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '15px', lineHeight: '1.9', marginBottom: '36px', maxWidth: '440px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '15px', lineHeight: '1.9', marginBottom: '36px', maxWidth: '440px' }}>
                 Most people try this system for two weeks and never go back. Pick up the three core products and start tonight.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -308,7 +308,7 @@ export default function SkinSystemPage() {
                   Shop the System →
                 </Link>
                 <Link to="/ingredients"
-                  style={{ border: '1px solid #2A2A2A', color: '#5A5A5A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em', padding: '18px 32px', textDecoration: 'none', textAlign: 'center' }}
+                  style={{ border: '1px solid #2A2A2A', color: '#CACACA', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em', padding: '18px 32px', textDecoration: 'none', textAlign: 'center' }}
                   className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-colors">
                   See What's Inside
                 </Link>
@@ -328,7 +328,7 @@ export default function SkinSystemPage() {
                   <div>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '9px', letterSpacing: '0.2em', marginBottom: '6px' }} className="uppercase">{p.step}</p>
                     <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px' }}>{p.name}</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '11px', marginTop: '4px' }}>{p.price} · {p.size}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', marginTop: '4px' }}>{p.price} · {p.size}</p>
                   </div>
                   <Link to={`/skincare/${p.slug}`}
                     style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '10px', letterSpacing: '0.15em', textDecoration: 'none', flexShrink: 0 }}

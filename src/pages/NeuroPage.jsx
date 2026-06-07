@@ -13,7 +13,7 @@ export default function NeuroPage() {
       {/* Back */}
       <div style={{ paddingTop: '100px' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <Link to="/programs/optimization" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
+          <Link to="/programs/optimization" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:text-[#8A9E85] transition-colors flex items-center gap-2">
             ← All Programs
           </Link>
@@ -30,7 +30,7 @@ export default function NeuroPage() {
             Lion Elite<br /><span style={{ color: '#8A9E85' }}>Neuro Program</span>
           </h1>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#8A9E85', margin: '0 auto 28px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.9', maxWidth: '540px', margin: '0 auto 36px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.9', maxWidth: '540px', margin: '0 auto 36px' }}>
             A structured, personalized peptide protocol designed to sharpen focus, eliminate brain fog, and help you sustain peak cognitive performance under pressure.
           </p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '40px' }}>

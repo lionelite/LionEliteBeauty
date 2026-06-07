@@ -172,15 +172,15 @@ export default function SkincarePage() {
 
                   <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem', lineHeight: '1.3', marginBottom: '8px' }}
                     className="font-normal">{b.name}</h3>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.7', marginBottom: '24px' }}>{b.tagline}</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '24px' }}>{b.tagline}</p>
 
                   <div style={{ borderTop: '1px solid #1A1A1A', borderBottom: '1px solid #1A1A1A', padding: '20px 0', marginBottom: '24px' }}>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '9px', letterSpacing: '0.2em', marginBottom: '12px' }} className="uppercase">Includes</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '9px', letterSpacing: '0.2em', marginBottom: '12px' }} className="uppercase">Includes</p>
                     <ul className="space-y-2">
                       {bundleProducts.map(p => (
                         <li key={p.slug} className="flex items-center gap-2">
                           <div style={{ width: '4px', height: '4px', backgroundColor: b.accent, borderRadius: '50%', flexShrink: 0 }}></div>
-                          <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px' }}>{p.name}</span>
+                          <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px' }}>{p.name}</span>
                         </li>
                       ))}
                     </ul>
@@ -188,7 +188,7 @@ export default function SkincarePage() {
 
                   <div className="flex items-end gap-3 mb-6 mt-auto">
                     <p style={{ fontFamily: 'Georgia, serif', color: b.accent, fontSize: '1.8rem' }}>{b.price}</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '13px', textDecoration: 'line-through', marginBottom: '6px' }}>{b.originalPrice}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', textDecoration: 'line-through', marginBottom: '6px' }}>{b.originalPrice}</p>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '11px', letterSpacing: '0.1em', marginBottom: '6px' }} className="uppercase">Save {b.savings}</p>
                   </div>
 

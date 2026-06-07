@@ -93,7 +93,7 @@ export default function OptimizationPage() {
       {/* Back */}
       <div style={{ paddingTop: '100px' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
+          <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:text-[#C9A96E] transition-colors flex items-center gap-2">
             ← Back to Home
           </Link>
@@ -110,12 +110,12 @@ export default function OptimizationPage() {
             Personalized Peptide Protocols<br /><span style={{ color: '#C9A96E' }}>Built for Real Results.</span>
           </h1>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.9', maxWidth: '560px', margin: '0 auto 32px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.9', maxWidth: '560px', margin: '0 auto 32px' }}>
             Designed to improve recovery, performance, and long-term health through structured protocols built around your biology — not generic programs.
           </p>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A', padding: '10px 18px' }}>
             <div style={{ width: '5px', height: '5px', backgroundColor: '#C9A96E', borderRadius: '50%' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', letterSpacing: '0.08em' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.08em' }}>
               Application required · Limited client intake · Personalized onboarding
             </p>
           </div>
@@ -139,20 +139,20 @@ export default function OptimizationPage() {
                     {p.label}
                   </h2>
                   <div style={{ width: '24px', height: '1px', backgroundColor: p.accent, marginBottom: '16px' }}></div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px', letterSpacing: '0.08em', marginBottom: '8px' }} className="uppercase">
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.08em', marginBottom: '8px' }} className="uppercase">
                     Best For
                   </p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7', marginBottom: '20px' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7', marginBottom: '20px' }}>
                     {p.bestFor}
                   </p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px', letterSpacing: '0.08em', marginBottom: '10px' }} className="uppercase">
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.08em', marginBottom: '10px' }} className="uppercase">
                     Key Outcomes
                   </p>
                   <div className="space-y-1.5 mb-6">
                     {p.fixes.map(f => (
                       <div key={f} className="flex items-center gap-2">
                         <span style={{ color: p.accent, fontSize: '10px', flexShrink: 0 }}>✔</span>
-                        <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px' }}>{f}</span>
+                        <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px' }}>{f}</span>
                       </div>
                     ))}
                   </div>
@@ -187,10 +187,10 @@ export default function OptimizationPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #1A1A1A' }}>
-                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Program</th>
-                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Best For</th>
-                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Primary Outcome</th>
-                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Timeline</th>
+                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Program</th>
+                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Best For</th>
+                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Primary Outcome</th>
+                  <th style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.2em', padding: '16px 20px', textAlign: 'left', fontWeight: 400 }} className="uppercase">Timeline</th>
                   <th style={{ padding: '16px 20px' }}></th>
                 </tr>
               </thead>
@@ -210,8 +210,8 @@ export default function OptimizationPage() {
                         <span style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px' }}>{row.label}</span>
                       </div>
                     </td>
-                    <td style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', padding: '18px 20px' }}>{row.bestFor}</td>
-                    <td style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', padding: '18px 20px' }}>{row.outcome}</td>
+                    <td style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', padding: '18px 20px' }}>{row.bestFor}</td>
+                    <td style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', padding: '18px 20px' }}>{row.outcome}</td>
                     <td style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: row.accent, fontSize: '12px', padding: '18px 20px', letterSpacing: '0.05em' }}>{row.timeline}</td>
                     <td style={{ padding: '18px 20px' }}>
                       <Link to={`/apply?program=${row.id}`}
@@ -264,7 +264,7 @@ export default function OptimizationPage() {
                 <p style={{ fontFamily: 'Georgia, serif', color: '#111', fontSize: '4rem', position: 'absolute', bottom: '12px', right: '16px', lineHeight: '1', userSelect: 'none' }}>{step.num}</p>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '9px', letterSpacing: '0.3em', marginBottom: '10px' }} className="uppercase">Step {step.num}</p>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.1rem', marginBottom: '10px' }} className="font-normal">{step.title}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '12px', lineHeight: '1.8' }}>{step.desc}</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.8' }}>{step.desc}</p>
               </div>
             ))}
           </div>
@@ -281,7 +281,7 @@ export default function OptimizationPage() {
             We only work with clients<br />we can genuinely help.
           </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 24px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '15px', lineHeight: '1.9', marginBottom: '40px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '15px', lineHeight: '1.9', marginBottom: '40px' }}>
             Applications are reviewed personally. If your goals align with what our protocols can deliver, we'll reach out within 24–48 hours with next steps.
           </p>
           <Link to="/apply"

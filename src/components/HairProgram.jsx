@@ -85,7 +85,7 @@ export default function HairProgram() {
                 <span style={{ fontSize: '24px', display: 'block', marginBottom: '14px' }}>{item.icon}</span>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px', letterSpacing: '0.06em', marginBottom: '8px' }} className="uppercase">{item.title}</p>
                 <div style={{ width: '20px', height: '1px', backgroundColor: '#C4A265', marginBottom: '12px' }}></div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -126,7 +126,7 @@ export default function HairProgram() {
             <div>
               <p style={{ color: '#C4A265', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">Expected Outcomes</p>
               <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.25', marginBottom: '24px' }} className="font-normal">What you will actually notice.</h2>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px' }}>
                 Hair restoration is a longer process than most programs. These are realistic timelines based on consistent protocol adherence:
               </p>
               <div className="space-y-3">
@@ -150,10 +150,10 @@ export default function HairProgram() {
                 Topicals treat the surface.<br />We address what's underneath.
               </p>
               <div style={{ width: '32px', height: '1px', backgroundColor: '#C4A265', marginBottom: '24px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9', marginBottom: '24px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.9', marginBottom: '24px' }}>
                 Most hair products work on the surface. Hair loss is driven by systemic factors — hormones, inflammation, circulation, nutrients. We test for all of them, then build a protocol that actually targets the root.
               </p>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.9' }}>
                 Programs typically range from <span style={{ color: '#FAFAF8' }}>$800–$1,500</span> depending on protocol complexity and support level.
               </p>
             </div>

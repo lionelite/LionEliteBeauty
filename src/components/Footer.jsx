@@ -21,7 +21,7 @@ export default function Footer() {
               <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', letterSpacing: '0.15em', fontSize: '16px' }} className="uppercase">Lion Elite Beauty</p>
               <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.2em', fontSize: '10px' }} className="uppercase mt-1">Powered by Lion Elite Wellness</p>
             </div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '13px', lineHeight: '1.8', marginTop: '16px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.8', marginTop: '16px' }}>
               Advanced peptide skincare and clinical-grade wellness programs — designed to work with your biology and deliver real, lasting results.
             </p>
             <div className="flex gap-3 mt-6">
@@ -29,7 +29,7 @@ export default function Footer() {
                 <a key={s} href="#"
                   style={{ width: '30px', height: '30px', border: '1px solid #1E1E1E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                   className="hover:border-[#C9A96E] transition-colors">
-                  <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px' }}>{s}</span>
+                  <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '9px' }}>{s}</span>
                 </a>
               ))}
             </div>
@@ -40,7 +40,7 @@ export default function Footer() {
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '11px', letterSpacing: '0.2em', marginBottom: '20px' }} className="uppercase">Programs</p>
             {programs.map(p => (
               <Link key={p.label} to={p.href}
-                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '13px', lineHeight: '1.5', display: 'block', marginBottom: '12px', textDecoration: 'none' }}
+                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.5', display: 'block', marginBottom: '12px', textDecoration: 'none' }}
                 className="hover:text-[#C9A96E] transition-colors">{p.label}</Link>
             ))}
           </div>
@@ -57,7 +57,7 @@ export default function Footer() {
               { label: 'Post-Procedure Recovery Kit', href: '/skincare/recovery-kit' },
             ].map(item => (
               <Link key={item.label} to={item.href}
-                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '13px', lineHeight: '1.5', display: 'block', marginBottom: '12px', textDecoration: 'none' }}
+                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.5', display: 'block', marginBottom: '12px', textDecoration: 'none' }}
                 className="hover:text-[#C9A96E] transition-colors">{item.label}</Link>
             ))}
           </div>

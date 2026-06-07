@@ -107,7 +107,7 @@ export default function ApplyPage() {
               We've received<br />your application.
             </h1>
             <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.9', marginBottom: '48px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.9', marginBottom: '48px' }}>
               We review every application personally. You'll hear from us within <strong style={{ color: '#FAFAF8' }}>24–48 hours</strong> with next steps tailored to your goals.
             </p>
 
@@ -116,7 +116,7 @@ export default function ApplyPage() {
                 className="uppercase">Want to move faster?</p>
               <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.4rem', lineHeight: '1.3', marginBottom: '12px' }}
                 className="font-normal">Book a consultation call directly.</h2>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '14px', lineHeight: '1.8', marginBottom: '24px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '14px', lineHeight: '1.8', marginBottom: '24px' }}>
                 Skip the wait — schedule a 20-minute call and we'll walk through your goals and the right protocol for you.
               </p>
               <a href="https://calendly.com/a-ringfield-trustetc" target="_blank" rel="noopener noreferrer"
@@ -127,7 +127,7 @@ export default function ApplyPage() {
             </div>
 
             <Link to="/"
-              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
               className="uppercase hover:text-[#C9A96E] transition-colors">
               ← Return to Home
             </Link>
@@ -152,12 +152,12 @@ export default function ApplyPage() {
             Apply for a Personalized<br />Peptide Optimization Program.
           </h1>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '24px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.9', maxWidth: '560px', marginBottom: '16px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.9', maxWidth: '560px', marginBottom: '16px' }}>
             This short application helps us understand your goals and determine the best protocol for you. Every response is reviewed personally before we reach out.
           </p>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A', padding: '10px 16px' }}>
             <div style={{ width: '5px', height: '5px', backgroundColor: '#C9A96E', borderRadius: '50%' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', letterSpacing: '0.08em' }}>We only take on a limited number of clients at a time.</p>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.08em' }}>We only take on a limited number of clients at a time.</p>
           </div>
         </div>
       </section>
@@ -322,13 +322,13 @@ export default function ApplyPage() {
               <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #141414', padding: '40px', marginBottom: '32px' }}>
                 <div className="flex items-start gap-3 mb-4">
                   <div style={{ width: '5px', height: '5px', backgroundColor: '#C9A96E', borderRadius: '50%', flexShrink: 0, marginTop: '7px' }}></div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.8' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.8' }}>
                     Your application is reviewed personally. We'll follow up within <span style={{ color: '#FAFAF8' }}>24–48 hours</span> with a tailored response and next steps.
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div style={{ width: '5px', height: '5px', backgroundColor: '#C9A96E', borderRadius: '50%', flexShrink: 0, marginTop: '7px' }}></div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.8' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.8' }}>
                     After submitting, you'll have the option to book a direct consultation call to accelerate the process.
                   </p>
                 </div>
@@ -373,7 +373,7 @@ function FormBlock({ label, title, subtitle, children }) {
         </div>
         <div>
           <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.2rem', marginBottom: '4px' }}>{title}</h3>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '13px' }}>{subtitle}</p>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px' }}>{subtitle}</p>
         </div>
       </div>
       <div style={{ paddingLeft: '0' }}>{children}</div>
@@ -389,7 +389,7 @@ function Field({ label, error, children }) {
   return (
     <div style={{ marginBottom: '16px' }}>
       {label && (
-        <label style={{ display: 'block', fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '8px' }}
+        <label style={{ display: 'block', fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '8px' }}
           className="uppercase">
           {label}
         </label>
@@ -426,7 +426,7 @@ function RadioCard({ selected, onClick, label, sub }) {
       </div>
       <div>
         <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: selected ? '#FAFAF8' : '#5A5A5A', fontSize: '13px', marginBottom: '2px' }}>{label}</p>
-        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '11px' }}>{sub}</p>
+        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px' }}>{sub}</p>
       </div>
     </button>
   )

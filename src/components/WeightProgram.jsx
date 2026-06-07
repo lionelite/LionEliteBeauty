@@ -85,7 +85,7 @@ export default function WeightProgram() {
                 <span style={{ fontSize: '24px', display: 'block', marginBottom: '14px' }}>{item.icon}</span>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px', letterSpacing: '0.06em', marginBottom: '8px' }} className="uppercase">{item.title}</p>
                 <div style={{ width: '20px', height: '1px', backgroundColor: '#5BA87A', marginBottom: '12px' }}></div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -126,7 +126,7 @@ export default function WeightProgram() {
             <div>
               <p style={{ color: '#5BA87A', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '14px' }} className="uppercase">Expected Outcomes</p>
               <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.25', marginBottom: '24px' }} className="font-normal">What you will actually notice.</h2>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px' }}>
                 Results vary by individual. These are the most commonly reported outcomes from consistent protocol adherence:
               </p>
               <div className="space-y-3">
@@ -150,10 +150,10 @@ export default function WeightProgram() {
                 Diets address behavior.<br />We address biology.
               </p>
               <div style={{ width: '32px', height: '1px', backgroundColor: '#5BA87A', marginBottom: '24px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9', marginBottom: '24px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.9', marginBottom: '24px' }}>
                 If your hormones, metabolism, and appetite regulation are working against you — no diet will fix it. We identify which biological systems are underperforming and target them directly.
               </p>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '14px', lineHeight: '1.9' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.9' }}>
                 Programs typically range from <span style={{ color: '#FAFAF8' }}>$800–$1,500</span> depending on protocol complexity and support level.
               </p>
             </div>

@@ -40,7 +40,7 @@ export default function Products() {
           <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.5rem', lineHeight: '1.2' }}
             className="font-normal">How It Works</h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.8', maxWidth: '520px', margin: '20px auto 0' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.8', maxWidth: '520px', margin: '20px auto 0' }}>
             No guessing. No random protocols. Just real data + strategic execution.
           </p>
         </div>
@@ -54,14 +54,14 @@ export default function Products() {
               <h3 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '1.15rem', lineHeight: '1.4', marginBottom: '16px' }}
                 className="font-normal">{step.title}</h3>
               <div style={{ width: '28px', height: '1px', backgroundColor: step.accent, marginBottom: '16px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px' }}>
                 {step.description}
               </p>
               <ul className="space-y-2">
                 {step.details.map(d => (
                   <li key={d} className="flex items-center gap-2">
                     <div style={{ width: '4px', height: '4px', backgroundColor: step.accent, borderRadius: '50%', flexShrink: 0 }}></div>
-                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px' }}>{d}</span>
+                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px' }}>{d}</span>
                   </li>
                 ))}
               </ul>
@@ -71,7 +71,7 @@ export default function Products() {
 
         {/* Visual flow */}
         <div style={{ backgroundColor: '#1A1A1A', padding: '48px', marginTop: '60px', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '24px' }} className="uppercase">
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '24px' }} className="uppercase">
             Your Optimization Cycle
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -79,7 +79,7 @@ export default function Products() {
               <div key={item} className="flex items-center gap-4">
                 <span style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.1rem', letterSpacing: '0.05em' }}>{item}</span>
                 {i < arr.length - 1 && (
-                  <span style={{ color: '#3A3A3A', fontSize: '18px' }}>→</span>
+                  <span style={{ color: '#8A8A8A', fontSize: '18px' }}>→</span>
                 )}
               </div>
             ))}

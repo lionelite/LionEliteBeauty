@@ -106,7 +106,7 @@ export default function Hero() {
             ].map(item => (
               <div key={item.label}>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.4rem', marginBottom: '4px' }}>{item.stat}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '10px', letterSpacing: '0.2em' }} className="uppercase">{item.label}</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '10px', letterSpacing: '0.2em' }} className="uppercase">{item.label}</p>
               </div>
             ))}
           </div>

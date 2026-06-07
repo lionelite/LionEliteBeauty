@@ -92,7 +92,7 @@ export default function SkincareLine() {
             Advanced Peptide Skincare Collection
           </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto' }}>
             Peptide-powered formulations designed to support the appearance of healthier, more nourished skin. Premium ingredients. Visible results with consistent use.
           </p>
         </div>
@@ -184,18 +184,18 @@ export default function SkincareLine() {
         <div style={{ marginTop: '48px', backgroundColor: '#1A1A1A', padding: '40px 48px' }}
           className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '8px' }}
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '8px' }}
               className="uppercase">Best Value</p>
             <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem' }}>
               Complete Skincare System
             </p>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '13px', marginTop: '6px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', marginTop: '6px' }}>
               All 6 products · Save on the full protocol
             </p>
           </div>
           <div className="flex items-center gap-6">
             <div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '12px', textDecoration: 'line-through' }}>$559.99</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px', textDecoration: 'line-through' }}>$559.99</p>
               <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '2rem' }}>$499.99</p>
             </div>
             <Link to="/skincare"

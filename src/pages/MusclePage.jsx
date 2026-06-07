@@ -13,7 +13,7 @@ export default function MusclePage() {
       {/* Back */}
       <div style={{ paddingTop: '100px' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <Link to="/programs/optimization" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
+          <Link to="/programs/optimization" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:text-[#C9A96E] transition-colors flex items-center gap-2">
             ← All Programs
           </Link>
@@ -30,7 +30,7 @@ export default function MusclePage() {
             Lion Elite<br /><span style={{ color: '#C9A96E' }}>Muscle & Recovery Program</span>
           </h1>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '16px', lineHeight: '1.9', maxWidth: '540px', margin: '0 auto 36px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.9', maxWidth: '540px', margin: '0 auto 36px' }}>
             A structured, personalized peptide protocol designed to accelerate recovery, support muscle development, and help you perform at a consistently higher level.
           </p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '40px' }}>

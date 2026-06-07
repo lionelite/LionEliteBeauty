@@ -47,7 +47,7 @@ export default function RoutineSection() {
           </div>
           <div>
             <div style={{ width: '32px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '20px' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '15px', lineHeight: '1.9' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '15px', lineHeight: '1.9' }}>
               You don't need ten products. You need the right three — in the right order. This is the Lion Elite Beauty core routine: cleanse, treat, protect. Simple enough to do every day. Powerful enough to change your skin.
             </p>
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '12px', letterSpacing: '0.15em', marginTop: '20px' }}
@@ -83,13 +83,13 @@ export default function RoutineSection() {
               <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.1rem', lineHeight: '1.3', marginBottom: '8px' }}>
                 {s.product}
               </p>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.15em', marginBottom: '20px' }} className="uppercase">
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.15em', marginBottom: '20px' }} className="uppercase">
                 {s.when}
               </p>
 
               <div style={{ width: '24px', height: '1px', backgroundColor: s.accent, marginBottom: '16px' }}></div>
 
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.7', marginBottom: '28px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '28px' }}>
                 {s.micro}
               </p>
 
@@ -106,9 +106,9 @@ export default function RoutineSection() {
         <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #141414', marginTop: '1px', padding: '32px 40px' }}
           className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '6px' }} className="uppercase">Evening Add-On</p>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '6px' }} className="uppercase">Evening Add-On</p>
             <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.1rem', marginBottom: '4px' }}>Collagen Boost Face Cream</p>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px' }}>
               Apply after serum, before moisturizer — supports the appearance of firmer, more nourished skin while you sleep.
             </p>
           </div>

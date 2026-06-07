@@ -136,18 +136,18 @@ export default function Testimonials() {
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '9px', letterSpacing: '0.3em', marginBottom: '10px' }}
                   className="uppercase">{p.eyebrow}</p>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '0.9rem', lineHeight: '1.4', marginBottom: '14px' }}>{p.name}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.15em' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '9px', letterSpacing: '0.15em' }}>
                   Premium Access
                 </p>
               </div>
               <div style={{ padding: '22px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '14px' }}
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '14px' }}
                   className="uppercase">What's Included</p>
                 <ul className="space-y-2.5 mb-6 flex-1">
                   {p.includes.map(item => (
                     <li key={item} className="flex items-start gap-2">
                       <span style={{ color: p.accent, fontSize: '11px', flexShrink: 0, marginTop: '2px' }}>✔</span>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.5' }}>{item}</span>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px', lineHeight: '1.5' }}>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -173,7 +173,7 @@ export default function Testimonials() {
 
         {/* Testimonials */}
         <div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#3A3A3A', fontSize: '10px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '16px' }}
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '16px' }}
             className="uppercase">What Clients Say</p>
           <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.8rem', textAlign: 'center', marginBottom: '48px', lineHeight: '1.3' }}
             className="font-normal">Real people. Real results.</p>
@@ -219,7 +219,7 @@ export default function Testimonials() {
                   />
                   <div>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px' }}>{t.name}</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '11px', letterSpacing: '0.1em', marginTop: '2px' }}
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', marginTop: '2px' }}
                       className="uppercase">{t.detail}</p>
                   </div>
                 </div>
