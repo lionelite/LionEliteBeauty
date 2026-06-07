@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
 const skincare = [
+  { name: 'GHK-Cu Intensive Serum', tagline: 'High-potency copper peptide complex — coming soon', price: 'Coming Soon', accent: '#C9A96E', slug: 'ghk-cu-serum' },
   { name: 'GHK-Cu Peptide Face Wash', tagline: 'Helps nourish & support daily skin health', price: '$69.99', accent: '#C9A96E', slug: 'ghk-cu-face-wash' },
   { name: 'Rejuvenate Serum', tagline: 'Supports the appearance of firmer, smoother skin', price: '$119.99', accent: '#8A9E85', slug: 'rejuvenate-serum' },
   { name: 'Collagen Boost Face Cream', tagline: 'Supports the appearance of skin firmness overnight', price: '$99.99', accent: '#C9A96E', slug: 'collagen-boost-cream' },

@@ -14,16 +14,16 @@ export const skincareProducts = [
     label: 'GHK-Cu',
     headline: 'Pure copper peptide. No filler. No shortcuts.',
     description:
-      'We\'re formulating the most concentrated GHK-Cu serum we\'ve ever created. No vitamin C. No unnecessary additives — just a high-potency copper peptide complex designed to support the appearance of firmer, smoother, more youthful-looking skin. Purpose-built for those who want maximum peptide density in every drop.',
+      'We\'re formulating the most concentrated GHK-Cu serum we\'ve ever created. No unnecessary additives — just a high-potency copper peptide complex designed to support the appearance of firmer, smoother, more youthful-looking skin. Purpose-built for those who want maximum peptide density in every drop.',
     whatYouNotice: [
-      'Pure GHK-Cu complex — no vitamin C, no dilution',
+      'Pure GHK-Cu complex — maximum peptide density',
       'Designed to support the appearance of skin firmness and density',
       'Formulated for daily use alongside your existing routine',
       'Premium concentration for visible results',
     ],
     benefits: [
       { title: 'High-Potency GHK-Cu Complex', desc: 'Maximum copper peptide density in every drop — no unnecessary additives.' },
-      { title: 'No Vitamin C', desc: 'Formulated without vitamin C — a pure peptide-first approach to skin support.' },
+      { title: 'Pure Peptide-First Formula', desc: 'Maximum copper peptide density — formulated without dilution for a concentrated approach to skin support.' },
       { title: 'Supports Appearance of Firmness', desc: 'Designed to help support the appearance of firmer, denser-looking skin over time.' },
       { title: 'Pairs With Any Routine', desc: 'Lightweight, fast-absorbing — fits seamlessly into your existing morning and evening regimen.' },
     ],

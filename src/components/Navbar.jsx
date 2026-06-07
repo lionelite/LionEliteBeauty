@@ -12,6 +12,7 @@ const programs = [
 ]
 
 const skincareItems = [
+  { label: 'GHK-Cu Intensive Serum', href: '/skincare/ghk-cu-serum', desc: 'Coming Soon' },
   { label: 'GHK-Cu Peptide Face Wash', href: '/skincare/ghk-cu-face-wash', desc: '$69.99 · 150ml' },
   { label: 'Rejuvenate Serum', href: '/skincare/rejuvenate-serum', desc: '$119.99 · 30ml' },
   { label: 'Collagen Boost Face Cream', href: '/skincare/collagen-boost-cream', desc: '$99.99 · 50ml' },
