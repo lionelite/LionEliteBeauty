@@ -158,7 +158,7 @@ export default function CheckoutPage() {
     width: '100%', padding: '14px 18px', backgroundColor: '#0A0A0A',
     border: '1px solid #2A2A2A', color: '#FAFAF8',
     fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '14px',
-    outline: 'none',
+    outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s',
   }
 
   return (
