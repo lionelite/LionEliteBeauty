@@ -24,6 +24,8 @@ import SkinSystemPage from './pages/SkinSystemPage'
 import ApplyPage from './pages/ApplyPage'
 import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
+import SkincarePolicies from './pages/SkincarePolicies'
+import ProgramsPolicies from './pages/ProgramsPolicies'
 import SEO from './components/SEO'
 
 function HomePage() {
@@ -67,6 +69,8 @@ export default function App() {
           <Route path="/apply" element={<ApplyPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/policies/skincare" element={<SkincarePolicies />} />
+          <Route path="/policies/programs" element={<ProgramsPolicies />} />
         </Routes>
       </CartProvider>
     </BrowserRouter>

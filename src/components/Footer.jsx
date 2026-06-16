@@ -76,6 +76,13 @@ export default function Footer() {
                 style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: item.external ? '#C9A96E' : '#8A8A8A', fontSize: '13px', lineHeight: '1.5', display: 'block', marginBottom: '12px', textDecoration: 'none' }}
                 className="hover:text-[#C9A96E] transition-colors">{item.label}</a>
             ))}
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.12em', marginTop: '20px', marginBottom: '10px' }} className="uppercase">Policies</p>
+            <Link to="/policies/skincare"
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', display: 'block', marginBottom: '8px', textDecoration: 'none' }}
+              className="hover:text-[#C9A96E] transition-colors">Skincare Policies</Link>
+            <Link to="/policies/programs"
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', display: 'block', marginBottom: '8px', textDecoration: 'none' }}
+              className="hover:text-[#C9A96E] transition-colors">Programs Policies</Link>
           </div>
         </div>
 
@@ -91,11 +98,12 @@ export default function Footer() {
             © {new Date().getFullYear()} Lion Elite Beauty · info@lionelitebeauty.com
           </p>
           <div className="flex gap-6">
-            {['Privacy Policy', 'Terms of Service'].map(link => (
-              <a key={link} href="#"
-                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.08em', textDecoration: 'none' }}
-                className="hover:text-[#C9A96E] transition-colors">{link}</a>
-            ))}
+            <Link to="/policies/skincare"
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.08em', textDecoration: 'none' }}
+              className="hover:text-[#C9A96E] transition-colors">Skincare Policies</Link>
+            <Link to="/policies/programs"
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.08em', textDecoration: 'none' }}
+              className="hover:text-[#C9A96E] transition-colors">Programs Policies</Link>
           </div>
         </div>
       </div>
