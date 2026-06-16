@@ -149,71 +149,32 @@ export default function ProductPage() {
               )}
 
               {/* Price + CTA */}
-              {isPreOrder ? (
-                <div className="mb-8" style={{ border: '1px solid #C9A96E33', padding: '28px', backgroundColor: '#0C0A08' }}>
-                  <div className="flex items-center justify-between mb-4">
-                    <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.8rem', letterSpacing: '0.02em' }}>
-                      ${p.priceNum.toFixed(2)}
-                    </p>
-                    <div style={{ backgroundColor: '#C9A96E', padding: '4px 12px' }}>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#000', fontSize: '9px', letterSpacing: '0.2em' }} className="uppercase">Pre-Order</span>
-                    </div>
-                  </div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7', marginBottom: '20px' }}>
-                    Coming Soon — Pre-order now and be first to receive it when it launches.
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <button onClick={handleAddToCart}
-                      style={{
-                        backgroundColor: addedToCart ? '#5BA87A' : '#C9A96E', color: '#000', border: 'none',
-                        fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                        fontSize: '11px', letterSpacing: '0.2em',
-                        padding: '16px 36px', cursor: 'pointer', flex: 1,
-                      }}
-                      className="uppercase hover:opacity-90 transition-opacity">
-                      {addedToCart ? '✓ Added to Cart' : 'Pre-Order Now →'}
-                    </button>
-                    {addedToCart && (
-                      <Link to="/cart"
-                        style={{
-                          fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                          color: '#C9A96E', fontSize: '10px', letterSpacing: '0.15em',
-                          textDecoration: 'none', borderBottom: '1px solid #C9A96E44', paddingBottom: '2px',
-                        }}
-                        className="uppercase hover:opacity-70 transition-opacity whitespace-nowrap">
-                        View Cart →
-                      </Link>
-                    )}
-                  </div>
+              <div className="flex items-center gap-5 mb-8">
+                <div>
+                  {p.originalPrice && (
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', textDecoration: 'line-through' }}>{p.originalPrice}</p>
+                  )}
+                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem' }}>{p.price}</p>
                 </div>
-              ) : (
-                <div className="flex items-center gap-5 mb-8">
-                  <div>
-                    {p.originalPrice && (
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', textDecoration: 'line-through' }}>{p.originalPrice}</p>
-                    )}
-                    <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem' }}>{p.price}</p>
-                  </div>
-                  <button onClick={handleAddToCart}
-                    style={{
-                      backgroundColor: addedToCart ? '#5BA87A' : p.accent, color: '#000',
-                      fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                      fontSize: '12px', letterSpacing: '0.18em',
-                      padding: '18px 36px', border: 'none', cursor: 'pointer',
-                    }}
-                    className="uppercase hover:opacity-90 transition-opacity">
-                    {addedToCart ? '✓ Added to Cart' : 'Add to Cart →'}
-                  </button>
-                  <Link to="/cart"
-                    style={{
-                      fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px',
-                      letterSpacing: '0.12em', textDecoration: 'none', borderBottom: '1px solid #2A2A2A', paddingBottom: '2px',
-                    }}
-                    className="uppercase hover:text-[#C9A96E] transition-colors">
-                    View Cart
-                  </Link>
-                </div>
-              )}
+                <button onClick={handleAddToCart}
+                  style={{
+                    backgroundColor: addedToCart ? '#5BA87A' : p.accent, color: '#000',
+                    fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                    fontSize: '12px', letterSpacing: '0.18em',
+                    padding: '18px 36px', border: 'none', cursor: 'pointer',
+                  }}
+                  className="uppercase hover:opacity-90 transition-opacity">
+                  {addedToCart ? '✓ Added to Cart' : 'Add to Cart →'}
+                </button>
+                <Link to="/cart"
+                  style={{
+                    fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px',
+                    letterSpacing: '0.12em', textDecoration: 'none', borderBottom: '1px solid #2A2A2A', paddingBottom: '2px',
+                  }}
+                  className="uppercase hover:text-[#C9A96E] transition-colors">
+                  View Cart
+                </Link>
+              </div>
 
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px' }}>
                 Questions? Email <a href="mailto:info@lionelitebeauty.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitebeauty.com</a>
