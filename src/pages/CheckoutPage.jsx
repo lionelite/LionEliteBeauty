@@ -514,135 +514,7 @@ export default function CheckoutPage() {
                   )}
                 </div>
 
-                {/* ═══════════════════════════════════════════════════════════
-                   REWARDS — Lion Elite Rewards
-                ═══════════════════════════════════════════════════════════ */}
-                <div style={{ marginBottom: '40px' }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
-                    className="uppercase">Lion Elite Rewards</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', marginBottom: '16px' }}>
-                    Earn <strong style={{ color: '#C9A96E' }}>{estPointsEarned} points</strong> with this purchase. Create an account to start collecting and save your rewards.
-                  </p>
-
-                  {/* Tab-style selection */}
-                  <div className="flex gap-0" style={{ border: '1px solid #E0D5C5', marginBottom: '16px' }}>
-                    {[
-                      { key: 'guest', label: 'Guest' },
-                      { key: 'join', label: 'Create Account' },
-                      { key: 'login', label: 'Log In' },
-                    ].map(tab => (
-                      <button key={tab.key} type="button" onClick={() => { setRewardMode(tab.key); setRewardData(null); setRewardMessage('') }}
-                        style={{
-                          flex: 1, padding: '12px', border: 'none', cursor: 'pointer',
-                          backgroundColor: rewardMode === tab.key ? '#C9A96E' : '#FAF7F2',
-                          color: rewardMode === tab.key ? '#000' : '#6A6A6A',
-                          fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                          fontSize: '11px', letterSpacing: '0.15em',
-                        }}
-                        className="uppercase transition-colors">
-                        {tab.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Rewards mode — Guest */}
-                  {rewardMode === 'guest' && (
-                    <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '20px' }}>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7' }}>
-                        Checking out as guest. You won't earn rewards points on this order.
-                      </p>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', marginTop: '8px' }}>
-                        Want to collect points? Select <strong>"Create Account"</strong> above — you'll get <strong style={{ color: '#C9A96E' }}>100 welcome points</strong> plus points from this order.
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Rewards mode — Create Account */}
-                  {rewardMode === 'join' && (
-                    <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '20px' }}>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', marginBottom: '12px' }}>
-                        Create a rewards account with <strong>{email || 'your email'}</strong> and earn <strong style={{ color: '#C9A96E' }}>{estPointsEarned} points</strong> + <strong style={{ color: '#C9A96E' }}>100 welcome bonus</strong> on this order.
-                      </p>
-                      {!rewardData && (
-                        <button type="button" onClick={() => handleRewardAction('register')}
-                          disabled={rewardLoading || !email.trim()}
-                          style={{
-                            backgroundColor: rewardLoading ? '#8A8A8A' : '#C9A96E', color: '#000', border: 'none',
-                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em',
-                            padding: '12px 28px', cursor: rewardLoading || !email.trim() ? 'not-allowed' : 'pointer',
-                          }}
-                          className="uppercase hover:opacity-90 transition-opacity">
-                          {rewardLoading ? 'Creating…' : 'Create Account & Get Points →'}
-                        </button>
-                      )}
-                      {rewardMessage && (
-                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: rewardData ? '#5BA87A' : '#E05A5A', fontSize: '12px', marginTop: '10px' }}>
-                          {rewardMessage}
-                        </p>
-                      )}
-                      {rewardData && (
-                        <div style={{ marginTop: '12px' }}>
-                          {rewardData.rewardId && (
-                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '13px' }}>
-                              Your Reward ID: <strong style={{ letterSpacing: '0.15em' }}>{rewardData.rewardId}</strong>
-                            </p>
-                          )}
-                          {rewardData.points !== undefined && (
-                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '14px', marginTop: '4px' }}>
-                              Balance: <strong>{rewardData.points} points</strong>
-                            </p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Rewards mode — Log In */}
-                  {rewardMode === 'login' && (
-                    <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '20px' }}>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', marginBottom: '12px' }}>
-                        Log in to your rewards account to earn points on this order.
-                      </p>
-                      {!rewardData && (
-                        <button type="button" onClick={() => handleRewardAction('login')}
-                          disabled={rewardLoading || !email.trim()}
-                          style={{
-                            backgroundColor: rewardLoading ? '#8A8A8A' : '#C9A96E', color: '#000', border: 'none',
-                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em',
-                            padding: '12px 28px', cursor: rewardLoading || !email.trim() ? 'not-allowed' : 'pointer',
-                          }}
-                          className="uppercase hover:opacity-90 transition-opacity">
-                          {rewardLoading ? 'Looking up…' : 'Log In →'}
-                        </button>
-                      )}
-                      {rewardMessage && (
-                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: rewardData ? '#5BA87A' : '#E05A5A', fontSize: '12px', marginTop: '10px' }}>
-                          {rewardMessage}
-                        </p>
-                      )}
-                      {rewardData && (
-                        <div style={{ marginTop: '12px' }}>
-                          {rewardData.rewardId && (
-                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '13px' }}>
-                              Reward ID: <strong style={{ letterSpacing: '0.15em' }}>{rewardData.rewardId}</strong>
-                            </p>
-                          )}
-                          {rewardData.points !== undefined && (
-                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '14px', marginTop: '4px' }}>
-                              Balance: <strong>{rewardData.points} points</strong>
-                            </p>
-                          )}
-                          {rewardData.orderCount !== undefined && (
-                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', marginTop: '4px' }}>
-                              Orders: {rewardData.orderCount}
-                            </p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
+                
                 {/* Payment Methods */}
                 <div style={{ marginBottom: '40px' }}>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
@@ -787,8 +659,184 @@ export default function CheckoutPage() {
               </form>
             </div>
 
-            {/* ── Right — Order Summary ────────────────────────────────────── */}
+            {/* ── Right — Rewards + Order Summary ──────────────────────────── */}
             <div className="md:col-span-2" style={{ backgroundColor: '#FAF7F2', padding: '40px' }}>
+              <div style={{
+                background: 'linear-gradient(180deg, #2A2A2A 0%, #1A1A1A 55%, #1E1E1E 100%)',
+                border: '1px solid #C9A96E44', padding: '36px', position: 'relative', overflow: 'hidden',
+                marginBottom: '24px',
+              }}>
+                {/* Decorative corner accent */}
+                <div style={{
+                  position: 'absolute', top: '0', right: '0', width: '60px', height: '60px',
+                  background: 'linear-gradient(135deg, transparent 50%, #C9A96E22 50%)',
+                }}></div>
+                <div style={{
+                  position: 'absolute', bottom: '0', left: '0', width: '60px', height: '60px',
+                  background: 'linear-gradient(315deg, transparent 50%, #C9A96E22 50%)',
+                }}></div>
+
+                {/* Crown / title */}
+                <div style={{ textAlign: 'center', marginBottom: '28px', position: 'relative' }}>
+                  <p style={{
+                    fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '10px',
+                    letterSpacing: '0.4em', marginBottom: '6px', textTransform: 'uppercase',
+                  }}>Lion Elite Beauty</p>
+                  <p style={{
+                    fontFamily: 'Georgia, serif', color: '#B89A5A', fontSize: '19px', fontWeight: 'bold',
+                    letterSpacing: '0.12em',
+                  }}>REWARDS</p>
+                  <div style={{ width: '36px', height: '1px', backgroundColor: '#C9A96E66', margin: '8px auto' }}></div>
+                </div>
+
+                {/* Points earned badge */}
+                <div style={{
+                  textAlign: 'center', marginBottom: '22px', padding: '16px',
+                  background: 'linear-gradient(135deg, #C9A96E20, #C9A96E08)',
+                  border: '1px solid #C9A96E30',
+                }}>
+                  <p style={{
+                    fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E',
+                    fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '6px',
+                  }}>Points This Order</p>
+                  <p style={{
+                    fontFamily: 'Georgia, serif', color: '#E5D5A0', fontSize: '38px',
+                    fontWeight: 'bold', lineHeight: '1.1',
+                  }}>+{estPointsEarned}</p>
+                  <p style={{
+                    fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A',
+                    fontSize: '11px', marginTop: '2px',
+                  }}>on this ${finalTotal.toFixed(2)} order</p>
+                </div>
+
+                {/* Forex signup hint */}
+                <p style={{
+                  fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#777',
+                  fontSize: '11px', textAlign: 'center', lineHeight: '1.6', marginBottom: '16px',
+                }}>
+                  Create an account to earn <span style={{ color: '#C9A96E', fontWeight: 'bold' }}>100 welcome bonus</span> points plus this order's points.
+                </p>
+
+                {/* Tab-style selection */}
+                <div className="flex gap-0" style={{ border: '1px solid #C9A96E33', marginBottom: '14px' }}>
+                  {[
+                    { key: 'guest', label: 'Guest' },
+                    { key: 'join', label: 'Create Account' },
+                    { key: 'login', label: 'Log In' },
+                  ].map(tab => (
+                    <button key={tab.key} type="button" onClick={() => { setRewardMode(tab.key); setRewardData(null); setRewardMessage('') }}
+                      style={{
+                        flex: 1, padding: '10px 4px', border: 'none', cursor: 'pointer',
+                        backgroundColor: rewardMode === tab.key ? '#C9A96E' : '#1E1E1E',
+                        color: rewardMode === tab.key ? '#000' : '#6A6A6A',
+                        fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                        fontSize: '9.5px', letterSpacing: '0.12em',
+                        transition: 'all 0.15s',
+                      }} className="uppercase">
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Rewards mode content */}
+                {rewardMode === 'guest' && (
+                  <div style={{ padding: '0 4px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#666', fontSize: '12px', lineHeight: '1.6', marginBottom: '8px' }}>
+                      You won't earn rewards points on this order.
+                    </p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#555', fontSize: '11px', lineHeight: '1.5' }}>
+                      Create an account to start collecting rewards.
+                    </p>
+                  </div>
+                )}
+
+                {rewardMode === 'join' && (
+                  <div style={{ padding: '0 4px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#999', fontSize: '12px', lineHeight: '1.6', marginBottom: '12px' }}>
+                      Create a rewards account with <strong style={{ color: '#C9A96E' }}>{email || 'your email'}</strong>.
+                    </p>
+                    {!rewardData && (
+                      <button type="button" onClick={() => handleRewardAction('register')}
+                        disabled={rewardLoading || !email.trim()}
+                        style={{
+                          width: '100%', backgroundColor: rewardLoading ? '#5A5040' : '#C9A96E',
+                          color: '#000', border: 'none',
+                          fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10.5px', letterSpacing: '0.18em',
+                          padding: '12px', cursor: rewardLoading || !email.trim() ? 'not-allowed' : 'pointer',
+                        }}
+                        className="uppercase hover:opacity-85 transition-opacity">
+                        {rewardLoading ? 'Creating…' : 'Create Account & Get Points →'}
+                      </button>
+                    )}
+                    {rewardMessage && (
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: rewardData ? '#C9A96E' : '#E05A5A', fontSize: '11px', marginTop: '10px' }}>
+                        {rewardMessage}
+                      </p>
+                    )}
+                    {rewardData && (
+                      <div style={{ marginTop: '12px' }}>
+                        {rewardData.rewardId && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CCC', fontSize: '12px' }}>
+                            Reward ID: <span style={{ color: '#C9A96E', fontWeight: 'bold', letterSpacing: '0.1em' }}>{rewardData.rewardId}</span>
+                          </p>
+                        )}
+                        {rewardData.points !== undefined && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '13px', marginTop: '4px' }}>
+                            Balance: <strong>{rewardData.points} pts</strong>
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {rewardMode === 'login' && (
+                  <div style={{ padding: '0 4px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#999', fontSize: '12px', lineHeight: '1.6', marginBottom: '12px' }}>
+                      Log in to earn points on this order.
+                    </p>
+                    {!rewardData && (
+                      <button type="button" onClick={() => handleRewardAction('login')}
+                        disabled={rewardLoading || !email.trim()}
+                        style={{
+                          width: '100%', backgroundColor: rewardLoading ? '#5A5040' : '#C9A96E',
+                          color: '#000', border: 'none',
+                          fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10.5px', letterSpacing: '0.18em',
+                          padding: '12px', cursor: rewardLoading || !email.trim() ? 'not-allowed' : 'pointer',
+                        }}
+                        className="uppercase hover:opacity-85 transition-opacity">
+                        {rewardLoading ? 'Looking up…' : 'Log In →'}
+                      </button>
+                    )}
+                    {rewardMessage && (
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: rewardData ? '#C9A96E' : '#E05A5A', fontSize: '11px', marginTop: '10px' }}>
+                        {rewardMessage}
+                      </p>
+                    )}
+                    {rewardData && (
+                      <div style={{ marginTop: '12px' }}>
+                        {rewardData.rewardId && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CCC', fontSize: '12px' }}>
+                            Reward ID: <span style={{ color: '#C9A96E', fontWeight: 'bold', letterSpacing: '0.1em' }}>{rewardData.rewardId}</span>
+                          </p>
+                        )}
+                        {rewardData.points !== undefined && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '13px', marginTop: '4px' }}>
+                            Balance: <strong>{rewardData.points} pts</strong>
+                          </p>
+                        )}
+                        {rewardData.orderCount !== undefined && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#666', fontSize: '11px', marginTop: '4px' }}>
+                            Orders: {rewardData.orderCount}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Order Summary card */}
               <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '32px', position: 'sticky', top: '120px' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }}
                   className="uppercase">Order Summary</p>
