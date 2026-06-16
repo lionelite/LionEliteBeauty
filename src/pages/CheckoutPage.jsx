@@ -363,7 +363,7 @@ export default function CheckoutPage() {
                     className="uppercase">Payment Method</p>
 
                   <div className="grid grid-cols-3 gap-3 mb-6">
-                    {/* Stripe / Card */}
+                    {/* Stripe / Card + BNPL */}
                     <button type="button" onClick={() => setPaymentMethod('stripe')}
                       style={{
                         backgroundColor: paymentMethod === 'stripe' ? '#0C0A08' : '#0A0A0A',
@@ -373,8 +373,8 @@ export default function CheckoutPage() {
                       <div style={{ width: '36px', height: '36px', backgroundColor: paymentMethod === 'stripe' ? '#C9A96E' : '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
                         <span style={{ color: paymentMethod === 'stripe' ? '#000' : '#8A8A8A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>C</span>
                       </div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'stripe' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>Credit Card</p>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '9px', marginTop: '2px' }}>via Stripe</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'stripe' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>Card + Pay Later</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '9px', marginTop: '2px' }}>Klarna · Afterpay · Affirm</p>
                     </button>
 
                     {/* Zelle */}
@@ -405,9 +405,16 @@ export default function CheckoutPage() {
                   </div>
 
                   {paymentMethod === 'stripe' && (
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.6' }}>
-                      Pay securely with your credit or debit card. We use Stripe for payment processing — your card details are encrypted and never stored on our servers.
-                    </p>
+                    <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '20px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7', marginBottom: '12px' }}>
+                        Pay with <strong style={{ color: '#C9A96E' }}>credit/debit card</strong>, or choose <strong style={{ color: '#C9A96E' }}>Klarna</strong>, <strong style={{ color: '#C9A96E' }}>Afterpay</strong>, or <strong style={{ color: '#C9A96E' }}>Affirm</strong> to pay in installments — all processed securely through Stripe.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {['Visa', 'Mastercard', 'Amex', 'Discover', 'Klarna', 'Afterpay', 'Affirm'].map(m => (
+                          <span key={m} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '9px', letterSpacing: '0.1em', border: '1px solid #2A2A2A', padding: '4px 10px' }}>{m}</span>
+                        ))}
+                      </div>
+                    </div>
                   )}
                   {paymentMethod === 'zelle' && (
                     <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '20px' }}>
@@ -486,7 +493,7 @@ export default function CheckoutPage() {
                   </div>
                   {paymentMethod === 'stripe' ? (
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', marginTop: '12px' }}>
-                      Your card will be charged immediately upon placing the order.
+                      Your payment will be processed immediately upon placing the order.
                     </p>
                   ) : (
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', marginTop: '12px' }}>

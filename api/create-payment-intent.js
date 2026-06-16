@@ -37,7 +37,12 @@ export default async function handler(req, res) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalCents,
       currency: 'usd',
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: [
+        'card',
+        'klarna',
+        'afterpay_clearpay',
+        'affirm',
+      ],
       metadata: {
         items: items.map(i => `${i.name} × ${i.quantity}`).join(', '),
         discountApplied: discountApplied ? 'WELCOME10' : 'none',
