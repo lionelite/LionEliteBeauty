@@ -156,7 +156,7 @@ function adminBody({ name, email, phone, program, experience, struggle, timeline
 }
 
 // ── Customer confirmation ──────────────────────────────────────────────────
-function clientConfirmation({ name, program, items, orderNumber, address, paymentMethod, stripePaymentId, total, subtotal, discountAmount }) {
+function clientConfirmation({ name, program, items, orderNumber, address, paymentMethod, stripePaymentId, total, subtotal, discountAmount, experience, struggle, timeline, investment, commitment, health }) {
   const isOrder = !!items
   const title = isOrder ? 'Your order is confirmed.' : 'We&rsquo;ve received your application.'
 
@@ -223,10 +223,32 @@ function clientConfirmation({ name, program, items, orderNumber, address, paymen
     <p style="margin:0 0 8px; color:#CACACA; font-size:15px; line-height:1.8;">We&rsquo;ll confirm shipping details within 24 hours. If you have any questions, reply to this email — we&rsquo;re here to help.</p>
     `
   } else {
-    // Application confirmation
+    // Application confirmation with full details
+    const labelMap = {
+      experience: { beginner: 'New to peptides', some: 'Some experience', advanced: 'Advanced user' },
+      timeline: { asap: 'As soon as possible', '2-4weeks': 'Within 2–4 weeks', exploring: 'Just exploring' },
+      investment: { '100-300': '$100–300/month', '300-700': '$300–700/month', '700+': '$700+/month' },
+      commitment: { very: 'Very committed', somewhat: 'Somewhat committed', exploring: 'Still deciding' },
+    }
+    function fmt(field, val) { return labelMap[field]?.[val] || val }
+
     bodyHtml = `
     <p style="margin:0 0 20px; color:#FAFAF8; font-size:17px;">Hi ${name},</p>
     <p style="margin:0 0 20px; color:#CACACA; font-size:15px; line-height:1.8;">Your application for the <strong style="color:#C9A96E;">${program}</strong> program has been received. We personally review every application and will reach out within 24&ndash;48 hours with your tailored next steps.</p>
+
+    <h3 style="color:#8A8A8A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:10px; letter-spacing:0.15em; margin:0 0 12px; text-transform:uppercase;">Application Summary</h3>
+    <div style="background-color:#0A0A0A; border:1px solid #1A1A1A; padding:16px 20px; margin-bottom:20px;">
+      ${styledTable([
+        { label: 'Program', value: program || 'Not specified' },
+        ...(experience ? [{ label: 'Experience', value: fmt('experience', experience) }] : []),
+        ...(struggle && struggle !== 'Not provided' ? [{ label: 'Primary Concerns', value: struggle }] : []),
+        ...(timeline ? [{ label: 'Timeline', value: fmt('timeline', timeline) }] : []),
+        ...(investment ? [{ label: 'Investment', value: fmt('investment', investment) }] : []),
+        ...(commitment ? [{ label: 'Commitment', value: fmt('commitment', commitment) }] : []),
+        ...(health && health !== 'Not provided' ? [{ label: 'Health Notes', value: health }] : []),
+      ])}
+    </div>
+
     <p style="margin:0 0 24px; color:#CACACA; font-size:15px; line-height:1.8;">Want to move faster? Book a consultation call directly:</p>
     <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#C9A96E; padding:14px 32px;">
       <a href="https://calendly.com/a-ringfield-trustetc" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase;">Book Your Call →</a>
@@ -291,6 +313,56 @@ export default async function handler(req, res) {
         }),
       ])
       console.log('Order emails sent:', orderNumber, adminRes.id, clientRes.id)
+    } else if (body.type === 'program_order') {
+      const progName = body.program || 'Wellness Program'
+      const [adminRes, clientRes] = await Promise.all([
+        resend.emails.send({
+          from: 'Lion Elite <orders@lionelitebeauty.com>',
+          to: ['orders@lionelitebeauty.com'],
+          subject: `Program Enrollment: ${progName} — ${body.name} ${body.vipId ? `(${body.vipId})` : ''}`,
+          html: wrap(`
+            <h2 style="color:#C9A96E; font-family:Georgia,serif; font-size:20px; margin:0 0 24px;">New Program Enrollment</h2>
+            ${paymentStatusBadge(body.paymentMethod, body.stripePaymentId)}
+            <div style="background-color:#0A0A0A; border:1px solid #1A1A1A; padding:20px 24px; margin-top:16px;">
+              ${styledTable([
+                { label: 'Name', value: body.name },
+                { label: 'Email', value: body.email },
+                { label: 'Program', value: progName },
+                ...(body.vipId ? [{ label: 'VIP ID', value: body.vipId }] : []),
+                { label: 'Payment', value: paymentMethodLabel(body.paymentMethod) },
+              ])}
+            </div>
+            <div style="background-color:#0A0A0A; border:1px solid #1A1A1A; padding:16px 20px; margin-top:12px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr><td style="padding:4px 0; color:#C9A96E; font-family:'Helvetica Neue',Arial,sans-serif; font-size:14px; letter-spacing:0.1em; text-transform:uppercase;">Total</td>
+                <td style="padding:4px 0; color:#C9A96E; font-family:Georgia,serif; font-size:20px; text-align:right;">$2,400.00</td></tr>
+              </table>
+            </div>`),
+          replyTo: body.email,
+        }),
+        resend.emails.send({
+          from: 'Lion Elite <orders@lionelitebeauty.com>',
+          to: [body.email],
+          subject: `Welcome to Lion Elite — ${progName} Enrollment`,
+          html: wrap(`
+            <h2 style="color:#C9A96E; font-family:Georgia,serif; font-size:22px; margin:0 0 20px;">Welcome to the Lion Elite Family.</h2>
+            <p style="margin:0 0 20px; color:#FAFAF8; font-size:17px;">Hi ${body.name},</p>
+            ${body.paymentMethod === 'stripe' && body.stripePaymentId
+              ? `<p style="margin:0 0 20px; color:#5BA87A; font-size:15px; line-height:1.8;">✓ Payment received. Your enrollment in the <strong style="color:#C9A96E;">${progName}</strong> program is confirmed.</p>`
+              : `<p style="margin:0 0 20px; color:#CACACA; font-size:15px; line-height:1.8;">Your enrollment in the <strong style="color:#C9A96E;">${progName}</strong> program has been received. We'll confirm your spot once payment is processed.</p>
+                 <div style="background-color:#0C0A08; border:1px solid #C9A96E33; padding:20px; margin-bottom:20px;">
+                   <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#C9A96E; font-size:11px; letter-spacing:0.15em; margin:0 0 12px; text-transform:uppercase;">Payment Instructions</p>
+                   <p style="margin:0 0 4px; color:#CACACA; font-size:13px;">Send <strong style="color:#C9A96E;">$2,400.00</strong> via Zelle to:</p>
+                   <p style="margin:0 0 12px; color:#C9A96E; font-size:15px; font-family:'Helvetica Neue',Arial,sans-serif;">orders@lionelitebeauty.com</p>
+                   <p style="margin:0; color:#6A6A6A; font-size:12px;">Include your name and VIP ID in the memo.</p>
+                 </div>`
+            }
+            ${body.vipId ? `<p style="margin:0 0 8px; color:#8A8A8A; font-size:12px;">VIP ID: <strong style="color:#C9A96E; letter-spacing:0.15em;">${body.vipId}</strong></p>` : ''}
+            <p style="margin:0 0 8px; color:#CACACA; font-size:15px; line-height:1.8;">We'll reach out within 24 hours to schedule your onboarding and walk you through your personalized protocol.</p>
+            <p style="margin:0 0 8px; color:#CACACA; font-size:15px; line-height:1.8;">If you have any questions, reply to this email — we're here to help.</p>`),
+        }),
+      ])
+      console.log('Program enrollment emails:', adminRes.id, clientRes.id)
     } else {
       const [adminRes, clientRes] = await Promise.all([
         resend.emails.send({
@@ -317,6 +389,12 @@ export default async function handler(req, res) {
           html: wrap(clientConfirmation({
             name: body.name,
             program: body.program,
+            experience: body.experience,
+            struggle: body.struggle,
+            timeline: body.timeline,
+            investment: body.investment,
+            commitment: body.commitment,
+            health: body.health,
           })),
         }),
       ])

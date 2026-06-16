@@ -35,8 +35,12 @@ export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
   const [errors, setErrors] = useState({})
+  // ── VIP account ─────────────────────────────────────────────────────────
+  const [vipLoading, setVipLoading] = useState(false)
+  const [vipAccount, setVipAccount] = useState(null)
+  const [vipError, setVipError] = useState('')
 
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => { window.scrollTo(0, 0) }, [submitted])
 
   function validate() {
     const e = {}
@@ -92,6 +96,32 @@ export default function ApplyPage() {
     window.scrollTo(0, 0)
   }
 
+  async function handleCreateVip() {
+    setVipLoading(true)
+    setVipError('')
+    try {
+      const res = await fetch('/api/vip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'register',
+          email: form.email,
+          name: form.name,
+          program: programs.find(p => p.value === form.goal)?.label || form.goal,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setVipError(data.error || 'Unable to create VIP account')
+      } else {
+        setVipAccount(data)
+      }
+    } catch {
+      setVipError('Service temporarily unavailable')
+    }
+    setVipLoading(false)
+  }
+
   if (submitted) {
     return (
       <div style={{ backgroundColor: '#080808', minHeight: '100vh' }}>
@@ -113,6 +143,7 @@ export default function ApplyPage() {
               We review every application personally. You'll hear from us within <strong style={{ color: '#FAFAF8' }}>24–48 hours</strong> with next steps tailored to your goals.
             </p>
 
+            {/* ── Consultation call ── */}
             <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #141414', padding: '40px', marginBottom: '32px' }}>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '16px' }}
                 className="uppercase">Want to move faster?</p>
@@ -126,6 +157,73 @@ export default function ApplyPage() {
                 className="uppercase hover:opacity-90 transition-opacity">
                 Book Your Call →
               </a>
+            </div>
+
+            {/* ── VIP Account ── */}
+            <div style={{
+              backgroundColor: '#0C0A08', border: '1px solid #C9A96E33', padding: '40px',
+              marginBottom: '32px', position: 'relative', overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute', top: '0', right: '0', width: '50px', height: '50px',
+                background: 'linear-gradient(135deg, transparent 50%, #C9A96E15 50%)',
+              }}></div>
+
+              {!vipAccount ? (
+                <>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }}
+                    className="uppercase">Lion Elite VIP</p>
+                  <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem', lineHeight: '1.3', marginBottom: '12px' }}
+                    className="font-normal">Create your VIP account</h2>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '20px' }}>
+                    Get instant access to your program checkout and membership portal. Your VIP account links all your program details in one place.
+                  </p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', marginBottom: '16px' }}>
+                    Account will be created for: <strong style={{ color: '#C9A96E' }}>{form.email}</strong>
+                  </p>
+                  {vipError && (
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '12px', marginBottom: '12px' }}>{vipError}</p>
+                  )}
+                  <button onClick={handleCreateVip} disabled={vipLoading}
+                    style={{
+                      backgroundColor: vipLoading ? '#5A5040' : '#C9A96E', color: '#000', border: 'none',
+                      fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em',
+                      padding: '14px 36px', cursor: vipLoading ? 'not-allowed' : 'pointer',
+                    }}
+                    className="uppercase hover:opacity-85 transition-opacity">
+                    {vipLoading ? 'Creating…' : 'Create VIP Account →'}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }}
+                    className="uppercase">✓ VIP Account Active</p>
+                  <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem', lineHeight: '1.3', marginBottom: '8px' }}
+                    className="font-normal">Welcome, {vipAccount.name}!</h2>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', marginBottom: '4px' }}>
+                    VIP ID: <strong style={{ color: '#C9A96E', letterSpacing: '0.15em' }}>{vipAccount.vipId}</strong>
+                  </p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', marginBottom: '24px' }}>
+                    Program: {vipAccount.program}
+                  </p>
+                  <div style={{ borderTop: '1px solid #1A1A1A', paddingTop: '24px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }}
+                      className="uppercase">Next Step: Secure Your Program</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '20px' }}>
+                      Complete your enrollment by securing your spot with payment. Your program is <strong style={{ color: '#FAFAF8' }}>$2,400 for 6 months</strong> with full access to your protocol, check-ins, and support.
+                    </p>
+                    <Link to={`/programs/checkout?vip=${vipAccount.vipId}&email=${encodeURIComponent(form.email)}&name=${encodeURIComponent(form.name)}&program=${encodeURIComponent(vipAccount.program)}`}
+                      style={{
+                        display: 'inline-block', backgroundColor: '#C9A96E', color: '#000',
+                        fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.2em',
+                        padding: '16px 40px', textDecoration: 'none',
+                      }}
+                      className="uppercase hover:opacity-90 transition-opacity">
+                      Proceed to Payment →
+                    </Link>
+                  </div>
+                </>
+              )}
             </div>
 
             <Link to="/"
