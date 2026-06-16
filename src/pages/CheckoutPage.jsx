@@ -72,7 +72,7 @@ export default function CheckoutPage() {
         setSending(false)
       }
     } else {
-      // Zelle / CashApp — submit order with payment instructions
+      // Zelle — submit order with payment instructions
       await submitOrder()
     }
   }
@@ -186,20 +186,6 @@ export default function CheckoutPage() {
                     </p>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.6', marginTop: '8px' }}>
                       Include your order name in the memo so we can match it.
-                    </p>
-                  </div>
-                )}
-
-                {paymentMethod === 'cashapp' && (
-                  <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '24px' }}>
-                    <div className="flex items-center gap-3 mb-3">
-                      <div style={{ width: '36px', height: '36px', backgroundColor: '#00D54B', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>$</span>
-                      </div>
-                      <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px' }}>CashApp</p>
-                    </div>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
-                      Send to: <strong style={{ color: '#C9A96E' }}>{'$LionElite'}</strong>
                     </p>
                   </div>
                 )}
@@ -361,74 +347,72 @@ export default function CheckoutPage() {
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
                     className="uppercase">Payment Method</p>
 
-                  <div className="grid grid-cols-3 gap-3 mb-6">
-                    {/* Stripe / Card + BNPL */}
+                  {/* Credit/Debit Card (default) */}
+                  <div style={{
+                    border: paymentMethod === 'stripe' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
+                    marginBottom: '12px', overflow: 'hidden',
+                  }}>
                     <button type="button" onClick={() => setPaymentMethod('stripe')}
                       style={{
-                        backgroundColor: paymentMethod === 'stripe' ? '#0C0A08' : '#0A0A0A',
-                        border: paymentMethod === 'stripe' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
-                        padding: '20px', textAlign: 'center', cursor: 'pointer',
+                        width: '100%', backgroundColor: '#0A0A0A', border: 'none',
+                        padding: '16px 20px', cursor: 'pointer', display: 'flex',
+                        alignItems: 'center', justifyContent: 'space-between',
                       }}>
-                      <div style={{ width: '36px', height: '36px', backgroundColor: paymentMethod === 'stripe' ? '#C9A96E' : '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
-                        <span style={{ color: paymentMethod === 'stripe' ? '#000' : '#8A8A8A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>C</span>
+                      <div className="flex items-center gap-3">
+                        <div style={{
+                          width: '20px', height: '20px', borderRadius: '50%',
+                          border: paymentMethod === 'stripe' ? '6px solid #C9A96E' : '2px solid #3A3A3A',
+                          transition: 'border 0.15s',
+                        }}></div>
+                        <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '14px' }}>
+                          Credit / Debit Card
+                        </span>
                       </div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'stripe' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>Card + Pay Later</p>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '9px', marginTop: '2px' }}>Klarna · Afterpay · Affirm</p>
-                    </button>
-
-                    {/* Zelle */}
-                    <button type="button" onClick={() => setPaymentMethod('zelle')}
-                      style={{
-                        backgroundColor: paymentMethod === 'zelle' ? '#0C0A08' : '#0A0A0A',
-                        border: paymentMethod === 'zelle' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
-                        padding: '20px', textAlign: 'center', cursor: 'pointer',
-                      }}>
-                      <div style={{ width: '36px', height: '36px', backgroundColor: '#6C1FD1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
-                        <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>Z</span>
-                      </div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'zelle' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>Zelle</p>
-                    </button>
-
-                    {/* CashApp */}
-                    <button type="button" onClick={() => setPaymentMethod('cashapp')}
-                      style={{
-                        backgroundColor: paymentMethod === 'cashapp' ? '#0C0A08' : '#0A0A0A',
-                        border: paymentMethod === 'cashapp' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
-                        padding: '20px', textAlign: 'center', cursor: 'pointer',
-                      }}>
-                      <div style={{ width: '36px', height: '36px', backgroundColor: '#00D54B', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
-                        <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>$</span>
-                      </div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'cashapp' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>CashApp</p>
-                    </button>
-                  </div>
-
-                  {paymentMethod === 'stripe' && (
-                    <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '20px' }}>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7', marginBottom: '12px' }}>
-                        Pay with <strong style={{ color: '#C9A96E' }}>credit/debit card</strong>, or choose <strong style={{ color: '#C9A96E' }}>Klarna</strong>, <strong style={{ color: '#C9A96E' }}>Afterpay</strong>, or <strong style={{ color: '#C9A96E' }}>Affirm</strong> to pay in installments — all processed securely through Stripe.
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {['Visa', 'Mastercard', 'Amex', 'Discover', 'Klarna', 'Afterpay', 'Affirm'].map(m => (
-                          <span key={m} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '9px', letterSpacing: '0.1em', border: '1px solid #2A2A2A', padding: '4px 10px' }}>{m}</span>
+                      <div className="flex gap-2">
+                        {['Visa', 'MC', 'Amex', 'Disc'].map(m => (
+                          <span key={m} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.08em', border: '1px solid #2A2A2A', padding: '2px 8px' }}>{m}</span>
                         ))}
                       </div>
-                    </div>
-                  )}
-                  {paymentMethod === 'zelle' && (
-                    <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '20px' }}>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7' }}>
-                        Send payment to <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong> via Zelle. Your order will be processed once payment is confirmed.
-                      </p>
-                    </div>
-                  )}
-                  {paymentMethod === 'cashapp' && (
-                    <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '20px' }}>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7' }}>
-                        Send payment to <strong style={{ color: '#C9A96E' }}>{'$LionElite'}</strong> via CashApp. Your order will be processed once payment is confirmed.
-                      </p>
-                    </div>
-                  )}
+                    </button>
+                    {paymentMethod === 'stripe' && (
+                      <div style={{ backgroundColor: '#0A0A0A', borderTop: '1px solid #1A1A1A', padding: '24px' }}>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', marginBottom: '16px' }}>
+                          Pay with card, or choose Klarna, Afterpay, or Affirm — all processed securely through Stripe.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Zelle */}
+                  <div style={{
+                    border: paymentMethod === 'zelle' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
+                    marginBottom: '12px', overflow: 'hidden',
+                  }}>
+                    <button type="button" onClick={() => setPaymentMethod('zelle')}
+                      style={{
+                        width: '100%', backgroundColor: '#0A0A0A', border: 'none',
+                        padding: '16px 20px', cursor: 'pointer', display: 'flex',
+                        alignItems: 'center', justifyContent: 'space-between',
+                      }}>
+                      <div className="flex items-center gap-3">
+                        <div style={{
+                          width: '20px', height: '20px', borderRadius: '50%',
+                          border: paymentMethod === 'zelle' ? '6px solid #C9A96E' : '2px solid #3A3A3A',
+                          transition: 'border 0.15s',
+                        }}></div>
+                        <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '14px' }}>
+                          Zelle
+                        </span>
+                      </div>
+                    </button>
+                    {paymentMethod === 'zelle' && (
+                      <div style={{ backgroundColor: '#0A0A0A', borderTop: '1px solid #1A1A1A', padding: '20px 24px 24px' }}>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7' }}>
+                          Send payment to <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong> via Zelle. Your order will be processed once payment is confirmed.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {stripeError && (

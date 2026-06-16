@@ -7,8 +7,8 @@ export default function Testimonials() {
       id: 'muscle',
       eyebrow: 'Muscle & Recovery',
       name: 'Lion Elite Muscle & Recovery Program',
-      price: '$1,000',
-      priceNote: 'One-Time Investment',
+      price: '$2,400',
+      priceNote: '6 Month Program',
       accent: '#C9A96E',
       href: '/programs/muscle',
       includes: [
@@ -25,8 +25,8 @@ export default function Testimonials() {
       id: 'neuro',
       eyebrow: 'Neuro Optimization',
       name: 'Lion Elite Neuro Program',
-      price: 'Premium Access',
-      priceNote: 'Apply for Availability',
+      price: '$2,400',
+      priceNote: '6 Month Program',
       accent: '#8A9E85',
       href: '/programs/neuro',
       includes: [
@@ -43,8 +43,8 @@ export default function Testimonials() {
       id: 'fertility',
       eyebrow: 'Fertility Optimization',
       name: 'Lion Elite Fertility Program',
-      price: 'Premium Access',
-      priceNote: 'Apply for Availability',
+      price: '$2,400',
+      priceNote: '6 Month Program',
       accent: '#B8A4D4',
       href: '/programs/fertility',
       includes: [
@@ -61,8 +61,8 @@ export default function Testimonials() {
       id: 'hair',
       eyebrow: 'Hair Optimization',
       name: 'Lion Elite Hair Program',
-      price: 'Premium Access',
-      priceNote: 'Apply for Availability',
+      price: '$2,400',
+      priceNote: '6 Month Program',
       accent: '#C4A265',
       href: '/programs/hair',
       includes: [
@@ -79,8 +79,8 @@ export default function Testimonials() {
       id: 'weight',
       eyebrow: 'Weight Optimization',
       name: 'Lion Elite Weight Program',
-      price: 'Premium Access',
-      priceNote: 'Apply for Availability',
+      price: '$2,400',
+      priceNote: '6 Month Program',
       accent: '#5BA87A',
       href: '/programs/weight',
       includes: [
@@ -97,8 +97,8 @@ export default function Testimonials() {
       id: 'longevity',
       eyebrow: 'Longevity & Anti-Aging',
       name: 'Lion Elite Longevity Program',
-      price: 'Premium Access',
-      priceNote: 'Apply for Availability',
+      price: '$2,400',
+      priceNote: '6 Month Program',
       accent: '#7A9FBF',
       href: '/programs/longevity',
       includes: [
@@ -136,8 +136,11 @@ export default function Testimonials() {
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '9px', letterSpacing: '0.3em', marginBottom: '10px' }}
                   className="uppercase">{p.eyebrow}</p>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '0.9rem', lineHeight: '1.4', marginBottom: '14px' }}>{p.name}</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.15em', marginBottom: '4px' }}>
+                  {p.price}
+                </p>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.15em' }}>
-                  Premium Access
+                  {p.priceNote}
                 </p>
               </div>
               <div style={{ padding: '22px 24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
