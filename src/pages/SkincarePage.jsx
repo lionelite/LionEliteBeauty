@@ -32,17 +32,17 @@ export default function SkincarePage() {
       <Navbar />
 
       {/* Hero */}
-      <section style={{ backgroundColor: '#080808', paddingTop: '140px', paddingBottom: '100px' }}>
+      <section style={{ backgroundColor: '#FAF7F2', paddingTop: '140px', paddingBottom: '100px', borderBottom: '1px solid #E8DDD0' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-2xl">
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.3em', fontSize: '10px' }}
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.3em', fontSize: '10px' }}
               className="uppercase mb-5">Lion Elite Beauty</p>
-            <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '3.2rem', lineHeight: '1.12', letterSpacing: '-0.02em' }}
+            <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '3.2rem', lineHeight: '1.12', letterSpacing: '-0.02em' }}
               className="font-normal mb-6">
               Advanced Peptide<br />Skincare Collection.
             </h1>
             <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '24px' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '16px', lineHeight: '1.8', maxWidth: '480px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '16px', lineHeight: '1.8', maxWidth: '480px' }}>
               Peptide-powered formulations designed to support the appearance of healthier, more radiant skin. Premium ingredients, purposefully formulated — to help you feel confident in your own skin.
             </p>
           </div>

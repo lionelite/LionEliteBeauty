@@ -44,27 +44,27 @@ export default function StripePaymentForm({ finalTotal, email, name, onBack, onS
   }
 
   return (
-    <div style={{ backgroundColor: '#080808', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
       <Navbar />
       <section style={{ paddingTop: '140px' }}>
         <div className="max-w-lg mx-auto px-6">
           <button onClick={onBack}
-            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', display: 'block', marginBottom: '32px' }}
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', display: 'block', marginBottom: '32px' }}
             className="uppercase hover:text-[#C9A96E] transition-colors">
             ← Back to Checkout
           </button>
 
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '12px' }}
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '12px' }}
             className="uppercase">Card Payment</p>
-          <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2rem', lineHeight: '1.15', marginBottom: '8px' }}
+          <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2rem', lineHeight: '1.15', marginBottom: '8px' }}
             className="font-normal">Enter your card details</h1>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', marginBottom: '8px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', marginBottom: '8px' }}>
             Total: <strong style={{ color: '#C9A96E', fontSize: '1.4rem' }}>${finalTotal.toFixed(2)}</strong>
           </p>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '20px 0 32px' }}></div>
 
           <form onSubmit={handlePay}>
-            <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A', padding: '28px', marginBottom: '24px', minHeight: '100px' }}>
+            <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '28px', marginBottom: '24px', minHeight: '100px' }}>
               {stripe && elements ? (
                 <PaymentElement options={{
                   defaultValues: { billingDetails: { name, email } },
@@ -78,7 +78,7 @@ export default function StripePaymentForm({ finalTotal, email, name, onBack, onS
             </div>
 
             {error && (
-              <div style={{ backgroundColor: '#1A0A0A', border: '1px solid #E05A5A44', padding: '14px 18px', marginBottom: '20px' }}>
+              <div style={{ backgroundColor: '#FFF0F0', border: '1px solid #E05A5A44', padding: '14px 18px', marginBottom: '20px' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '13px' }}>{error}</p>
               </div>
             )}
@@ -86,7 +86,7 @@ export default function StripePaymentForm({ finalTotal, email, name, onBack, onS
             <div className="flex gap-3">
               <button type="button" onClick={onBack}
                 style={{
-                  flex: 1, backgroundColor: 'transparent', border: '1px solid #2A2A2A', color: '#CACACA',
+                  flex: 1, backgroundColor: 'transparent', border: '1px solid #D0C8BA', color: '#6A6A6A',
                   fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em',
                   padding: '16px', cursor: 'pointer',
                 }}
@@ -95,7 +95,7 @@ export default function StripePaymentForm({ finalTotal, email, name, onBack, onS
               </button>
               <button type="submit" disabled={sending || !stripe || !elements}
                 style={{
-                  flex: 1, backgroundColor: sending ? '#6A5A3A' : '#C9A96E', color: '#000', border: 'none',
+                  flex: 1, backgroundColor: sending ? '#8A8A8A' : '#C9A96E', color: '#000', border: 'none',
                   fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.18em',
                   padding: '16px', cursor: (sending || !stripe || !elements) ? 'not-allowed' : 'pointer',
                 }}
@@ -105,7 +105,7 @@ export default function StripePaymentForm({ finalTotal, email, name, onBack, onS
             </div>
           </form>
 
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', textAlign: 'center', marginTop: '24px', marginBottom: '60px' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', textAlign: 'center', marginTop: '24px', marginBottom: '60px' }}>
             Secured by Stripe · Your card details are encrypted
           </p>
         </div>

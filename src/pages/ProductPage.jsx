@@ -81,18 +81,18 @@ export default function ProductPage() {
   }
 
   return (
-    <div style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
       <SEO title={p.name} description={`${p.name} — ${p.tagline}. ${p.description ? p.description.substring(0, 120) : 'Premium peptide skincare from Lion Elite Beauty.'}`} />
       <Navbar />
 
       {/* Breadcrumb */}
-      <div style={{ paddingTop: '100px', paddingBottom: '16px', borderBottom: '1px solid #141414' }}>
+      <div style={{ paddingTop: '100px', paddingBottom: '16px', borderBottom: '1px solid #E8DDD0' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2">
-            <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
+            <Link to="/" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
               className="uppercase hover:text-[#C9A96E] transition-colors">Home</Link>
             <span style={{ color: '#2A2A2A', fontSize: '11px' }}>·</span>
-            <Link to="/skincare" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
+            <Link to="/skincare" style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.12em', textDecoration: 'none' }}
               className="uppercase hover:text-[#C9A96E] transition-colors">Skincare</Link>
             <span style={{ color: '#2A2A2A', fontSize: '11px' }}>·</span>
             <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.12em' }} className="uppercase">{p.shortName}</span>
@@ -129,19 +129,19 @@ export default function ProductPage() {
 
               <div style={{ width: '32px', height: '1px', backgroundColor: p.accent, marginBottom: '24px' }}></div>
 
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.9', marginBottom: '32px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.9', marginBottom: '32px' }}>
                 {p.description}
               </p>
 
               {/* Kit includes */}
               {p.kitIncludes && (
                 <div style={{ backgroundColor: '#111', border: `1px solid ${p.accent}22`, padding: '20px 24px', marginBottom: '28px' }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '12px' }} className="uppercase">Kit Includes</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '12px' }} className="uppercase">Kit Includes</p>
                   <ul className="space-y-2">
                     {p.kitIncludes.map(item => (
                       <li key={item} className="flex items-center gap-3">
                         <span style={{ color: p.accent, fontSize: '11px' }}>✔</span>
-                        <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px' }}>{item}</span>
+                        <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px' }}>{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -152,7 +152,7 @@ export default function ProductPage() {
               <div className="flex items-center gap-5 mb-8">
                 <div>
                   {p.originalPrice && (
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', textDecoration: 'line-through' }}>{p.originalPrice}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', textDecoration: 'line-through' }}>{p.originalPrice}</p>
                   )}
                   <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem' }}>{p.price}</p>
                 </div>
@@ -168,7 +168,7 @@ export default function ProductPage() {
                 </button>
                 <Link to="/cart"
                   style={{
-                    fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px',
+                    fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px',
                     letterSpacing: '0.12em', textDecoration: 'none', borderBottom: '1px solid #2A2A2A', paddingBottom: '2px',
                   }}
                   className="uppercase hover:text-[#C9A96E] transition-colors">
@@ -176,7 +176,7 @@ export default function ProductPage() {
                 </Link>
               </div>
 
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px' }}>
                 Questions? Email <a href="mailto:info@lionelitebeauty.com" style={{ color: '#C9A96E', textDecoration: 'none' }}>info@lionelitebeauty.com</a>
               </p>
             </div>
@@ -185,12 +185,12 @@ export default function ProductPage() {
       </section>
 
       {/* What you'll notice + Timeline */}
-      <section style={{ backgroundColor: '#080808', padding: '80px 0', borderTop: '1px solid #141414' }}>
+      <section style={{ backgroundColor: '#F5F0E8', padding: '80px 0', borderTop: '1px solid #E8DDD0' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-px" style={{ backgroundColor: '#141414' }}>
 
             {/* What You'll Notice */}
-            <div style={{ backgroundColor: '#080808', padding: '48px 40px' }}>
+            <div style={{ backgroundColor: '#F5F0E8', padding: '48px 40px' }}>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">
                 What You'll Actually Notice
               </p>
@@ -198,7 +198,7 @@ export default function ProductPage() {
                 {(p.whatYouNotice || p.benefits.map(b => b.title)).map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <span style={{ color: p.accent, fontSize: '13px', flexShrink: 0, marginTop: '1px' }}>✔</span>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.7' }}>{item}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.7' }}>{item}</p>
                   </li>
                 ))}
               </ul>
@@ -206,7 +206,7 @@ export default function ProductPage() {
 
             {/* Results Timeline */}
             {p.timeline && (
-              <div style={{ backgroundColor: '#080808', padding: '48px 40px' }}>
+              <div style={{ backgroundColor: '#F5F0E8', padding: '48px 40px' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">
                   What to Expect &amp; When
                 </p>
@@ -221,7 +221,7 @@ export default function ProductPage() {
                       </div>
                       <div>
                         <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '10px', letterSpacing: '0.15em', marginBottom: '4px' }} className="uppercase">{t.period}</p>
-                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7' }}>{t.result}</p>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7' }}>{t.result}</p>
                       </div>
                     </li>
                   ))}
@@ -234,27 +234,27 @@ export default function ProductPage() {
 
       {/* Who it's for */}
       {p.whoItsFor && (
-        <section style={{ backgroundColor: '#0A0A0A', padding: '60px 0', borderTop: '1px solid #141414' }}>
+        <section style={{ backgroundColor: '#FAF7F2', padding: '60px 0', borderTop: '1px solid #E8DDD0' }}>
           <div className="max-w-7xl mx-auto px-6">
-            <div style={{ backgroundColor: '#080808', border: `1px solid ${p.accent}18`, padding: '40px 48px' }}
+            <div style={{ backgroundColor: '#F5F0E8', border: `1px solid ${p.accent}18`, padding: '40px 48px' }}
               className="flex flex-col md:flex-row items-start md:items-center gap-8">
               <div style={{ flexShrink: 0 }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '8px' }} className="uppercase">Who This Is For</p>
                 <div style={{ width: '32px', height: '1px', backgroundColor: p.accent }}></div>
               </div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.8' }}>{p.whoItsFor}</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.8' }}>{p.whoItsFor}</p>
             </div>
           </div>
         </section>
       )}
 
       {/* Details */}
-      <section style={{ backgroundColor: '#050505', padding: '80px 0', borderTop: '1px solid #141414' }}>
+      <section style={{ backgroundColor: '#F5F0E8', padding: '80px 0', borderTop: '1px solid #E8DDD0' }}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-px" style={{ backgroundColor: '#141414' }}>
 
             {/* Key Ingredients */}
-            <div style={{ backgroundColor: '#080808', padding: '48px 40px' }}>
+            <div style={{ backgroundColor: '#F5F0E8', padding: '48px 40px' }}>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">
                 Key Ingredients
               </p>
@@ -269,7 +269,7 @@ export default function ProductPage() {
             </div>
 
             {/* Benefits */}
-            <div style={{ backgroundColor: '#080808', padding: '48px 40px' }}>
+            <div style={{ backgroundColor: '#F5F0E8', padding: '48px 40px' }}>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">
                 Benefits
               </p>
@@ -287,7 +287,7 @@ export default function ProductPage() {
             </div>
 
             {/* How to Use */}
-            <div style={{ backgroundColor: '#080808', padding: '48px 40px' }}>
+            <div style={{ backgroundColor: '#F5F0E8', padding: '48px 40px' }}>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">
                 How to Use
               </p>
@@ -295,7 +295,7 @@ export default function ProductPage() {
                 {p.howToUse.map((step, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <span style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: '1.1rem', flexShrink: 0, lineHeight: '1.4' }}>0{i + 1}</span>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7' }}>{step}</p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7' }}>{step}</p>
                   </li>
                 ))}
               </ol>
@@ -306,7 +306,7 @@ export default function ProductPage() {
 
       {/* Pairs With */}
       {relatedProducts.length > 0 && (
-        <section style={{ backgroundColor: '#0A0A0A', padding: '80px 0', borderTop: '1px solid #141414' }}>
+        <section style={{ backgroundColor: '#FAF7F2', padding: '80px 0', borderTop: '1px solid #E8DDD0' }}>
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center gap-4 mb-12">
               <div style={{ width: '32px', height: '1px', backgroundColor: p.accent }}></div>
@@ -320,7 +320,7 @@ export default function ProductPage() {
                 const rpDark = rp.bg === '#1A1A1A' || rp.bg === '#2A2A2A'
                 return (
                   <Link key={rp.slug} to={`/skincare/${rp.slug}`}
-                    style={{ backgroundColor: '#0A0A0A', padding: '36px', textDecoration: 'none', display: 'block' }}
+                    style={{ backgroundColor: '#FAF7F2', padding: '36px', textDecoration: 'none', display: 'block' }}
                     className="group hover:bg-[#0F0F0F] transition-colors">
                     <ProductBottle accent={rp.accent} label={rp.label} />
                     <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px', marginTop: '20px', marginBottom: '6px', textAlign: 'center' }}>{rp.name}</p>
@@ -340,10 +340,10 @@ export default function ProductPage() {
       )}
 
       {/* Back to shop */}
-      <section style={{ backgroundColor: '#050505', padding: '48px 0', borderTop: '1px solid #141414' }}>
+      <section style={{ backgroundColor: '#F5F0E8', padding: '48px 0', borderTop: '1px solid #E8DDD0' }}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between flex-wrap gap-4">
           <Link to="/skincare"
-            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '11px', letterSpacing: '0.15em', textDecoration: 'none' }}
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.15em', textDecoration: 'none' }}
             className="uppercase hover:text-[#C9A96E] transition-colors flex items-center gap-2">
             ← Back to All Products
           </Link>
