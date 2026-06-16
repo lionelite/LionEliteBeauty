@@ -4,7 +4,7 @@ export const skincareProducts = [
     name: 'GHK-Cu Intensive Serum',
     shortName: 'GHK-Cu Serum',
     price: '$69.99',
-    size: '30ml · Est. 2026',
+    size: '30ml',
     badge: 'Pre-Order',
     badgeColor: '#C9A96E',
     priceNum: 69.99,

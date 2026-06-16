@@ -160,7 +160,7 @@ export default function ProductPage() {
                     </div>
                   </div>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7', marginBottom: '20px' }}>
-                    Secure your order now. First batch ships <strong style={{ color: '#FAFAF8' }}>Est. 2026</strong>. You'll be charged when your order ships.
+                    Secure your order now. First batch shipping <strong style={{ color: '#FAFAF8' }}>August 2026</strong>. You'll be charged when your order ships.
                   </p>
                   <div className="flex items-center gap-3">
                     <button onClick={handleAddToCart}
