@@ -129,6 +129,52 @@ export default function OptimizationPage() {
         </div>
       </section>
 
+      {/* Foundation Coaching — Starter Program */}
+      <section style={{ padding: '0 0 80px' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div style={{
+            backgroundColor: '#0A0A0A', border: '1px solid #8A9E8540',
+            padding: '40px 48px', display: 'flex',
+            flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+            flexWrap: 'wrap', gap: '24px',
+          }}>
+            <div style={{ flex: '1', minWidth: '280px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', fontSize: '9px', letterSpacing: '0.25em', padding: '4px 10px', border: '1px solid #8A9E8540' }} className="uppercase">Starter Program</span>
+                <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.2em' }} className="uppercase">$299.99 / month</span>
+              </div>
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.6rem', marginBottom: '8px' }} className="font-normal">
+                Foundation Coaching
+              </h2>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.8', marginBottom: '16px', maxWidth: '480px' }}>
+                Monthly coaching with a personalized wellness roadmap, peptide education, and step-by-step implementation guidance. Built for those looking for professional support at an accessible entry point.
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
+                {['Monthly coaching call', 'Wellness roadmap', 'Peptide education', 'Email support', 'Progress tracking'].map(f => (
+                  <span key={f} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', color: '#8A9E85', letterSpacing: '0.05em', backgroundColor: '#080F08', padding: '6px 12px', border: '1px solid #8A9E8520' }}>{f}</span>
+                ))}
+              </div>
+              <Link to="/apply?program=foundation"
+                style={{
+                  display: 'inline-block', backgroundColor: '#8A9E85', color: '#000',
+                  fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em',
+                  padding: '14px 32px', textDecoration: 'none',
+                }}
+                className="uppercase hover:opacity-90 transition-opacity">
+                Apply for Foundation →
+              </Link>
+            </div>
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <p style={{ fontFamily: 'Georgia, serif', color: '#8A9E85', fontSize: '2.4rem', lineHeight: '1', marginBottom: '4px' }}>$299.99</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '10px', letterSpacing: '0.15em' }}>/ MONTH</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '11px', marginTop: '16px', lineHeight: '1.6' }}>
+                No long-term commitment<br />Cancel anytime
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Program Cards */}
       <section style={{ padding: '0 0 80px' }}>
         <div className="max-w-7xl mx-auto px-6">
@@ -203,6 +249,7 @@ export default function OptimizationPage() {
               </thead>
               <tbody>
                 {[
+                  { label: 'Foundation Coaching', accent: '#8A9E85', bestFor: 'Beginners & entry-level', outcome: 'Monthly coaching + wellness roadmap', timeline: 'No commitment', href: '/apply?program=foundation', id: 'foundation', note: 'Starter' },
                   { label: 'Muscle & Recovery', accent: '#C9A96E', bestFor: 'Athletes & active individuals', outcome: 'Faster recovery + lean mass', timeline: '4–8 weeks', href: '/programs/muscle', id: 'muscle' },
                   { label: 'Neuro / Cognitive', accent: '#8A9E85', bestFor: 'High-performers & executives', outcome: 'Focus, clarity, mental energy', timeline: '3–6 weeks', href: '/programs/neuro', id: 'neuro' },
                   { label: 'Fertility & Hormonal', accent: '#B8A4D4', bestFor: 'Men & women planning ahead', outcome: 'Hormonal balance & function', timeline: '6–12 weeks', href: '/programs/fertility', id: 'fertility' },
@@ -235,6 +282,20 @@ export default function OptimizationPage() {
 
           {/* Mobile: simple stack */}
           <div className="md:hidden space-y-3">
+            <div key="foundation" style={{ backgroundColor: '#0A0A0A', border: '1px solid #8A9E8540', padding: '20px 24px' }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div style={{ width: '7px', height: '7px', backgroundColor: '#8A9E85', borderRadius: '50%' }}></div>
+                  <div>
+                    <span style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px' }}>Foundation Coaching</span>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '10px', letterSpacing: '0.1em' }}>$299.99/month · Starter</p>
+                  </div>
+                </div>
+                <Link to="/apply?program=foundation"
+                  style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', fontSize: '10px', letterSpacing: '0.15em', textDecoration: 'none' }}
+                  className="uppercase">Apply →</Link>
+              </div>
+            </div>
             {allPrograms.map(p => (
               <div key={p.id} style={{ backgroundColor: '#0A0A0A', border: `1px solid ${p.border}`, padding: '20px 24px' }}>
                 <div className="flex items-center justify-between">
