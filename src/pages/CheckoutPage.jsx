@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart()
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
+  // ── Form state ──────────────────────────────────────────────────────────
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -36,12 +37,41 @@ export default function CheckoutPage() {
   const [clientSecret, setClientSecret] = useState('')
   const [showCardForm, setShowCardForm] = useState(false)
 
-  function handleApplyDiscount() {
-    if (discountCode.trim().toUpperCase() === 'WELCOME10') {
-      setDiscountApplied(true)
-    } else {
-      alert('Invalid discount code')
+  // ── Rewards state ──────────────────────────────────────────────────────
+  const [rewardMode, setRewardMode] = useState('guest') // 'guest' | 'join' | 'login'
+  const [rewardData, setRewardData] = useState(null)    // { rewardId, points, lifetimePoints, ... }
+  const [rewardLoading, setRewardLoading] = useState(false)
+  const [rewardMessage, setRewardMessage] = useState('')
+  const [pointsEarned, setPointsEarned] = useState(0)   // points from this order
+
+  const finalTotal = discountApplied ? (subtotal * 0.9) : subtotal
+  const estPointsEarned = finalTotal > 0 ? Math.floor(finalTotal) : 0
+
+  // ── Rewards: Register or Login ─────────────────────────────────────────
+  async function handleRewardAction(action) {
+    if (!email.trim()) {
+      setRewardMessage('Enter your email first')
+      return
     }
+    setRewardLoading(true)
+    setRewardMessage('')
+    try {
+      const res = await fetch('/api/rewards', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, email: email.trim(), name: name.trim() || email.split('@')[0] }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setRewardMessage(data.error || 'Rewards service unavailable')
+      } else {
+        setRewardData(data)
+        setRewardMessage(data.message || '')
+      }
+    } catch {
+      setRewardMessage('Rewards service unavailable')
+    }
+    setRewardLoading(false)
   }
 
   async function handlePayNow(e) {
@@ -49,7 +79,6 @@ export default function CheckoutPage() {
     if (!name.trim() || !email.trim() || !address.trim() || !city.trim() || !state.trim() || !zip.trim()) return
 
     if (paymentMethod === 'stripe') {
-      // Create payment intent
       setSending(true)
       setStripeError('')
       try {
@@ -100,6 +129,51 @@ export default function CheckoutPage() {
           ...(stripePaymentId ? { stripePaymentId } : {}),
         }),
       })
+
+      // Add points if user has a rewards account
+      if (rewardData?.rewardId && finalTotal > 0) {
+        const ptsRes = await fetch('/api/rewards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'add-points',
+            email: email.trim(),
+            orderAmountCents: Math.round(finalTotal * 100),
+          }),
+        })
+        if (ptsRes.ok) {
+          const ptsData = await ptsRes.json()
+          setPointsEarned(ptsData.pointsEarned || 0)
+          setRewardData(ptsData)
+        }
+      } else if (rewardMode === 'join' && !rewardData) {
+        // Guest who opted to join — register and add points
+        const regRes = await fetch('/api/rewards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'register', email: email.trim(), name: name.trim() || email.split('@')[0],
+          }),
+        })
+        if (regRes.ok) {
+          const regData = await regRes.json()
+          const ptsRes = await fetch('/api/rewards', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'add-points', email: email.trim(),
+              orderAmountCents: Math.round(finalTotal * 100),
+            }),
+          })
+          if (ptsRes.ok) {
+            const ptsData = await ptsRes.json()
+            setPointsEarned(ptsData.pointsEarned || 0)
+            setRewardData(ptsData)
+          } else {
+            setRewardData(regData)
+          }
+        }
+      }
     } catch (err) {
       console.error('API error:', err)
     }
@@ -134,6 +208,29 @@ export default function CheckoutPage() {
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.9', marginBottom: '32px' }}>
               We'll confirm your shipping details within 24 hours.
             </p>
+
+            {/* ── Rewards earned ── */}
+            {(rewardData || pointsEarned > 0) && (
+              <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '32px', marginBottom: '24px', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }} className="uppercase">
+                  Lion Elite Rewards
+                </p>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.6rem', marginBottom: '4px' }}>
+                  +{pointsEarned || estPointsEarned} points earned
+                </p>
+                {rewardData?.rewardId && (
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', marginBottom: '8px' }}>
+                    Reward ID: <span style={{ color: '#2A2A2A', fontWeight: 'bold', letterSpacing: '0.1em' }}>{rewardData.rewardId}</span>
+                  </p>
+                )}
+                {rewardData?.points !== undefined && (
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px' }}>
+                    Total Balance: <strong style={{ color: '#2A2A2A' }}>{rewardData.points} points</strong>
+                  </p>
+                )}
+              </div>
+            )}
+
             {paymentMethod !== 'stripe' && (
               <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '40px', marginTop: '24px', textAlign: 'left' }}>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.2rem', marginBottom: '20px', textAlign: 'center' }}>
@@ -200,8 +297,6 @@ export default function CheckoutPage() {
     outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s',
   }
 
-  const finalTotal = discountApplied ? (subtotal * 0.9) : subtotal
-
   return (
     <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
       <SEO title="Checkout" description="Complete your order for peptide skincare and wellness products." />
@@ -221,7 +316,7 @@ export default function CheckoutPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-5 gap-px" style={{ backgroundColor: '#E0D5C5' }}>
 
-            {/* Left — Form */}
+            {/* ── Left — Form ─────────────────────────────────────────────── */}
             <div className="md:col-span-3" style={{ backgroundColor: '#FAF7F2', padding: '40px' }}>
               <form onSubmit={handlePayNow}>
 
@@ -295,6 +390,135 @@ export default function CheckoutPage() {
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '12px', marginTop: '8px' }}>
                       10% discount applied — reflected in the total below.
                     </p>
+                  )}
+                </div>
+
+                {/* ═══════════════════════════════════════════════════════════
+                   REWARDS — Lion Elite Rewards
+                ═══════════════════════════════════════════════════════════ */}
+                <div style={{ marginBottom: '40px' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
+                    className="uppercase">Lion Elite Rewards</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', marginBottom: '16px' }}>
+                    Earn <strong style={{ color: '#C9A96E' }}>{estPointsEarned} points</strong> with this purchase. Create an account to start collecting and save your rewards.
+                  </p>
+
+                  {/* Tab-style selection */}
+                  <div className="flex gap-0" style={{ border: '1px solid #E0D5C5', marginBottom: '16px' }}>
+                    {[
+                      { key: 'guest', label: 'Guest' },
+                      { key: 'join', label: 'Create Account' },
+                      { key: 'login', label: 'Log In' },
+                    ].map(tab => (
+                      <button key={tab.key} type="button" onClick={() => { setRewardMode(tab.key); setRewardData(null); setRewardMessage('') }}
+                        style={{
+                          flex: 1, padding: '12px', border: 'none', cursor: 'pointer',
+                          backgroundColor: rewardMode === tab.key ? '#C9A96E' : '#FAF7F2',
+                          color: rewardMode === tab.key ? '#000' : '#6A6A6A',
+                          fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                          fontSize: '11px', letterSpacing: '0.15em',
+                        }}
+                        className="uppercase transition-colors">
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Rewards mode — Guest */}
+                  {rewardMode === 'guest' && (
+                    <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '20px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7' }}>
+                        Checking out as guest. You won't earn rewards points on this order.
+                      </p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', marginTop: '8px' }}>
+                        Want to collect points? Select <strong>"Create Account"</strong> above — you'll get <strong style={{ color: '#C9A96E' }}>100 welcome points</strong> plus points from this order.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Rewards mode — Create Account */}
+                  {rewardMode === 'join' && (
+                    <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '20px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', marginBottom: '12px' }}>
+                        Create a rewards account with <strong>{email || 'your email'}</strong> and earn <strong style={{ color: '#C9A96E' }}>{estPointsEarned} points</strong> + <strong style={{ color: '#C9A96E' }}>100 welcome bonus</strong> on this order.
+                      </p>
+                      {!rewardData && (
+                        <button type="button" onClick={() => handleRewardAction('register')}
+                          disabled={rewardLoading || !email.trim()}
+                          style={{
+                            backgroundColor: rewardLoading ? '#8A8A8A' : '#C9A96E', color: '#000', border: 'none',
+                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em',
+                            padding: '12px 28px', cursor: rewardLoading || !email.trim() ? 'not-allowed' : 'pointer',
+                          }}
+                          className="uppercase hover:opacity-90 transition-opacity">
+                          {rewardLoading ? 'Creating…' : 'Create Account & Get Points →'}
+                        </button>
+                      )}
+                      {rewardMessage && (
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: rewardData ? '#5BA87A' : '#E05A5A', fontSize: '12px', marginTop: '10px' }}>
+                          {rewardMessage}
+                        </p>
+                      )}
+                      {rewardData && (
+                        <div style={{ marginTop: '12px' }}>
+                          {rewardData.rewardId && (
+                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '13px' }}>
+                              Your Reward ID: <strong style={{ letterSpacing: '0.15em' }}>{rewardData.rewardId}</strong>
+                            </p>
+                          )}
+                          {rewardData.points !== undefined && (
+                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '14px', marginTop: '4px' }}>
+                              Balance: <strong>{rewardData.points} points</strong>
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Rewards mode — Log In */}
+                  {rewardMode === 'login' && (
+                    <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '20px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', marginBottom: '12px' }}>
+                        Log in to your rewards account to earn points on this order.
+                      </p>
+                      {!rewardData && (
+                        <button type="button" onClick={() => handleRewardAction('login')}
+                          disabled={rewardLoading || !email.trim()}
+                          style={{
+                            backgroundColor: rewardLoading ? '#8A8A8A' : '#C9A96E', color: '#000', border: 'none',
+                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em',
+                            padding: '12px 28px', cursor: rewardLoading || !email.trim() ? 'not-allowed' : 'pointer',
+                          }}
+                          className="uppercase hover:opacity-90 transition-opacity">
+                          {rewardLoading ? 'Looking up…' : 'Log In →'}
+                        </button>
+                      )}
+                      {rewardMessage && (
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: rewardData ? '#5BA87A' : '#E05A5A', fontSize: '12px', marginTop: '10px' }}>
+                          {rewardMessage}
+                        </p>
+                      )}
+                      {rewardData && (
+                        <div style={{ marginTop: '12px' }}>
+                          {rewardData.rewardId && (
+                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '13px' }}>
+                              Reward ID: <strong style={{ letterSpacing: '0.15em' }}>{rewardData.rewardId}</strong>
+                            </p>
+                          )}
+                          {rewardData.points !== undefined && (
+                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '14px', marginTop: '4px' }}>
+                              Balance: <strong>{rewardData.points} points</strong>
+                            </p>
+                          )}
+                          {rewardData.orderCount !== undefined && (
+                            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', marginTop: '4px' }}>
+                              Orders: {rewardData.orderCount}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
 
@@ -442,7 +666,7 @@ export default function CheckoutPage() {
               </form>
             </div>
 
-            {/* Right — Order Summary */}
+            {/* ── Right — Order Summary ────────────────────────────────────── */}
             <div className="md:col-span-2" style={{ backgroundColor: '#FAF7F2', padding: '40px' }}>
               <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '32px', position: 'sticky', top: '120px' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }}
@@ -469,6 +693,13 @@ export default function CheckoutPage() {
                     <div className="flex justify-between mb-1">
                       <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '13px' }}>Discount (10%)</span>
                       <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '14px' }}>−${(subtotal * 0.1).toFixed(2)}</span>
+                    </div>
+                  )}
+                  {/* Points earned preview */}
+                  {rewardMode !== 'guest' && estPointsEarned > 0 && (
+                    <div className="flex justify-between mb-1">
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.08em' }} className="uppercase">Points Earned</span>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '13px' }}>+{estPointsEarned}</span>
                     </div>
                   )}
                   <div className="flex justify-between pt-3" style={{ borderTop: '1px solid #E8DDD0', marginTop: '12px' }}>
