@@ -16,6 +16,14 @@ function getStripe() {
   return stripePromise
 }
 
+const US_STATES = [
+  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA',
+  'HI','ID','IL','IN','IA','KS','KY','LA','ME','MD',
+  'MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
+  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC',
+  'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY',
+]
+
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart()
   useEffect(() => { window.scrollTo(0, 0) }, [])
@@ -36,6 +44,50 @@ export default function CheckoutPage() {
   const [stripeError, setStripeError] = useState('')
   const [clientSecret, setClientSecret] = useState('')
   const [showCardForm, setShowCardForm] = useState(false)
+
+  // ── Address validation ──────────────────────────────────────────────────
+  const [addressErrors, setAddressErrors] = useState({})
+  const [addressTouched, setAddressTouched] = useState({})
+
+  function validateAddressField(field, value) {
+    switch (field) {
+      case 'address':
+        return value.trim().length < 5 ? 'Enter a valid street address' : ''
+      case 'city':
+        return value.trim().length < 2 ? 'Enter a valid city' : ''
+      case 'state':
+        return !value ? 'Select a state' : ''
+      case 'zip': {
+        const clean = value.replace(/[^0-9-]/g, '')
+        if (!/^\d{5}(-\d{4})?$/.test(clean)) return 'Enter a valid 5-digit ZIP code'
+        return ''
+      }
+      default:
+        return ''
+    }
+  }
+
+  function formatZip(value) {
+    const digits = value.replace(/\D/g, '').slice(0, 10)
+    if (digits.length > 5) return `${digits.slice(0, 5)}-${digits.slice(5, 9)}`
+    return digits
+  }
+
+  function handleAddressBlur(field) {
+    setAddressTouched(prev => ({ ...prev, [field]: true }))
+    const val = field === 'zip' ? zip : field === 'state' ? state : field === 'address' ? address : city
+    const err = validateAddressField(field, val)
+    setAddressErrors(prev => ({ ...prev, [field]: err }))
+  }
+
+  function allAddressValid() {
+    return (
+      !validateAddressField('address', address) &&
+      !validateAddressField('city', city) &&
+      !validateAddressField('state', state) &&
+      !validateAddressField('zip', zip)
+    )
+  }
 
   // ── Rewards state ──────────────────────────────────────────────────────
   const [rewardMode, setRewardMode] = useState('guest') // 'guest' | 'join' | 'login'
@@ -76,7 +128,18 @@ export default function CheckoutPage() {
 
   async function handlePayNow(e) {
     e.preventDefault()
-    if (!name.trim() || !email.trim() || !address.trim() || !city.trim() || !state.trim() || !zip.trim()) return
+
+    // Validate all address fields
+    const errs = {
+      address: validateAddressField('address', address),
+      city: validateAddressField('city', city),
+      state: validateAddressField('state', state),
+      zip: validateAddressField('zip', zip),
+    }
+    setAddressErrors(errs)
+    setAddressTouched({ address: true, city: true, state: true, zip: true })
+    if (Object.values(errs).some(Boolean)) return
+    if (!name.trim() || !email.trim()) return
 
     if (paymentMethod === 'stripe') {
       setSending(true)
@@ -340,27 +403,76 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* Shipping */}
+                {/* Shipping — with address verification */}
                 <div style={{ marginBottom: '40px' }}>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
                     className="uppercase">Shipping Address</p>
                   <div className="space-y-4">
                     <div>
                       <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Street Address *</label>
-                      <input type="text" value={address} onChange={e => setAddress(e.target.value)} required style={inputStyle} placeholder="123 Main Street" />
+                      <input type="text" value={address}
+                        onChange={e => setAddress(e.target.value)}
+                        onBlur={() => handleAddressBlur('address')}
+                        style={{
+                          ...inputStyle,
+                          borderColor: addressErrors.address && addressTouched.address ? '#E05A5A' : addressTouched.address && !addressErrors.address ? '#5BA87A' : inputStyle.borderColor,
+                        }}
+                        placeholder="123 Main Street" />
+                      {addressErrors.address && addressTouched.address && (
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '11px', marginTop: '4px' }}>{addressErrors.address}</p>
+                      )}
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                       <div className="col-span-1">
                         <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">City *</label>
-                        <input type="text" value={city} onChange={e => setCity(e.target.value)} required style={inputStyle} placeholder="City" />
+                        <input type="text" value={city}
+                          onChange={e => setCity(e.target.value)}
+                          onBlur={() => handleAddressBlur('city')}
+                          style={{
+                            ...inputStyle,
+                            borderColor: addressErrors.city && addressTouched.city ? '#E05A5A' : addressTouched.city && !addressErrors.city ? '#5BA87A' : inputStyle.borderColor,
+                          }}
+                          placeholder="City" />
+                        {addressErrors.city && addressTouched.city && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '11px', marginTop: '4px' }}>{addressErrors.city}</p>
+                        )}
                       </div>
                       <div className="col-span-1">
                         <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">State *</label>
-                        <input type="text" value={state} onChange={e => setState(e.target.value)} required style={inputStyle} placeholder="State" />
+                        <select value={state}
+                          onChange={e => setState(e.target.value)}
+                          onBlur={() => handleAddressBlur('state')}
+                          style={{
+                            ...inputStyle,
+                            borderColor: addressErrors.state && addressTouched.state ? '#E05A5A' : addressTouched.state && !addressErrors.state ? '#5BA87A' : inputStyle.borderColor,
+                            appearance: 'none', cursor: 'pointer',
+                            backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 fill=%27%236A6A6A%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M8 11L3 6h10z%27/%3E%3C/svg%3E")',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'right 14px center',
+                            paddingRight: '36px',
+                          }}>
+                          <option value="" style={{ color: '#8A8A8A' }}>State</option>
+                          {US_STATES.map(st => (
+                            <option key={st} value={st}>{st}</option>
+                          ))}
+                        </select>
+                        {addressErrors.state && addressTouched.state && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '11px', marginTop: '4px' }}>{addressErrors.state}</p>
+                        )}
                       </div>
                       <div className="col-span-1">
                         <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Zip Code *</label>
-                        <input type="text" value={zip} onChange={e => setZip(e.target.value)} required style={inputStyle} placeholder="00000" />
+                        <input type="text" value={zip}
+                          onChange={e => setZip(formatZip(e.target.value))}
+                          onBlur={() => handleAddressBlur('zip')}
+                          style={{
+                            ...inputStyle,
+                            borderColor: addressErrors.zip && addressTouched.zip ? '#E05A5A' : addressTouched.zip && !addressErrors.zip ? '#5BA87A' : inputStyle.borderColor,
+                          }}
+                          placeholder="00000" maxLength={10} />
+                        {addressErrors.zip && addressTouched.zip && (
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '11px', marginTop: '4px' }}>{addressErrors.zip}</p>
+                        )}
                       </div>
                     </div>
                   </div>
