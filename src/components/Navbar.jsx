@@ -237,9 +237,14 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — fixed overlay */}
       {menuOpen && (
-        <div style={{ backgroundColor: '#FAFAF8', borderTop: '1px solid #E8DDD0' }}
+        <div style={{
+          backgroundColor: '#FAFAF8',
+          position: 'fixed', top: '57px', left: 0, right: 0, bottom: 0,
+          overflowY: 'auto', zIndex: 100,
+          borderTop: '1px solid #E8DDD0',
+        }}
           className="md:hidden px-6 py-6 flex flex-col gap-1">
 
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '8px' }}
