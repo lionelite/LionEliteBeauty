@@ -89,6 +89,15 @@ export default function CheckoutPage() {
     )
   }
 
+  // ── Discount code ──────────────────────────────────────────────────────
+  function handleApplyDiscount() {
+    if (discountCode.trim().toLowerCase() === 'lion10') {
+      setDiscountApplied(true)
+    } else {
+      alert('Invalid discount code')
+    }
+  }
+
   // ── Rewards state ──────────────────────────────────────────────────────
   const [rewardMode, setRewardMode] = useState('guest') // 'guest' | 'join' | 'login'
   const [rewardData, setRewardData] = useState(null)    // { rewardId, points, lifetimePoints, ... }
