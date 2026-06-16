@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
@@ -28,6 +28,46 @@ export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart()
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
+  // ── Handle redirect return from Affirm / Klarna / Afterpay ────────────
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const piSecret = params.get('payment_intent_client_secret')
+    if (!piSecret) return
+
+    window.history.replaceState({}, '', '/checkout')
+
+    const saved = sessionStorage.getItem('leb_checkout')
+    if (saved) {
+      const data = JSON.parse(saved)
+      checkoutDataRef.current = data
+      setName(data.name || '')
+      setEmail(data.email || '')
+      setPhone(data.phone || '')
+      setAddress(data.address || '')
+      setCity(data.city || '')
+      setState(data.state || '')
+      setZip(data.zip || '')
+      setDiscountCode(data.discountCode || '')
+      setDiscountApplied(data.discountApplied || false)
+      setPaymentMethod(data.paymentMethod || 'stripe')
+      if (data.rewardData) setRewardData(data.rewardData)
+      if (data.rewardMode) setRewardMode(data.rewardMode)
+
+      const stripe = getStripe()
+      if (stripe) {
+        stripe.retrievePaymentIntent(piSecret).then(({ paymentIntent }) => {
+          if (paymentIntent.status === 'succeeded') {
+            submitOrder(paymentIntent.id)
+          } else if (paymentIntent.status === 'processing') {
+            setStripeError('Your payment is still processing. Please check your email for confirmation.')
+          } else {
+            setStripeError('Payment was not completed. You can try again.')
+          }
+        })
+      }
+    }
+  }, [])
+
   // ── Form state ──────────────────────────────────────────────────────────
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -44,6 +84,9 @@ export default function CheckoutPage() {
   const [stripeError, setStripeError] = useState('')
   const [clientSecret, setClientSecret] = useState('')
   const [showCardForm, setShowCardForm] = useState(false)
+
+  // Ref to hold checkout data for redirect return (Affirm/Klarna/Afterpay)
+  const checkoutDataRef = useRef({})
 
   // ── Address validation ──────────────────────────────────────────────────
   const [addressErrors, setAddressErrors] = useState({})
@@ -150,6 +193,18 @@ export default function CheckoutPage() {
     if (Object.values(errs).some(Boolean)) return
     if (!name.trim() || !email.trim()) return
 
+    // Save order data in case of redirect (Affirm/Klarna/Afterpay)
+    const checkoutData = {
+      name: name.trim(), email: email.trim(), phone,
+      address, city, state, zip,
+      discountCode, discountApplied,
+      paymentMethod,
+      rewardData, rewardMode,
+      items, finalTotal,
+    }
+    checkoutDataRef.current = checkoutData
+    sessionStorage.setItem('leb_checkout', JSON.stringify(checkoutData))
+
     if (paymentMethod === 'stripe') {
       setSending(true)
       setStripeError('')
@@ -186,31 +241,45 @@ export default function CheckoutPage() {
   }
 
   async function submitOrder(stripePaymentId = null) {
+    const d = checkoutDataRef.current
+    if (!d.items || d.items.length === 0) {
+      setSending(false)
+      setPlaced(true)
+      clearCart()
+      window.scrollTo(0, 0)
+      return
+    }
     setSending(true)
     try {
       await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'order', name, email,
-          phone: phone || 'Not provided',
-          address: `${address}, ${city}, ${state} ${zip}`,
-          discountCode: discountApplied ? discountCode : 'None',
-          items: items.map(i => ({ name: i.name, quantity: i.quantity, price: i.priceNum })),
-          paymentMethod,
+          type: 'order',
+          name: d.name, email: d.email,
+          phone: d.phone || 'Not provided',
+          address: `${d.address}, ${d.city}, ${d.state} ${d.zip}`,
+          discountCode: d.discountApplied ? d.discountCode : 'None',
+          items: d.items.map(i => ({ name: i.name, quantity: i.quantity, price: i.priceNum })),
+          paymentMethod: d.paymentMethod,
           ...(stripePaymentId ? { stripePaymentId } : {}),
         }),
       })
 
       // Add points if user has a rewards account
-      if (rewardData?.rewardId && finalTotal > 0) {
+      const finalTotalVal = d.discountApplied ? (d.items.reduce((s, i) => s + (i.priceNum || 0) * i.quantity, 0) * 0.9) : d.items.reduce((s, i) => s + (i.priceNum || 0) * i.quantity, 0)
+      const rewData = d.rewardData
+      const rewMode = d.rewardMode
+      const rewEmail = d.email
+
+      if (rewData?.rewardId && finalTotalVal > 0) {
         const ptsRes = await fetch('/api/rewards', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'add-points',
-            email: email.trim(),
-            orderAmountCents: Math.round(finalTotal * 100),
+            email: rewEmail,
+            orderAmountCents: Math.round(finalTotalVal * 100),
           }),
         })
         if (ptsRes.ok) {
@@ -218,13 +287,12 @@ export default function CheckoutPage() {
           setPointsEarned(ptsData.pointsEarned || 0)
           setRewardData(ptsData)
         }
-      } else if (rewardMode === 'join' && !rewardData) {
-        // Guest who opted to join — register and add points
+      } else if (rewMode === 'join' && !rewData) {
         const regRes = await fetch('/api/rewards', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            action: 'register', email: email.trim(), name: name.trim() || email.split('@')[0],
+            action: 'register', email: rewEmail, name: d.name || rewEmail.split('@')[0],
           }),
         })
         if (regRes.ok) {
@@ -233,8 +301,8 @@ export default function CheckoutPage() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              action: 'add-points', email: email.trim(),
-              orderAmountCents: Math.round(finalTotal * 100),
+              action: 'add-points', email: rewEmail,
+              orderAmountCents: Math.round(finalTotalVal * 100),
             }),
           })
           if (ptsRes.ok) {
@@ -252,6 +320,7 @@ export default function CheckoutPage() {
     setSending(false)
     setPlaced(true)
     clearCart()
+    sessionStorage.removeItem('leb_checkout')
     window.scrollTo(0, 0)
   }
 
@@ -677,6 +746,15 @@ export default function CheckoutPage() {
                       finalTotal={finalTotal}
                       onSuccess={handleCardSuccess}
                       onError={handleCardError}
+                      saveOrderData={() => {
+                        sessionStorage.setItem('leb_checkout', JSON.stringify({
+                          name: name.trim(), email: email.trim(), phone,
+                          address, city, state, zip,
+                          discountCode, discountApplied,
+                          paymentMethod,
+                          rewardData, rewardMode,
+                        }))
+                      }}
                     />
                   </Elements>
 
