@@ -49,6 +49,32 @@ const wrap = (content) => `
 </body>
 </html>`
 
+// ── Light email wrapper (for application confirmations) ───────────────────
+const wrapLight = (content) => `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0; padding:0; background-color:#F5F0E8; font-family:Georgia, 'Times New Roman', serif;">
+  <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:40px 20px;">
+    <table width="600" cellpadding="0" cellspacing="0" style="background-color:#FFFFFF; border:1px solid #E0D5C5;">
+      <tr><td style="height:4px; background-color:#C9A96E; padding:0;"></td></tr>
+      <tr><td style="padding:40px 40px 24px; text-align:center; border-bottom:1px solid #E0D5C5;">
+        <p style="font-family:Georgia,serif; color:#C9A96E; font-size:22px; letter-spacing:0.3em; margin:0 0 4px; text-transform:uppercase;">Lion Elite</p>
+        <p style="font-family:Georgia,serif; color:#8A8A8A; font-size:11px; letter-spacing:0.2em; margin:0; text-transform:uppercase;">Beauty &amp; Wellness</p>
+      </td></tr>
+      <tr><td style="padding:40px 40px; color:#2A2A2A; font-size:15px; line-height:1.8;">
+        ${content}
+      </td></tr>
+      <tr><td style="padding:32px 40px; border-top:1px solid #E0D5C5; text-align:center;">
+        <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#6A6A6A; font-size:11px; margin:0 0 6px;">Lion Elite Beauty &amp; Wellness</p>
+        <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#8A8A8A; font-size:10px; margin:0 0 4px;">orders@lionelitebeauty.com</p>
+        <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#BABABA; font-size:9px; margin:8px 0 0;">${formatDate()}</p>
+      </td></tr>
+    </table>
+  </td></tr></table>
+</body>
+</html>`
+
 function styledTable(rows) {
   return `
   <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -56,6 +82,17 @@ function styledTable(rows) {
     <tr>
       <td style="padding:10px 14px; border-bottom:${i < rows.length - 1 ? '1px solid #1A1A1A' : 'none'}; color:#CACACA; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; white-space:nowrap; vertical-align:top;"><strong style="color:#C9A96E;">${r.label}</strong></td>
       <td style="padding:10px 14px; border-bottom:${i < rows.length - 1 ? '1px solid #1A1A1A' : 'none'}; color:#FAFAF8; font-family:'Helvetica Neue',Arial,sans-serif; font-size:13px;">${r.value}</td>
+    </tr>`).join('')}
+  </table>`
+}
+
+function styledTableLight(rows) {
+  return `
+  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    ${rows.map((r, i) => `
+    <tr>
+      <td style="padding:10px 14px; border-bottom:${i < rows.length - 1 ? '1px solid #E0D5C5' : 'none'}; color:#6A6A6A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; white-space:nowrap; vertical-align:top;"><strong style="color:#C9A96E;">${r.label}</strong></td>
+      <td style="padding:10px 14px; border-bottom:${i < rows.length - 1 ? '1px solid #E0D5C5' : 'none'}; color:#2A2A2A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:13px;">${r.value}</td>
     </tr>`).join('')}
   </table>`
 }
@@ -233,12 +270,12 @@ function clientConfirmation({ name, program, items, orderNumber, address, paymen
     function fmt(field, val) { return labelMap[field]?.[val] || val }
 
     bodyHtml = `
-    <p style="margin:0 0 20px; color:#FAFAF8; font-size:17px;">Hi ${name},</p>
-    <p style="margin:0 0 20px; color:#CACACA; font-size:15px; line-height:1.8;">Your application for the <strong style="color:#C9A96E;">${program}</strong> program has been received. We personally review every application and will reach out within 24&ndash;48 hours with your tailored next steps.</p>
+    <p style="margin:0 0 20px; color:#2A2A2A; font-size:17px;">Hi ${name},</p>
+    <p style="margin:0 0 20px; color:#4A4A4A; font-size:15px; line-height:1.8;">Your application for the <strong style="color:#C9A96E;">${program}</strong> program has been received. We personally review every application and will reach out within 24&ndash;48 hours with your tailored next steps.</p>
 
-    <h3 style="color:#8A8A8A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:10px; letter-spacing:0.15em; margin:0 0 12px; text-transform:uppercase;">Application Summary</h3>
-    <div style="background-color:#0A0A0A; border:1px solid #1A1A1A; padding:16px 20px; margin-bottom:20px;">
-      ${styledTable([
+    <h3 style="color:#6A6A6A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:10px; letter-spacing:0.15em; margin:0 0 12px; text-transform:uppercase;">Application Summary</h3>
+    <div style="background-color:#F9F7F4; border:1px solid #E0D5C5; padding:16px 20px; margin-bottom:20px;">
+      ${styledTableLight([
         { label: 'Program', value: program || 'Not specified' },
         ...(experience ? [{ label: 'Experience', value: fmt('experience', experience) }] : []),
         ...(struggle && struggle !== 'Not provided' ? [{ label: 'Primary Concerns', value: struggle }] : []),
@@ -249,9 +286,14 @@ function clientConfirmation({ name, program, items, orderNumber, address, paymen
       ])}
     </div>
 
-    <p style="margin:0 0 24px; color:#CACACA; font-size:15px; line-height:1.8;">Want to move faster? Book a consultation call directly:</p>
-    <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#C9A96E; padding:14px 32px;">
-      <a href="https://calendly.com/a-ringfield-trustetc" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase;">Book Your Call →</a>
+    <p style="margin:0 0 12px; color:#4A4A4A; font-size:15px; line-height:1.8;">Ready to move forward? Create your VIP account and choose your program tier to complete enrollment:</p>
+    <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background-color:#C9A96E; padding:14px 32px; border-radius:2px;">
+      <a href="${process.env.SITE_URL || 'https://lionelitebeauty.com'}/apply?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&program=${encodeURIComponent(program)}" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase; white-space:nowrap;">Complete Your Enrollment →</a>
+    </td></tr></table>
+
+    <p style="margin:0 0 24px; color:#8A8A8A; font-size:13px; line-height:1.8;">Prefer to speak first? Book a consultation call:</p>
+    <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#C9A96E; padding:14px 32px; border-radius:2px;">
+      <a href="https://calendly.com/a-ringfield-trustetc" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase; white-space:nowrap;">Book Your Call →</a>
     </td></tr></table>`
   }
 
@@ -395,7 +437,7 @@ export default async function handler(req, res) {
           from: 'Lion Elite <orders@lionelitebeauty.com>',
           to: [body.email],
           subject: 'We received your application — Lion Elite',
-          html: wrap(clientConfirmation({
+          html: wrapLight(clientConfirmation({
             name: body.name,
             program: body.program,
             experience: body.experience,

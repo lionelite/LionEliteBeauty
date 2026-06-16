@@ -31,7 +31,9 @@ const initialForm = {
 export default function ApplyPage() {
   const [searchParams] = useSearchParams()
   const programTag = searchParams.get('program') || ''
-  const [form, setForm] = useState({ ...initialForm, goal: programTag })
+  const prefilledName = searchParams.get('name') || ''
+  const prefilledEmail = searchParams.get('email') || ''
+  const [form, setForm] = useState({ ...initialForm, goal: programTag, name: prefilledName, email: prefilledEmail })
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
   const [errors, setErrors] = useState({})
