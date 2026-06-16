@@ -207,19 +207,62 @@ export default function ApplyPage() {
                     Program: {vipAccount.program}
                   </p>
                   <div style={{ borderTop: '1px solid #1A1A1A', paddingTop: '24px' }}>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }}
-                      className="uppercase">Next Step: Secure Your Program</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '20px' }}>
-                      Complete your enrollment by securing your spot with payment. Your program is <strong style={{ color: '#FAFAF8' }}>$2,400 for 6 months</strong> with full access to your protocol, check-ins, and support.
-                    </p>
-                    <Link to={`/programs/checkout?vip=${vipAccount.vipId}&email=${encodeURIComponent(form.email)}&name=${encodeURIComponent(form.name)}&program=${encodeURIComponent(vipAccount.program)}`}
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '16px' }}
+                      className="uppercase">Choose Your Program Tier</p>
+
+                    {/* VIP — Primary */}
+                    <div style={{
+                      backgroundColor: '#0A0A0A', border: '1px solid #C9A96E44', padding: '24px',
+                      marginBottom: '16px', position: 'relative', overflow: 'hidden',
+                    }}>
+                      <div style={{
+                        position: 'absolute', top: 0, right: 0,
+                        background: 'linear-gradient(135deg, transparent 50%, #C9A96E10 50%)',
+                        width: '60px', height: '60px',
+                      }}></div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                        <div>
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.15em', fontSize: '9px', marginBottom: '4px' }}
+                            className="uppercase">Most Popular</p>
+                          <h3 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.1rem' }}>VIP Transformation Program</h3>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '22px', lineHeight: '1' }}>$2,400</p>
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '10px', letterSpacing: '0.1em' }}>/ 6 MONTHS</p>
+                        </div>
+                      </div>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', marginBottom: '16px' }}>
+                        Full biomarker testing, fully personalized protocol, bi-weekly check-ins, lab review, direct messaging with your specialist.
+                      </p>
+                      <Link to={`/programs/checkout?tier=vip&vip=${vipAccount.vipId}&email=${encodeURIComponent(form.email)}&name=${encodeURIComponent(form.name)}&program=${encodeURIComponent(vipAccount.program)}`}
+                        style={{
+                          display: 'inline-block', backgroundColor: '#C9A96E', color: '#000',
+                          fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.2em',
+                          padding: '16px 40px', textDecoration: 'none', width: '100%', textAlign: 'center',
+                        }}
+                        className="uppercase hover:opacity-90 transition-opacity">
+                        Enroll in VIP → $2,400
+                      </Link>
+                    </div>
+
+                    {/* Foundation — Secondary */}
+                    <Link to={`/programs/checkout?tier=foundation&vip=${vipAccount.vipId}&email=${encodeURIComponent(form.email)}&name=${encodeURIComponent(form.name)}&program=${encodeURIComponent(vipAccount.program)}`}
                       style={{
-                        display: 'inline-block', backgroundColor: '#C9A96E', color: '#000',
-                        fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.2em',
-                        padding: '16px 40px', textDecoration: 'none',
+                        display: 'block', backgroundColor: '#080808', border: '1px solid #1A1A1A',
+                        color: '#FAFAF8', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '13px',
+                        padding: '18px 20px', textDecoration: 'none',
                       }}
-                      className="uppercase hover:opacity-90 transition-opacity">
-                      Proceed to Payment →
+                      className="hover:border-[#C9A96E44] transition-all">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <p style={{ fontFamily: 'Georgia, serif', fontSize: '14px', marginBottom: '2px' }}>Foundation Coaching</p>
+                          <p style={{ color: '#6A6A6A', fontSize: '11px' }}>Monthly coaching &amp; wellness roadmap</p>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <p style={{ fontFamily: 'Georgia, serif', color: '#8A8A8A', fontSize: '16px' }}>$299.99</p>
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', fontSize: '9px', letterSpacing: '0.1em' }}>/ MONTH</p>
+                        </div>
+                      </div>
                     </Link>
                   </div>
                 </>

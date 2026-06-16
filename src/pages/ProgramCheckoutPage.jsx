@@ -7,8 +7,20 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
 
-const PROGRAM_PRICE = 240000 // $2,400 in cents
-const PROGRAM_PRICE_DISPLAY = 2400.00
+const TIERS = {
+  vip: {
+    cents: 240000, display: 2400.00, label: 'VIP Transformation Program',
+    duration: '6 months', desc: '6-month personalized protocol',
+    includes: 'Personalized peptide protocol, bi-weekly check-ins, lab review, protocol adjustments, direct messaging with your specialist.',
+    ideal: 'Long-term body composition, health optimization, high performers, maximum accountability.',
+  },
+  foundation: {
+    cents: 29999, display: 299.99, label: 'Foundation Coaching',
+    duration: '1 month', desc: 'Monthly coaching program',
+    includes: 'Monthly coaching call, personalized wellness roadmap, peptide education & implementation guidance, reconstitution instruction, email support, monthly progress check-in.',
+    ideal: 'Beginners, weight loss goals, general wellness, low-cost entry point, professional guidance.',
+  },
+}
 
 let stripePromise
 function getStripe() {
@@ -24,6 +36,8 @@ export default function ProgramCheckoutPage() {
   const email = searchParams.get('email') || ''
   const name = searchParams.get('name') || ''
   const program = searchParams.get('program') || 'Wellness Program'
+  const tierKey = searchParams.get('tier') || 'vip'
+  const tier = TIERS[tierKey] || TIERS.vip
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
@@ -46,7 +60,7 @@ export default function ProgramCheckoutPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            items: [{ name: program, price: PROGRAM_PRICE_DISPLAY, quantity: 1, priceNum: PROGRAM_PRICE_DISPLAY }],
+            items: [{ name: `${tier.label} — ${program}`, price: tier.display, quantity: 1, priceNum: tier.display }],
             discountApplied: false,
             programCheckout: true,
           }),
@@ -87,6 +101,7 @@ export default function ProgramCheckoutPage() {
           type: 'program_order',
           name, email,
           program,
+          tier: tierKey,
           vipId,
           paymentMethod,
           ...(stripePaymentId ? { stripePaymentId } : {}),
@@ -116,6 +131,9 @@ export default function ProgramCheckoutPage() {
               className="font-normal">
               Welcome to the<br />Lion Elite Family.
             </h1>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', marginBottom: '16px' }}>
+              {tier.label}
+            </p>
             <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
             {paymentMethod === 'stripe' ? (
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '15px', lineHeight: '1.9', marginBottom: '12px' }}>
@@ -126,9 +144,15 @@ export default function ProgramCheckoutPage() {
                 Your enrollment is pending. Send payment via Zelle to confirm.
               </p>
             )}
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '32px' }}>
-              We'll reach out within 24 hours to schedule your onboarding and walk you through your personalized protocol.
-            </p>
+            {tierKey === 'foundation' ? (
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '32px' }}>
+                We'll reach out within 24 hours to schedule your first coaching call and get you started on your wellness roadmap.
+              </p>
+            ) : (
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', marginBottom: '32px' }}>
+                We'll reach out within 24 hours to schedule your onboarding and walk you through your personalized protocol.
+              </p>
+            )}
             <Link to="/"
               style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none' }}
               className="uppercase hover:text-[#C9A96E] transition-colors">
@@ -150,15 +174,15 @@ export default function ProgramCheckoutPage() {
 
   return (
     <div style={{ backgroundColor: '#080808', minHeight: '100vh' }}>
-      <SEO title="Program Enrollment" description="Complete your enrollment for a personalized peptide optimization program." />
+      <SEO title="Program Enrollment" description={`Complete your enrollment for ${tier.label.toLowerCase()} — ${tier.desc}.`} />
       <Navbar />
 
       <section style={{ paddingTop: '140px', paddingBottom: '64px', borderBottom: '1px solid #1A1A1A' }}>
         <div className="max-w-3xl mx-auto px-6">
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '16px' }}
-            className="uppercase">Secure Your Spot</p>
+            className="uppercase">Secure Your Spot — {tier.label}</p>
           <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.6rem', lineHeight: '1.1' }}
-            className="font-normal">Enroll in Your Program</h1>
+            className="font-normal">Enroll in {tier.label}</h1>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginTop: '20px' }}></div>
         </div>
       </section>
@@ -285,7 +309,7 @@ export default function ProgramCheckoutPage() {
                       {paymentMethod === 'zelle' && (
                         <div style={{ backgroundColor: '#0F0E0A', borderTop: '1px solid #1A1A1A', padding: '20px 24px 24px' }}>
                           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
-                            Send <strong style={{ color: '#C9A96E' }}>$2,400.00</strong> to <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong> via Zelle. Include your name and VIP ID ({vipId}) in the memo.
+                            Send <strong style={{ color: '#C9A96E' }}>${tier.display.toFixed(2)}</strong> to <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong> via Zelle. Include your name and VIP ID ({vipId}) in the memo.
                           </p>
                         </div>
                       )}
@@ -310,7 +334,7 @@ export default function ProgramCheckoutPage() {
                     {sending
                       ? 'Processing…'
                       : paymentMethod === 'stripe'
-                        ? 'Pay $2,400.00 — Secure Payment'
+                        ? `Pay $${tier.display.toFixed(2)} — Secure Payment`
                         : 'Place Enrollment — See Payment Details →'
                     }
                   </button>
@@ -347,7 +371,7 @@ export default function ProgramCheckoutPage() {
                     <StripePaymentSection
                       email={email}
                       name={name}
-                      finalTotal={PROGRAM_PRICE_DISPLAY}
+                      finalTotal={tier.display}
                       onSuccess={handleCardSuccess}
                       onError={handleCardError}
                     />
@@ -367,27 +391,27 @@ export default function ProgramCheckoutPage() {
                   className="uppercase">Program Summary</p>
 
                 <div style={{ borderBottom: '1px solid #1A1A1A', paddingBottom: '16px', marginBottom: '16px' }}>
-                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '15px', marginBottom: '4px' }}>{program}</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px' }}>6-month personalized protocol</p>
+                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '15px', marginBottom: '4px' }}>{tier.label}</p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px' }}>{tier.desc}</p>
                 </div>
 
                 <div style={{ borderBottom: '1px solid #1A1A1A', paddingBottom: '16px', marginBottom: '16px' }}>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', lineHeight: '1.8' }}>
-                    Includes: Personalized peptide protocol, bi-weekly check-ins, lab review, protocol adjustments, direct messaging with your specialist.
+                    {tier.includes}
                   </p>
                 </div>
 
                 <div className="flex justify-between mb-1">
                   <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px' }}>Program Fee</span>
-                  <span style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '18px' }}>$2,400.00</span>
+                  <span style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '18px' }}>${tier.display.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between mb-1">
                   <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '12px' }}>Duration</span>
-                  <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px' }}>6 months</span>
+                  <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px' }}>{tier.duration}</span>
                 </div>
                 <div className="flex justify-between pt-3" style={{ borderTop: '1px solid #1A1A1A', marginTop: '12px' }}>
                   <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '14px', letterSpacing: '0.1em' }} className="uppercase">Total</span>
-                  <span style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '22px' }}>$2,400.00</span>
+                  <span style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '22px' }}>${tier.display.toFixed(2)}</span>
                 </div>
 
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', marginTop: '16px', lineHeight: '1.7' }}>

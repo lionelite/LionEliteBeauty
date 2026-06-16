@@ -13,12 +13,13 @@ function generateVipId() {
   return `LEV-${p1}-${p2}`
 }
 
-function makeAccount(name, email, program) {
+function makeAccount(name, email, program, tier) {
   return {
     vipId: generateVipId(),
     name,
     email,
     program: program || 'Not specified',
+    tier: tier || null,
     paid: false,
     created: new Date().toISOString(),
   }
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { action, email, name, program } = req.body
+  const { action, email, name, program, tier } = req.body
   const key = email?.trim().toLowerCase()
 
   if (!key) return res.status(400).json({ error: 'Email is required' })
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
         ...STORE[key],
       })
     }
-    const account = makeAccount(name || key.split('@')[0], key, program)
+    const account = makeAccount(name || key.split('@')[0], key, program, tier)
     STORE[key] = account
     console.log('VIP account created:', account.vipId, key)
     return res.status(200).json({

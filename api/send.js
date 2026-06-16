@@ -315,19 +315,23 @@ export default async function handler(req, res) {
       console.log('Order emails sent:', orderNumber, adminRes.id, clientRes.id)
     } else if (body.type === 'program_order') {
       const progName = body.program || 'Wellness Program'
+      const tierInfo = body.tier === 'foundation'
+        ? { label: 'Foundation Coaching', price: '$299.99', period: '/ month', emailSub: '(Foundation)', duration: 'monthly coaching program' }
+        : { label: 'VIP Transformation Program', price: '$2,400.00', period: '/ 6 months', emailSub: '(VIP)', duration: '6-month personalized protocol' }
       const [adminRes, clientRes] = await Promise.all([
         resend.emails.send({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
           to: ['orders@lionelitebeauty.com'],
-          subject: `Program Enrollment: ${progName} — ${body.name} ${body.vipId ? `(${body.vipId})` : ''}`,
+          subject: `Program Enrollment: ${tierInfo.label} — ${progName} — ${body.name} ${body.vipId ? `(${body.vipId})` : ''}`,
           html: wrap(`
-            <h2 style="color:#C9A96E; font-family:Georgia,serif; font-size:20px; margin:0 0 24px;">New Program Enrollment</h2>
+            <h2 style="color:#C9A96E; font-family:Georgia,serif; font-size:20px; margin:0 0 24px;">New Program Enrollment — ${tierInfo.label}</h2>
             ${paymentStatusBadge(body.paymentMethod, body.stripePaymentId)}
             <div style="background-color:#0A0A0A; border:1px solid #1A1A1A; padding:20px 24px; margin-top:16px;">
               ${styledTable([
                 { label: 'Name', value: body.name },
                 { label: 'Email', value: body.email },
                 { label: 'Program', value: progName },
+                { label: 'Tier', value: tierInfo.label },
                 ...(body.vipId ? [{ label: 'VIP ID', value: body.vipId }] : []),
                 { label: 'Payment', value: paymentMethodLabel(body.paymentMethod) },
               ])}
@@ -335,7 +339,7 @@ export default async function handler(req, res) {
             <div style="background-color:#0A0A0A; border:1px solid #1A1A1A; padding:16px 20px; margin-top:12px;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr><td style="padding:4px 0; color:#C9A96E; font-family:'Helvetica Neue',Arial,sans-serif; font-size:14px; letter-spacing:0.1em; text-transform:uppercase;">Total</td>
-                <td style="padding:4px 0; color:#C9A96E; font-family:Georgia,serif; font-size:20px; text-align:right;">$2,400.00</td></tr>
+                <td style="padding:4px 0; color:#C9A96E; font-family:Georgia,serif; font-size:20px; text-align:right;">${tierInfo.price}</td></tr>
               </table>
             </div>`),
           replyTo: body.email,
@@ -343,26 +347,31 @@ export default async function handler(req, res) {
         resend.emails.send({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
           to: [body.email],
-          subject: `Welcome to Lion Elite — ${progName} Enrollment`,
+          subject: `Welcome to Lion Elite — ${tierInfo.label} Enrollment`,
           html: wrap(`
             <h2 style="color:#C9A96E; font-family:Georgia,serif; font-size:22px; margin:0 0 20px;">Welcome to the Lion Elite Family.</h2>
             <p style="margin:0 0 20px; color:#FAFAF8; font-size:17px;">Hi ${body.name},</p>
+            <p style="margin:0 0 4px; color:#8A8A8A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; letter-spacing:0.15em; text-transform:uppercase;">${tierInfo.label}</p>
+            <p style="margin:0 0 20px; color:#6A6A6A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px;">${tierInfo.price}${tierInfo.period} · ${tierInfo.duration}</p>
             ${body.paymentMethod === 'stripe' && body.stripePaymentId
               ? `<p style="margin:0 0 20px; color:#5BA87A; font-size:15px; line-height:1.8;">✓ Payment received. Your enrollment in the <strong style="color:#C9A96E;">${progName}</strong> program is confirmed.</p>`
-              : `<p style="margin:0 0 20px; color:#CACACA; font-size:15px; line-height:1.8;">Your enrollment in the <strong style="color:#C9A96E;">${progName}</strong> program has been received. We'll confirm your spot once payment is processed.</p>
+              : `<p style="margin:0 0 20px; color:#CACACA; font-size:15px; line-height:1.8;">Your enrollment in the <strong style="color:#C9A96E;">${progName} (${tierInfo.label})</strong> program has been received. We'll confirm your spot once payment is processed.</p>
                  <div style="background-color:#0C0A08; border:1px solid #C9A96E33; padding:20px; margin-bottom:20px;">
                    <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#C9A96E; font-size:11px; letter-spacing:0.15em; margin:0 0 12px; text-transform:uppercase;">Payment Instructions</p>
-                   <p style="margin:0 0 4px; color:#CACACA; font-size:13px;">Send <strong style="color:#C9A96E;">$2,400.00</strong> via Zelle to:</p>
+                   <p style="margin:0 0 4px; color:#CACACA; font-size:13px;">Send <strong style="color:#C9A96E;">${tierInfo.price}</strong> via Zelle to:</p>
                    <p style="margin:0 0 12px; color:#C9A96E; font-size:15px; font-family:'Helvetica Neue',Arial,sans-serif;">orders@lionelitebeauty.com</p>
                    <p style="margin:0; color:#6A6A6A; font-size:12px;">Include your name and VIP ID in the memo.</p>
                  </div>`
             }
             ${body.vipId ? `<p style="margin:0 0 8px; color:#8A8A8A; font-size:12px;">VIP ID: <strong style="color:#C9A96E; letter-spacing:0.15em;">${body.vipId}</strong></p>` : ''}
-            <p style="margin:0 0 8px; color:#CACACA; font-size:15px; line-height:1.8;">We'll reach out within 24 hours to schedule your onboarding and walk you through your personalized protocol.</p>
+            ${body.tier === 'foundation'
+              ? `<p style="margin:0 0 8px; color:#CACACA; font-size:15px; line-height:1.8;">We'll reach out within 24 hours to schedule your first coaching call and get you started on your wellness roadmap.</p>`
+              : `<p style="margin:0 0 8px; color:#CACACA; font-size:15px; line-height:1.8;">We'll reach out within 24 hours to schedule your onboarding and walk you through your personalized protocol.</p>`
+            }
             <p style="margin:0 0 8px; color:#CACACA; font-size:15px; line-height:1.8;">If you have any questions, reply to this email — we're here to help.</p>`),
         }),
       ])
-      console.log('Program enrollment emails:', adminRes.id, clientRes.id)
+      console.log('Program enrollment emails:', tierInfo.label, adminRes.id, clientRes.id)
     } else {
       const [adminRes, clientRes] = await Promise.all([
         resend.emails.send({
