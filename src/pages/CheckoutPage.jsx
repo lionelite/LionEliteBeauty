@@ -1,9 +1,23 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
 import { useCart } from '../context/CartContext'
+import StripePaymentForm from '../components/StripePaymentForm'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+
+// Lazy-init stripe promise — preserved across renders
+let stripePromise
+function getStripe() {
+  const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+  if (!key) return null
+  if (!stripePromise) {
+    stripePromise = loadStripe(key)
+  }
+  return stripePromise
+}
 
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart()
@@ -18,8 +32,11 @@ export default function CheckoutPage() {
   const [zip, setZip] = useState('')
   const [discountCode, setDiscountCode] = useState('')
   const [discountApplied, setDiscountApplied] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState('stripe')
   const [sending, setSending] = useState(false)
   const [placed, setPlaced] = useState(false)
+  const [stripeError, setStripeError] = useState('')
+  const [clientSecret, setClientSecret] = useState('')
 
   function handleApplyDiscount() {
     if (discountCode.trim().toUpperCase() === 'WELCOME10') {
@@ -32,35 +49,97 @@ export default function CheckoutPage() {
   async function handlePlaceOrder(e) {
     e.preventDefault()
     if (!name.trim() || !email.trim() || !address.trim() || !city.trim() || !state.trim() || !zip.trim()) return
-    setSending(true)
 
-    const payload = {
-      type: 'order',
-      name,
-      email,
-      phone: phone || 'Not provided',
-      address: `${address}, ${city}, ${state} ${zip}`,
-      discountCode: discountApplied ? discountCode : 'None',
-      products: items.map(i => `${i.name} × ${i.quantity}`),
-      total: `$${subtotal.toFixed(2)}`,
+    if (paymentMethod === 'stripe') {
+      setSending(true)
+      setStripeError('')
+      try {
+        const intentRes = await fetch('/api/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items, discountApplied }),
+        })
+        const intentData = await intentRes.json()
+        if (!intentRes.ok) {
+          setStripeError(intentData.error || 'Payment service unavailable')
+          setSending(false)
+          return
+        }
+        setClientSecret(intentData.clientSecret)
+        setSending(false)
+      } catch (err) {
+        setStripeError('Payment service temporarily unavailable')
+        setSending(false)
+      }
+    } else {
+      // Zelle / CashApp — submit order with payment instructions
+      await submitOrder()
     }
+  }
 
+  async function submitOrder(stripePaymentId = null) {
+    setSending(true)
     try {
       await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          type: 'order',
+          name,
+          email,
+          phone: phone || 'Not provided',
+          address: `${address}, ${city}, ${state} ${zip}`,
+          discountCode: discountApplied ? discountCode : 'None',
+          products: items.map(i => `${i.name} × ${i.quantity}`),
+          total: `$${subtotal.toFixed(2)}`,
+          paymentMethod,
+          ...(stripePaymentId ? { stripePaymentId } : {}),
+        }),
       })
     } catch (err) {
       console.error('API error:', err)
-    } finally {
-      setSending(false)
-      setPlaced(true)
-      clearCart()
-      window.scrollTo(0, 0)
     }
+    setSending(false)
+    setPlaced(true)
+    clearCart()
+    window.scrollTo(0, 0)
   }
 
+  // ── Stripe card payment view ─────────────────────────────────────────────
+  if (clientSecret) {
+    const stripe = getStripe()
+    const finalTotal = discountApplied ? (subtotal * 0.9) : subtotal
+    return (
+      <Elements
+        stripe={stripe}
+        options={{
+          clientSecret,
+          appearance: {
+            theme: 'night',
+            labels: 'floating',
+            variables: {
+              colorPrimary: '#C9A96E',
+              colorBackground: '#0A0A0A',
+              colorText: '#FAFAF8',
+              colorDanger: '#E05A5A',
+              fontFamily: 'Helvetica Neue, Arial, sans-serif',
+              borderRadius: '0px',
+            },
+          },
+        }}
+      >
+        <StripePaymentForm
+          finalTotal={finalTotal}
+          email={email}
+          name={name}
+          onBack={() => setClientSecret('')}
+          onSuccess={() => submitOrder('stripe_confirmed')}
+        />
+      </Elements>
+    )
+  }
+
+  // ── Order placed confirmation ────────────────────────────────────────────
   if (placed) {
     return (
       <div style={{ backgroundColor: '#080808', minHeight: '100vh' }}>
@@ -77,49 +156,60 @@ export default function CheckoutPage() {
               Your order has been<br />received.
             </h1>
             <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 28px' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.9', marginBottom: '12px' }}>
+
+            {paymentMethod === 'stripe' && (
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '15px', lineHeight: '1.9', marginBottom: '12px' }}>
+                ✓ Payment successful. You'll receive a confirmation email shortly.
+              </p>
+            )}
+
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.9', marginBottom: '32px' }}>
               We'll confirm your shipping details within 24 hours.
             </p>
 
-            {/* Payment instructions */}
-            <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #C9A96E33', padding: '40px', marginTop: '40px', textAlign: 'left' }}>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.2rem', marginBottom: '20px', textAlign: 'center' }}>
-                Send Payment To Complete Your Order
-              </p>
-
-              {/* Zelle */}
-              <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '24px', marginBottom: '16px' }}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div style={{ width: '36px', height: '36px', backgroundColor: '#6C1FD1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>Z</span>
-                  </div>
-                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px' }}>Zelle</p>
-                </div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
-                  Send payment to: <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong>
+            {/* Offline payment instructions */}
+            {paymentMethod !== 'stripe' && (
+              <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #C9A96E33', padding: '40px', marginTop: '24px', textAlign: 'left' }}>
+                <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.2rem', marginBottom: '20px', textAlign: 'center' }}>
+                  Send Payment To Complete Your Order
                 </p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.6', marginTop: '8px' }}>
-                  Include your order name in the memo so we can match it.
+
+                {paymentMethod === 'zelle' && (
+                  <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '24px' }}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div style={{ width: '36px', height: '36px', backgroundColor: '#6C1FD1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>Z</span>
+                      </div>
+                      <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px' }}>Zelle</p>
+                    </div>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
+                      Send payment to: <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong>
+                    </p>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.6', marginTop: '8px' }}>
+                      Include your order name in the memo so we can match it.
+                    </p>
+                  </div>
+                )}
+
+                {paymentMethod === 'cashapp' && (
+                  <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '24px' }}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div style={{ width: '36px', height: '36px', backgroundColor: '#00D54B', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>$</span>
+                      </div>
+                      <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px' }}>CashApp</p>
+                    </div>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
+                      Send to: <strong style={{ color: '#C9A96E' }}>{'$LionElite'}</strong>
+                    </p>
+                  </div>
+                )}
+
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', textAlign: 'center', marginTop: '20px' }}>
+                  Your order will ship once payment is confirmed. We'll notify you by email.
                 </p>
               </div>
-
-              {/* CashApp */}
-              <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '24px', marginBottom: '16px' }}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div style={{ width: '36px', height: '36px', backgroundColor: '#00D54B', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>$</span>
-                  </div>
-                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px' }}>CashApp</p>
-                </div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
-                  Send to: <strong style={{ color: '#C9A96E' }}>$LionElite</strong>
-                </p>
-              </div>
-
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', textAlign: 'center' }}>
-                Your order will ship once payment is confirmed. We'll notify you by email.
-              </p>
-            </div>
+            )}
 
             <Link to="/"
               style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none', display: 'inline-block', marginTop: '40px' }}
@@ -133,6 +223,7 @@ export default function CheckoutPage() {
     )
   }
 
+  // ── Empty cart ───────────────────────────────────────────────────────────
   if (items.length === 0) {
     return (
       <div style={{ backgroundColor: '#080808', minHeight: '100vh' }}>
@@ -160,6 +251,8 @@ export default function CheckoutPage() {
     fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '14px',
     outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s',
   }
+
+  const finalTotal = discountApplied ? (subtotal * 0.9) : subtotal
 
   return (
     <div style={{ backgroundColor: '#080808', minHeight: '100vh' }}>
@@ -259,40 +352,84 @@ export default function CheckoutPage() {
                   </div>
                   {discountApplied && (
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '12px', marginTop: '8px' }}>
-                      Discount applied! We'll adjust the total before processing payment.
+                      10% discount applied — reflected in the total below.
                     </p>
                   )}
                 </div>
 
-                {/* Payment methods */}
+                {/* Payment Methods */}
                 <div style={{ marginBottom: '40px' }}>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '20px' }}
                     className="uppercase">Payment Method</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', marginBottom: '16px' }}>
-                    Choose a payment method below. Instructions will appear after your order is placed.
-                  </p>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #2A2A2A', padding: '20px', textAlign: 'center' }}>
+                  <div className="grid grid-cols-3 gap-3 mb-6">
+                    {/* Stripe / Card */}
+                    <button type="button" onClick={() => setPaymentMethod('stripe')}
+                      style={{
+                        backgroundColor: paymentMethod === 'stripe' ? '#0C0A08' : '#0A0A0A',
+                        border: paymentMethod === 'stripe' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
+                        padding: '20px', textAlign: 'center', cursor: 'pointer',
+                      }}>
+                      <div style={{ width: '36px', height: '36px', backgroundColor: paymentMethod === 'stripe' ? '#C9A96E' : '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
+                        <span style={{ color: paymentMethod === 'stripe' ? '#000' : '#8A8A8A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>C</span>
+                      </div>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'stripe' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>Credit Card</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '9px', marginTop: '2px' }}>via Stripe</p>
+                    </button>
+
+                    {/* Zelle */}
+                    <button type="button" onClick={() => setPaymentMethod('zelle')}
+                      style={{
+                        backgroundColor: paymentMethod === 'zelle' ? '#0C0A08' : '#0A0A0A',
+                        border: paymentMethod === 'zelle' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
+                        padding: '20px', textAlign: 'center', cursor: 'pointer',
+                      }}>
                       <div style={{ width: '36px', height: '36px', backgroundColor: '#6C1FD1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
                         <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>Z</span>
                       </div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px' }}>Zelle</p>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '10px', marginTop: '4px' }}>
-                        orders@lionelitebeauty.com
-                      </p>
-                    </div>
-                    <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #2A2A2A', padding: '20px', textAlign: 'center' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'zelle' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>Zelle</p>
+                    </button>
+
+                    {/* CashApp */}
+                    <button type="button" onClick={() => setPaymentMethod('cashapp')}
+                      style={{
+                        backgroundColor: paymentMethod === 'cashapp' ? '#0C0A08' : '#0A0A0A',
+                        border: paymentMethod === 'cashapp' ? '1px solid #C9A96E' : '1px solid #2A2A2A',
+                        padding: '20px', textAlign: 'center', cursor: 'pointer',
+                      }}>
                       <div style={{ width: '36px', height: '36px', backgroundColor: '#00D54B', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
                         <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>$</span>
                       </div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px' }}>CashApp</p>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '10px', marginTop: '4px' }}>
-                        $LionElite
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: paymentMethod === 'cashapp' ? '#C9A96E' : '#FAFAF8', fontSize: '11px' }}>CashApp</p>
+                    </button>
+                  </div>
+
+                  {paymentMethod === 'stripe' && (
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.6' }}>
+                      Pay securely with your credit or debit card. We use Stripe for payment processing — your card details are encrypted and never stored on our servers.
+                    </p>
+                  )}
+                  {paymentMethod === 'zelle' && (
+                    <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '20px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7' }}>
+                        Send payment to <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong> via Zelle. Your order will be processed once payment is confirmed.
                       </p>
                     </div>
-                  </div>
+                  )}
+                  {paymentMethod === 'cashapp' && (
+                    <div style={{ backgroundColor: '#111', border: '1px solid #1A1A1A', padding: '20px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.7' }}>
+                        Send payment to <strong style={{ color: '#C9A96E' }}>{'$LionElite'}</strong> via CashApp. Your order will be processed once payment is confirmed.
+                      </p>
+                    </div>
+                  )}
                 </div>
+
+                {stripeError && (
+                  <div style={{ backgroundColor: '#1A0A0A', border: '1px solid #E05A5A44', padding: '14px 18px', marginBottom: '20px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '13px' }}>{stripeError}</p>
+                  </div>
+                )}
 
                 <button type="submit" disabled={sending}
                   style={{
@@ -302,7 +439,12 @@ export default function CheckoutPage() {
                     padding: '18px', cursor: sending ? 'not-allowed' : 'pointer',
                   }}
                   className="uppercase hover:opacity-90 transition-opacity">
-                  {sending ? 'Processing…' : 'Place Order — See Payment Details →'}
+                  {sending
+                    ? 'Processing…'
+                    : paymentMethod === 'stripe'
+                      ? `Pay $${finalTotal.toFixed(2)} — Place Order`
+                      : 'Place Order — See Payment Details →'
+                  }
                 </button>
               </form>
             </div>
@@ -334,13 +476,23 @@ export default function CheckoutPage() {
                   </div>
                   {discountApplied && (
                     <div className="flex justify-between mb-1">
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '13px' }}>Discount</span>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '14px' }}>Applied at payment</span>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '13px' }}>Discount (10%)</span>
+                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '14px' }}>−${(subtotal * 0.1).toFixed(2)}</span>
                     </div>
                   )}
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', marginTop: '8px' }}>
-                    You'll receive payment instructions after placing your order.
-                  </p>
+                  <div className="flex justify-between pt-3" style={{ borderTop: '1px solid #1A1A1A', marginTop: '12px' }}>
+                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '14px', letterSpacing: '0.1em' }} className="uppercase">Total</span>
+                    <span style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '22px' }}>${finalTotal.toFixed(2)}</span>
+                  </div>
+                  {paymentMethod === 'stripe' ? (
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', marginTop: '12px' }}>
+                      Your card will be charged immediately upon placing the order.
+                    </p>
+                  ) : (
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '11px', marginTop: '12px' }}>
+                      You'll receive payment instructions after placing your order.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
