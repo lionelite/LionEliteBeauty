@@ -186,7 +186,14 @@ function adminBody({ name, email, phone, program, experience, struggle, timeline
       ...(investment ? [{ label: 'Investment', value: investment }] : []),
       ...(commitment ? [{ label: 'Commitment', value: commitment }] : []),
       ...(health && health !== 'Not provided' ? [{ label: 'Health Notes', value: health }] : []),
-    ])}`
+    ])}
+    <div style="background-color:#0C0A08; border:1px solid #C9A96E33; padding:16px 20px; margin-top:20px;">
+      <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#C9A96E; font-size:11px; letter-spacing:0.15em; margin:0 0 8px; text-transform:uppercase;">Send Payment Form to Customer</p>
+      <p style="margin:0 0 12px; color:#CACACA; font-size:13px; line-height:1.6;">Forward this link to the customer to create a VIP account and pay directly:</p>
+      <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#C9A96E; padding:12px 24px;">
+        <a href="${process.env.SITE_URL || 'https://lionelitebeauty.com'}/apply?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&program=${encodeURIComponent(program || 'Wellness Program')}" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase; white-space:nowrap;">Send Payment Form →</a>
+      </td></tr></table>
+    </div>`
   }
 
   return emailHtml
@@ -286,10 +293,11 @@ function clientConfirmation({ name, program, items, orderNumber, address, paymen
       ])}
     </div>
 
-    <p style="margin:0 0 12px; color:#4A4A4A; font-size:15px; line-height:1.8;">Ready to move forward? Create your VIP account and choose your program tier to complete enrollment:</p>
+    <p style="margin:0 0 12px; color:#4A4A4A; font-size:15px; line-height:1.8;">Ready to move forward? Create your VIP account and enroll with payment right on the same page:</p>
     <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background-color:#C9A96E; padding:14px 32px; border-radius:2px;">
-      <a href="${process.env.SITE_URL || 'https://lionelitebeauty.com'}/apply?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&program=${encodeURIComponent(program)}" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase; white-space:nowrap;">Complete Your Enrollment →</a>
+      <a href="${process.env.SITE_URL || 'https://lionelitebeauty.com'}/apply?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&program=${encodeURIComponent(program)}" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase; white-space:nowrap;">Create VIP Account &amp; Pay →</a>
     </td></tr></table>
+    <p style="margin:0 0 24px; color:#6A6A6A; font-size:13px; line-height:1.8;">Pay with credit/debit card (Visa, MC, Amex), Klarna, Afterpay, Affirm, or Zelle. Your VIP account links all your program details in one place.</p>
 
     <p style="margin:0 0 24px; color:#8A8A8A; font-size:13px; line-height:1.8;">Prefer to speak first? Book a consultation call:</p>
     <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#C9A96E; padding:14px 32px; border-radius:2px;">

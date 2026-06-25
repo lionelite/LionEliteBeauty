@@ -1,8 +1,19 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import StripePaymentSection from '../components/StripePaymentSection'
+
+let stripePromise
+function getStripe() {
+  const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+  if (!key) return null
+  if (!stripePromise) stripePromise = loadStripe(key)
+  return stripePromise
+}
 
 const programs = [
   { value: 'muscle', label: 'Muscle & Recovery', accent: '#C9A96E' },
@@ -41,6 +52,15 @@ export default function ApplyPage() {
   const [vipLoading, setVipLoading] = useState(false)
   const [vipAccount, setVipAccount] = useState(null)
   const [vipError, setVipError] = useState('')
+
+  // ── Inline payment ──────────────────────────────────────────────────────
+  const [selectedTier, setSelectedTier] = useState(null)
+  const [payMethod, setPayMethod] = useState('stripe')
+  const [paySending, setPaySending] = useState(false)
+  const [payError, setPayError] = useState('')
+  const [clientSecret, setClientSecret] = useState('')
+  const [showCardForm, setShowCardForm] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState(false)
 
   useEffect(() => { window.scrollTo(0, 0) }, [submitted])
 
@@ -124,6 +144,77 @@ export default function ApplyPage() {
     setVipLoading(false)
   }
 
+  // ── Inline payment handlers ──────────────────────────────────────────────
+  async function handleStartPayment(tierKey) {
+    setSelectedTier(tierKey)
+    const isVip = tierKey === 'vip'
+    const cents = isVip ? 240000 : 29999
+    const display = isVip ? 2400.00 : 299.99
+    const label = isVip ? 'VIP Transformation Program' : 'Foundation Coaching'
+
+    setPaySending(true)
+    setPayError('')
+    try {
+      const res = await fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{ name: `${label} — ${vipAccount.program}`, price: display, quantity: 1, priceNum: display }],
+          discountApplied: false,
+          programCheckout: true,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setPayError(data.error || 'Payment service unavailable')
+        setPaySending(false)
+        return
+      }
+      setClientSecret(data.clientSecret)
+      setShowCardForm(true)
+    } catch {
+      setPayError('Payment service temporarily unavailable')
+    }
+    setPaySending(false)
+  }
+
+  async function handleZelleSubmit(tierKey) {
+    setSelectedTier(tierKey)
+    setPayError('')
+    setPaySending(true)
+    const isVip = tierKey === 'vip'
+    const label = isVip ? 'VIP Transformation Program' : 'Foundation Coaching'
+    try {
+      await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'program_order',
+          name: form.name,
+          email: form.email,
+          program: vipAccount.program,
+          tier: tierKey,
+          vipId: vipAccount.vipId,
+          paymentMethod: 'zelle',
+        }),
+      })
+    } catch (err) {
+      console.error('API error:', err)
+    }
+    setPaySending(false)
+    setPaymentSuccess(true)
+    window.scrollTo(0, 0)
+  }
+
+  function handleCardSuccess() {
+    setPaymentSuccess(true)
+    window.scrollTo(0, 0)
+  }
+
+  function handleCardError(msg) {
+    setPayError(msg)
+  }
+
   if (submitted) {
     return (
       <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
@@ -196,6 +287,19 @@ export default function ApplyPage() {
                     {vipLoading ? 'Creating…' : 'Create VIP Account →'}
                   </button>
                 </>
+              ) : paymentSuccess ? (
+                <>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }}
+                    className="uppercase">✓ Enrollment Complete</p>
+                  <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.3rem', lineHeight: '1.3', marginBottom: '8px' }}
+                    className="font-normal">Welcome to the Lion Elite Family!</h2>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '14px', marginBottom: '16px' }}>
+                    ✓ Payment successful. You'll receive your program details by email shortly.
+                  </p>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', marginBottom: '4px' }}>
+                    VIP ID: <strong style={{ color: '#C9A96E', letterSpacing: '0.15em' }}>{vipAccount.vipId}</strong>
+                  </p>
+                </>
               ) : (
                 <>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }}
@@ -236,26 +340,72 @@ export default function ApplyPage() {
                       <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', marginBottom: '16px' }}>
                         Full biomarker testing, fully personalized protocol, bi-weekly check-ins, lab review, direct messaging with your specialist.
                       </p>
-                      <Link to={`/programs/checkout?tier=vip&vip=${vipAccount.vipId}&email=${encodeURIComponent(form.email)}&name=${encodeURIComponent(form.name)}&program=${encodeURIComponent(vipAccount.program)}`}
-                        style={{
-                          display: 'inline-block', backgroundColor: '#C9A96E', color: '#000',
-                          fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.2em',
-                          padding: '16px 40px', textDecoration: 'none', width: '100%', textAlign: 'center',
-                        }}
-                        className="uppercase hover:opacity-90 transition-opacity">
-                        Enroll in VIP → $2,400
-                      </Link>
+
+                      {/* Payment buttons */}
+                      <div className="flex flex-col gap-2">
+                        <button onClick={() => handleStartPayment('vip')} disabled={paySending}
+                          style={{
+                            display: 'inline-block', backgroundColor: '#C9A96E', color: '#000',
+                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.2em',
+                            padding: '16px 40px', textDecoration: 'none', width: '100%', textAlign: 'center',
+                            border: 'none', cursor: paySending ? 'not-allowed' : 'pointer',
+                          }}
+                          className="uppercase hover:opacity-90 transition-opacity">
+                          {paySending && selectedTier === 'vip' ? 'Processing…' : 'Pay with Card — $2,400'}
+                        </button>
+                        <button onClick={() => handleZelleSubmit('vip')} disabled={paySending}
+                          style={{
+                            display: 'inline-block', backgroundColor: 'transparent', color: '#6A6A6A',
+                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.15em',
+                            padding: '12px', textDecoration: 'none', width: '100%', textAlign: 'center',
+                            border: '1px solid #E0D5C5', cursor: paySending ? 'not-allowed' : 'pointer',
+                          }}
+                          className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-all">
+                          Pay via Zelle Instead
+                        </button>
+                      </div>
+
+                      {selectedTier === 'vip' && showCardForm && clientSecret && (
+                        <div style={{
+                          marginTop: '16px', backgroundColor: '#FFFFFF', border: '2px solid #C9A96E',
+                          padding: '20px',
+                        }}>
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600', marginBottom: '16px' }}
+                            className="uppercase">Secure Card Payment</p>
+                          <Elements
+                            stripe={getStripe()}
+                            options={{
+                              clientSecret,
+                              appearance: {
+                                theme: 'stripe',
+                                variables: {
+                                  colorPrimary: '#C9A96E',
+                                  colorBackground: '#FFFFFF',
+                                  colorText: '#2A2A2A',
+                                  fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                                  borderRadius: '0px',
+                                },
+                              },
+                            }}
+                          >
+                            <StripePaymentSection
+                              email={form.email}
+                              name={form.name}
+                              finalTotal={2400.00}
+                              onSuccess={handleCardSuccess}
+                              onError={handleCardError}
+                            />
+                          </Elements>
+                        </div>
+                      )}
                     </div>
 
                     {/* Foundation — Secondary */}
-                    <Link to={`/programs/checkout?tier=foundation&vip=${vipAccount.vipId}&email=${encodeURIComponent(form.email)}&name=${encodeURIComponent(form.name)}&program=${encodeURIComponent(vipAccount.program)}`}
-                      style={{
-                        display: 'block', backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5',
-                        color: '#2A2A2A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '13px',
-                        padding: '18px 20px', textDecoration: 'none',
-                      }}
-                      className="hover:border-[#C9A96E] transition-all">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{
+                      backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '18px 20px',
+                      marginBottom: '12px',
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                         <div>
                           <p style={{ fontFamily: 'Georgia, serif', fontSize: '14px', marginBottom: '2px' }}>Foundation Coaching</p>
                           <p style={{ color: '#8A8A8A', fontSize: '11px' }}>Monthly coaching &amp; wellness roadmap</p>
@@ -265,7 +415,69 @@ export default function ApplyPage() {
                           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#9A9A9A', fontSize: '9px', letterSpacing: '0.1em' }}>/ MONTH</p>
                         </div>
                       </div>
-                    </Link>
+                      <div className="flex flex-col gap-2">
+                        <button onClick={() => handleStartPayment('foundation')} disabled={paySending}
+                          style={{
+                            display: 'inline-block', backgroundColor: '#C9A96E', color: '#000',
+                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em',
+                            padding: '14px 32px', textDecoration: 'none', width: '100%', textAlign: 'center',
+                            border: 'none', cursor: paySending ? 'not-allowed' : 'pointer',
+                          }}
+                          className="uppercase hover:opacity-90 transition-opacity">
+                          {paySending && selectedTier === 'foundation' ? 'Processing…' : 'Pay with Card — $299.99'}
+                        </button>
+                        <button onClick={() => handleZelleSubmit('foundation')} disabled={paySending}
+                          style={{
+                            display: 'inline-block', backgroundColor: 'transparent', color: '#8A8A8A',
+                            fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.15em',
+                            padding: '10px', textDecoration: 'none', width: '100%', textAlign: 'center',
+                            border: '1px solid #E0D5C5', cursor: paySending ? 'not-allowed' : 'pointer',
+                          }}
+                          className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-all">
+                          Pay via Zelle Instead
+                        </button>
+                      </div>
+
+                      {selectedTier === 'foundation' && showCardForm && clientSecret && (
+                        <div style={{
+                          marginTop: '16px', backgroundColor: '#FFFFFF', border: '2px solid #C9A96E',
+                          padding: '20px',
+                        }}>
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600', marginBottom: '16px' }}
+                            className="uppercase">Secure Card Payment</p>
+                          <Elements
+                            stripe={getStripe()}
+                            options={{
+                              clientSecret,
+                              appearance: {
+                                theme: 'stripe',
+                                variables: {
+                                  colorPrimary: '#C9A96E',
+                                  colorBackground: '#FFFFFF',
+                                  colorText: '#2A2A2A',
+                                  fontFamily: 'Helvetica Neue, Arial, sans-serif',
+                                  borderRadius: '0px',
+                                },
+                              },
+                            }}
+                          >
+                            <StripePaymentSection
+                              email={form.email}
+                              name={form.name}
+                              finalTotal={299.99}
+                              onSuccess={handleCardSuccess}
+                              onError={handleCardError}
+                            />
+                          </Elements>
+                        </div>
+                      )}
+                    </div>
+
+                    {payError && (
+                      <div style={{ backgroundColor: '#FFF0F0', border: '1px solid #E05A5A44', padding: '14px 18px', marginTop: '16px' }}>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '13px' }}>{payError}</p>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
