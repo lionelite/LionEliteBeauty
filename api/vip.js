@@ -12,7 +12,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const DATA_PATH = join(__dirname, 'vip-data.json')
 
 let STORE = {}
-const ADMIN_TOKEN = ADMIN_TOKEN || 'lionelite-admin-secret'
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'lionelite-admin-secret'
 
 // Load persisted data if available
 function load() {
