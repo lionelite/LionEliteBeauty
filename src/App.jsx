@@ -30,6 +30,7 @@ import SkincareTerms from './pages/SkincareTerms'
 import ProgramsTerms from './pages/ProgramsTerms'
 import ProgramCheckoutPage from './pages/ProgramCheckoutPage'
 import AdminPage from './pages/AdminPage'
+import VIPPage from './pages/VIPPage'
 import SEO from './components/SEO'
 
 function HomePage() {
@@ -79,6 +80,7 @@ export default function App() {
           <Route path="/terms/programs" element={<ProgramsTerms />} />
           <Route path="/programs/checkout" element={<ProgramCheckoutPage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/vip" element={<VIPPage />} />
         </Routes>
       </CartProvider>
     </BrowserRouter>

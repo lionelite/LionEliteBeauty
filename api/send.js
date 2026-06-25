@@ -122,8 +122,8 @@ function paymentInstructions(method, amount) {
     return `<div style="background-color:#FDF8EE; border:1px solid #C9A96E40; padding:20px 24px; border-radius:2px;">
       <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#C9A96E; font-size:9px; letter-spacing:0.2em; margin:0 0 12px; text-transform:uppercase;">Payment Instructions</p>
       <p style="margin:0 0 4px; color:#4A4A4A; font-size:14px; line-height:1.6;">Send ${amount ? `<strong>${amount}</strong> ` : ''}via <strong style="color:#C9A96E;">Zelle</strong> to:</p>
-      <p style="margin:0 0 10px; color:#C9A96E; font-size:16px; font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:0.05em;">orders@lionelitebeauty.com</p>
-      <p style="margin:0; color:#8A8A8A; font-size:12px; line-height:1.5;">Include your order name or VIP ID in the memo so we can match your payment.</p>
+      <p style="margin:0 0 10px; color:#C9A96E; font-size:18px; font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:0.05em;">+1 (216) 326-0050</p>
+      <p style="margin:0; color:#8A8A8A; font-size:12px; line-height:1.5;">Include your full name in the memo so we can match your payment. We'll confirm receipt via email within 24 hours.</p>
     </div>`
   }
   return `<div style="background-color:#FDF8EE; border:1px solid #C9A96E40; padding:20px 24px; border-radius:2px;">
@@ -340,6 +340,7 @@ function clientConfirmation({ name, email, program, items, orderNumber, address,
 // ── Program enrollment (admin notification) ─────────────────────────────────
 function programAdminBody({ name, email, program, tier, vipId, paymentMethod, stripePaymentId, amount }) {
   const tierLabel = tier === 'foundation' ? 'Foundation Coaching' : 'VIP Transformation Program'
+  const needsVerification = paymentMethod !== 'stripe'
   return `
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:28px;">
       <h2 style="color:#2A2A2A; font-family:Georgia,serif; font-size:20px; margin:0;">New Program Enrollment</h2>
@@ -359,7 +360,18 @@ function programAdminBody({ name, email, program, tier, vipId, paymentMethod, st
 
     <div style="margin-top:20px;">
       ${totalLine(amount || '$299.99', 'Enrollment Total')}
-    </div>`
+    </div>
+
+    ${needsVerification ? `
+    ${divider()}
+    <div style="background-color:#FDF8EE; border:1px solid #C9A96E40; padding:20px 24px;">
+      <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#C9A96E; font-size:9px; letter-spacing:0.2em; margin:0 0 10px; text-transform:uppercase;">Action Required — Verify Payment</p>
+      <p style="margin:0 0 10px; color:#4A4A4A; font-size:13px; line-height:1.7;">This payment is marked as <strong>PENDING</strong>. Check your ${paymentMethodLabel(paymentMethod)} account for a payment from <strong style="color:#C9A96E;">${email}</strong>.</p>
+      <p style="margin:0 0 4px; color:#4A4A4A; font-size:13px; line-height:1.7;">Once confirmed, visit the admin dashboard to mark this account as paid:</p>
+      <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#C9A96E; padding:13px 26px;">
+        <a href="${process.env.SITE_URL || 'https://lionelitebeauty.com'}/admin" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase; white-space:nowrap;">Open Admin Dashboard \u2192</a>
+      </td></tr></table>
+    </div>` : ''}`
 }
 
 // ── Program enrollment (client welcome) ─────────────────────────────────────
@@ -383,8 +395,13 @@ function programClientBody({ name, program, tier, vipId, paymentMethod, stripePa
     }
 
     ${vipId ? `
-    <div style="background-color:#F9F7F4; border:1px solid #E0D5C5; padding:14px 20px; border-radius:2px; margin-top:20px;">
-      <p style="margin:0; color:#8A8A8A; font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; letter-spacing:0.05em;">VIP ID: <strong style="color:#C9A96E; letter-spacing:0.15em;">${vipId}</strong></p>
+    <div style="background-color:#FDF8EE; border:2px solid #C9A96E; padding:24px; margin-top:20px;">
+      <p style="font-family:'Helvetica Neue',Arial,sans-serif; color:#C9A96E; font-size:9px; letter-spacing:0.2em; margin:0 0 12px; text-transform:uppercase;">Your VIP Account</p>
+      <p style="margin:0 0 4px; color:#4A4A4A; font-size:14px; line-height:1.6;">VIP ID: <strong style="color:#C9A96E; font-size:20px; font-family:Georgia,serif; letter-spacing:0.15em;">${vipId}</strong></p>
+      <p style="margin:0 0 12px; color:#6A6A6A; font-size:12px; font-family:'Helvetica Neue',Arial,sans-serif;">Use this ID to access your VIP account anytime.</p>
+      <table cellpadding="0" cellspacing="0"><tr><td style="background-color:#C9A96E; padding:13px 26px;">
+        <a href="${process.env.SITE_URL || 'https://lionelitebeauty.com'}/vip" style="color:#000; font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; letter-spacing:0.1em; text-decoration:none; text-transform:uppercase; white-space:nowrap;">Access Your VIP Account \u2192</a>
+      </td></tr></table>
     </div>` : ''}
 
     ${divider()}
