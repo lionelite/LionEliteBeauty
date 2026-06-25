@@ -329,7 +329,7 @@ export default function CheckoutPage() {
   // ── Order placed confirmation ────────────────────────────────────────────
   if (placed) {
     return (
-      <div style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
+      <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
         <Navbar />
         <section style={{ paddingTop: '140px', paddingBottom: '100px' }}>
           <div className="max-w-2xl mx-auto px-6 text-center">
@@ -338,7 +338,7 @@ export default function CheckoutPage() {
             </div>
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '20px' }}
               className="uppercase">Order Placed</p>
-            <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.6rem', lineHeight: '1.12', marginBottom: '20px' }}
+            <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.6rem', lineHeight: '1.12', marginBottom: '20px' }}
               className="font-normal">
               Your order has been<br />received.
             </h1>
@@ -348,13 +348,13 @@ export default function CheckoutPage() {
                 ✓ Payment successful. You'll receive a confirmation email shortly.
               </p>
             )}
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '15px', lineHeight: '1.9', marginBottom: '32px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.9', marginBottom: '32px' }}>
               We'll confirm your shipping details within 24 hours.
             </p>
 
             {/* ── Rewards earned ── */}
             {(rewardData || pointsEarned > 0) && (
-              <div style={{ backgroundColor: '#080808', border: '1px solid #1A1A1A', padding: '32px', marginBottom: '24px', textAlign: 'center' }}>
+              <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '32px', marginBottom: '24px', textAlign: 'center' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '9px', marginBottom: '12px' }} className="uppercase">
                   Lion Elite Rewards
                 </p>
@@ -362,45 +362,45 @@ export default function CheckoutPage() {
                   +{pointsEarned || estPointsEarned} points earned
                 </p>
                 {rewardData?.rewardId && (
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', marginBottom: '8px' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', marginBottom: '8px' }}>
                     Reward ID: <span style={{ color: '#C9A96E', fontWeight: 'bold', letterSpacing: '0.1em' }}>{rewardData.rewardId}</span>
                   </p>
                 )}
                 {rewardData?.points !== undefined && (
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px' }}>
-                    Total Balance: <strong style={{ color: '#C9A96E' }}>{rewardData.points} points</strong>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px' }}>
+                    Total Balance: <strong style={{ color: '#2A2A2A' }}>{rewardData.points} points</strong>
                   </p>
                 )}
               </div>
             )}
 
             {paymentMethod !== 'stripe' && (
-              <div style={{ backgroundColor: '#080808', border: '1px solid #1A1A1A', padding: '40px', marginTop: '24px', textAlign: 'left' }}>
+              <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '40px', marginTop: '24px', textAlign: 'left' }}>
                 <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1.2rem', marginBottom: '20px', textAlign: 'center' }}>
                   Send Payment To Complete Your Order</p>
                 {paymentMethod === 'zelle' && (
-                  <div style={{ backgroundColor: '#0A0A0A', border: '1px solid #1A1A1A', padding: '24px' }}>
+                  <div style={{ backgroundColor: '#FAF7F2', border: '1px solid #E0D5C5', padding: '24px' }}>
                     <div className="flex items-center gap-3 mb-3">
                       <div style={{ width: '36px', height: '36px', backgroundColor: '#6C1FD1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <span style={{ color: '#FFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', fontWeight: 'bold' }}>Z</span>
                       </div>
-                      <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '16px' }}>Zelle</p>
+                      <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '16px' }}>Zelle</p>
                     </div>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7' }}>
                       Send payment to: <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong>
                     </p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.6', marginTop: '8px' }}>
+                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.6', marginTop: '8px' }}>
                       Include your order name in the memo so we can match it.
                     </p>
                   </div>
                 )}
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7', textAlign: 'center', marginTop: '20px' }}>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', textAlign: 'center', marginTop: '20px' }}>
                   Your order will ship once payment is confirmed. We'll notify you by email.
                 </p>
               </div>
             )}
             <Link to="/"
-              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none', display: 'inline-block', marginTop: '40px' }}
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', letterSpacing: '0.15em', textDecoration: 'none', display: 'inline-block', marginTop: '40px' }}
               className="uppercase hover:text-[#C9A96E] transition-colors">
               ← Return Home
             </Link>
@@ -414,11 +414,11 @@ export default function CheckoutPage() {
   // ── Empty cart ───────────────────────────────────────────────────────────
   if (items.length === 0 && !placed) {
     return (
-      <div style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
+      <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
         <Navbar />
         <section style={{ paddingTop: '140px', paddingBottom: '100px', textAlign: 'center' }}>
           <div className="max-w-2xl mx-auto px-6">
-            <p style={{ fontFamily: 'Georgia, serif', color: '#8A8A8A', fontSize: '1.2rem', marginBottom: '24px' }}>
+            <p style={{ fontFamily: 'Georgia, serif', color: '#6A6A6A', fontSize: '1.2rem', marginBottom: '24px' }}>
               Your cart is empty.
             </p>
             <Link to="/skincare"
@@ -434,22 +434,22 @@ export default function CheckoutPage() {
   }
 
   const inputStyle = {
-    width: '100%', padding: '14px 18px', backgroundColor: '#0A0A0A',
-    border: '1px solid #1A1A1A', color: '#FAFAF8',
+    width: '100%', padding: '14px 18px', backgroundColor: '#FFFFFF',
+    border: '1px solid #E0D5C5', color: '#2A2A2A',
     fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '14px',
     outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s',
   }
 
   return (
-    <div style={{ backgroundColor: '#0A0A0A', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
       <SEO title="Checkout" description="Complete your order for peptide skincare and wellness products." />
       <Navbar />
 
-      <section style={{ paddingTop: '140px', paddingBottom: '64px', borderBottom: '1px solid #1A1A1A' }}>
+      <section style={{ paddingTop: '140px', paddingBottom: '64px', borderBottom: '1px solid #E8DDD0' }}>
         <div className="max-w-5xl mx-auto px-6">
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '16px' }}
             className="uppercase">Checkout</p>
-          <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.6rem', lineHeight: '1.1' }}
+          <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.6rem', lineHeight: '1.1' }}
             className="font-normal">Complete Your Order</h1>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginTop: '20px' }}></div>
         </div>
@@ -457,35 +457,35 @@ export default function CheckoutPage() {
 
       <section style={{ padding: '80px 0' }}>
         <div className="max-w-5xl mx-auto px-6">
-          <div className="grid md:grid-cols-5 gap-px" style={{ backgroundColor: '#1A1A1A' }}>
+          <div className="grid md:grid-cols-5 gap-px" style={{ backgroundColor: '#E0D5C5' }}>
 
             {/* ── Left — Form ─────────────────────────────────────────────── */}
-            <div className="md:col-span-3" style={{ backgroundColor: '#0A0A0A', padding: '40px' }}>
+            <div className="md:col-span-3" style={{ backgroundColor: '#FAF7F2', padding: '40px' }}>
 
               {!showCardForm && (
                 <form onSubmit={handlePayNow}>
 
                   {/* Contact */}
                   <div style={{
-                    backgroundColor: '#080808', border: '1px solid #141414', padding: '28px',
+                    backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '28px',
                     marginBottom: '16px',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                       <div style={{ width: '3px', height: '18px', backgroundColor: '#C9A96E' }}></div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
                         className="uppercase">Contact</p>
                     </div>
                     <div className="space-y-4">
                       <div>
-                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Full Name *</label>
+                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Full Name *</label>
                         <input type="text" value={name} onChange={e => setName(e.target.value)} required style={inputStyle} placeholder="Your full name" />
                       </div>
                       <div>
-                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Email *</label>
+                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Email *</label>
                         <input type="email" value={email} onChange={e => setEmail(e.target.value)} required style={inputStyle} placeholder="your@email.com" />
                       </div>
                       <div>
-                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Phone</label>
+                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Phone</label>
                         <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} style={inputStyle} placeholder="+1 (000) 000-0000" />
                       </div>
                     </div>
@@ -493,17 +493,17 @@ export default function CheckoutPage() {
 
                   {/* Shipping */}
                   <div style={{
-                    backgroundColor: '#080808', border: '1px solid #141414', padding: '28px',
+                    backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '28px',
                     marginBottom: '16px',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                       <div style={{ width: '3px', height: '18px', backgroundColor: '#C9A96E' }}></div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
                         className="uppercase">Shipping</p>
                     </div>
                     <div className="space-y-4">
                       <div>
-                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Street Address *</label>
+                        <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Street Address *</label>
                         <input type="text" value={address}
                           onChange={e => setAddress(e.target.value)}
                           onBlur={() => handleAddressBlur('address')}
@@ -518,7 +518,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div className="col-span-1">
-                          <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">City *</label>
+                          <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">City *</label>
                           <input type="text" value={city}
                             onChange={e => setCity(e.target.value)}
                             onBlur={() => handleAddressBlur('city')}
@@ -532,7 +532,7 @@ export default function CheckoutPage() {
                           )}
                         </div>
                         <div className="col-span-1">
-                          <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">State *</label>
+                          <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">State *</label>
                           <select value={state}
                             onChange={e => setState(e.target.value)}
                             onBlur={() => handleAddressBlur('state')}
@@ -540,12 +540,12 @@ export default function CheckoutPage() {
                               ...inputStyle,
                               borderColor: addressErrors.state && addressTouched.state ? '#E05A5A' : addressTouched.state && !addressErrors.state ? '#5BA87A' : inputStyle.borderColor,
                               appearance: 'none', cursor: 'pointer',
-                              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 fill=%27%238A8A8A%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M8 11L3 6h10z%27/%3E%3C/svg%3E")',
+                              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 fill=%27%236A6A6A%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M8 11L3 6h10z%27/%3E%3C/svg%3E")',
                               backgroundRepeat: 'no-repeat',
                               backgroundPosition: 'right 14px center',
                               paddingRight: '36px',
                             }}>
-                            <option value="" style={{ color: '#6A6A6A' }}>State</option>
+                            <option value="" style={{ color: '#8A8A8A' }}>State</option>
                             {US_STATES.map(st => (
                               <option key={st} value={st}>{st}</option>
                             ))}
@@ -555,7 +555,7 @@ export default function CheckoutPage() {
                           )}
                         </div>
                         <div className="col-span-1">
-                          <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Zip Code *</label>
+                          <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }} className="uppercase">Zip Code *</label>
                           <input type="text" value={zip}
                             onChange={e => setZip(formatZip(e.target.value))}
                             onBlur={() => handleAddressBlur('zip')}
@@ -574,12 +574,12 @@ export default function CheckoutPage() {
 
                   {/* Discount Code */}
                   <div style={{
-                    backgroundColor: '#080808', border: '1px solid #141414', padding: '28px',
+                    backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '28px',
                     marginBottom: '16px',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                       <div style={{ width: '3px', height: '18px', backgroundColor: '#C9A96E' }}></div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
                         className="uppercase">Discount</p>
                     </div>
                     <div className="flex gap-3">
@@ -607,23 +607,23 @@ export default function CheckoutPage() {
 
                   {/* Payment Methods */}
                   <div style={{
-                    backgroundColor: '#080808', border: '1px solid #141414', padding: '28px',
+                    backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '28px',
                     marginBottom: '16px',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                       <div style={{ width: '3px', height: '18px', backgroundColor: '#C9A96E' }}></div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600' }}
                         className="uppercase">Payment</p>
                     </div>
 
                     {/* Credit/Debit Card */}
                     <div style={{
-                      border: paymentMethod === 'stripe' ? '2px solid #C9A96E' : '1px solid #1A1A1A',
+                      border: paymentMethod === 'stripe' ? '2px solid #C9A96E' : '1px solid #E0D5C5',
                       marginBottom: '12px', overflow: 'hidden',
                     }}>
                       <button type="button" onClick={() => setPaymentMethod('stripe')}
                         style={{
-                          width: '100%', backgroundColor: paymentMethod === 'stripe' ? '#0F0E0A' : '#0A0A0A',
+                          width: '100%', backgroundColor: paymentMethod === 'stripe' ? '#FDF8F0' : '#F9F7F4',
                           border: 'none', padding: '16px 20px', cursor: 'pointer',
                           display: 'flex', alignItems: 'center',
                           justifyContent: 'space-between',
@@ -631,22 +631,22 @@ export default function CheckoutPage() {
                         <div className="flex items-center gap-3">
                           <div style={{
                             width: '20px', height: '20px', borderRadius: '50%',
-                            border: paymentMethod === 'stripe' ? '6px solid #C9A96E' : '2px solid #2A2A2A',
+                            border: paymentMethod === 'stripe' ? '6px solid #C9A96E' : '2px solid #D0C8BA',
                             transition: 'border 0.15s',
                           }}></div>
-                          <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '14px', fontWeight: paymentMethod === 'stripe' ? '600' : '400' }}>
+                          <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '14px', fontWeight: paymentMethod === 'stripe' ? '600' : '400' }}>
                             Credit / Debit Card
                           </span>
                         </div>
                         <div className="flex gap-2">
                           {['Visa', 'MC', 'Amex', 'Disc'].map(m => (
-                            <span key={m} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.08em', border: '1px solid #2A2A2A', padding: '2px 8px' }}>{m}</span>
+                            <span key={m} style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.08em', border: '1px solid #D0C8BA', padding: '2px 8px' }}>{m}</span>
                           ))}
                         </div>
                       </button>
                       {paymentMethod === 'stripe' && (
-                        <div style={{ backgroundColor: '#0F0E0A', borderTop: '1px solid #1A1A1A', padding: '20px 24px' }}>
-                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
+                        <div style={{ backgroundColor: '#FDF8F0', borderTop: '1px solid #E0D5C5', padding: '20px 24px' }}>
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7' }}>
                             <span style={{ color: '#C9A96E', fontWeight: '600' }}>✦</span> Pay with card, Klarna, Afterpay, or Affirm — secured by Stripe.
                           </p>
                         </div>
@@ -655,12 +655,12 @@ export default function CheckoutPage() {
 
                     {/* Zelle */}
                     <div style={{
-                      border: paymentMethod === 'zelle' ? '2px solid #C9A96E' : '1px solid #1A1A1A',
+                      border: paymentMethod === 'zelle' ? '2px solid #C9A96E' : '1px solid #E0D5C5',
                       marginBottom: '12px', overflow: 'hidden',
                     }}>
                       <button type="button" onClick={() => setPaymentMethod('zelle')}
                         style={{
-                          width: '100%', backgroundColor: paymentMethod === 'zelle' ? '#0F0E0A' : '#0A0A0A',
+                          width: '100%', backgroundColor: paymentMethod === 'zelle' ? '#FDF8F0' : '#F9F7F4',
                           border: 'none', padding: '16px 20px', cursor: 'pointer',
                           display: 'flex', alignItems: 'center',
                           justifyContent: 'space-between',
@@ -668,10 +668,10 @@ export default function CheckoutPage() {
                         <div className="flex items-center gap-3">
                           <div style={{
                             width: '20px', height: '20px', borderRadius: '50%',
-                            border: paymentMethod === 'zelle' ? '6px solid #C9A96E' : '2px solid #2A2A2A',
+                            border: paymentMethod === 'zelle' ? '6px solid #C9A96E' : '2px solid #D0C8BA',
                             transition: 'border 0.15s',
                           }}></div>
-                          <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '14px', fontWeight: paymentMethod === 'zelle' ? '600' : '400' }}>
+                          <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '14px', fontWeight: paymentMethod === 'zelle' ? '600' : '400' }}>
                             Zelle
                           </span>
                         </div>
@@ -680,8 +680,8 @@ export default function CheckoutPage() {
                         </div>
                       </button>
                       {paymentMethod === 'zelle' && (
-                        <div style={{ backgroundColor: '#0F0E0A', borderTop: '1px solid #1A1A1A', padding: '20px 24px 24px' }}>
-                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7' }}>
+                        <div style={{ backgroundColor: '#FDF8F0', borderTop: '1px solid #E0D5C5', padding: '20px 24px 24px' }}>
+                          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', fontSize: '13px', lineHeight: '1.7' }}>
                             Send payment to <strong style={{ color: '#C9A96E' }}>orders@lionelitebeauty.com</strong> via Zelle. Your order will be processed once payment is confirmed.
                           </p>
                         </div>
@@ -690,7 +690,7 @@ export default function CheckoutPage() {
                   </div>
 
                   {stripeError && (
-                    <div style={{ backgroundColor: '#1A0A0A', border: '1px solid #E05A5A44', padding: '14px 18px', marginBottom: '16px' }}>
+                    <div style={{ backgroundColor: '#FFF0F0', border: '1px solid #E05A5A44', padding: '14px 18px', marginBottom: '16px' }}>
                       <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#E05A5A', fontSize: '13px' }}>{stripeError}</p>
                     </div>
                   )}
@@ -698,7 +698,7 @@ export default function CheckoutPage() {
                   {/* Submit Button */}
                   <button type="submit" disabled={sending}
                     style={{
-                      width: '100%', backgroundColor: sending ? '#5A5040' : '#C9A96E', color: '#000', border: 'none',
+                      width: '100%', backgroundColor: sending ? '#6A5A3A' : '#C9A96E', color: '#000', border: 'none',
                       fontFamily: 'Helvetica Neue, Arial, sans-serif',
                       fontSize: '13px', letterSpacing: '0.2em',
                       padding: '18px', cursor: sending ? 'not-allowed' : 'pointer',
@@ -718,10 +718,10 @@ export default function CheckoutPage() {
               {/* Inline Card Payment Form — OUTSIDE main form to prevent nested form bug */}
               {showCardForm && clientSecret && paymentMethod === 'stripe' && (
                 <div style={{
-                  backgroundColor: '#080808', border: '2px solid #C9A96E',
+                  backgroundColor: '#FFFFFF', border: '2px solid #C9A96E',
                   padding: '28px',
                 }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600', marginBottom: '20px' }}
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', letterSpacing: '0.2em', fontSize: '10px', fontWeight: '600', marginBottom: '20px' }}
                     className="uppercase">Secure Card Payment</p>
 
                   <Elements
@@ -729,12 +729,12 @@ export default function CheckoutPage() {
                     options={{
                       clientSecret,
                       appearance: {
-                        theme: 'night',
+                        theme: 'stripe',
                         labels: 'floating',
                         variables: {
                           colorPrimary: '#C9A96E',
-                          colorBackground: '#080808',
-                          colorText: '#FAFAF8',
+                          colorBackground: '#FFFFFF',
+                          colorText: '#2A2A2A',
                           colorDanger: '#E05A5A',
                           fontFamily: 'Helvetica Neue, Arial, sans-serif',
                           borderRadius: '0px',
@@ -760,7 +760,7 @@ export default function CheckoutPage() {
                     />
                   </Elements>
 
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', marginTop: '16px', textAlign: 'center' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', marginTop: '16px', textAlign: 'center' }}>
                     Secured by Stripe · Your card details are encrypted
                   </p>
                 </div>
@@ -768,7 +768,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* ── Right — Rewards + Order Summary ──────────────────────────── */}
-            <div className="md:col-span-2" style={{ backgroundColor: '#0A0A0A', padding: '40px' }}>
+            <div className="md:col-span-2" style={{ backgroundColor: '#FAF7F2', padding: '40px' }}>
               <div style={{
                 background: 'linear-gradient(180deg, #2A2A2A 0%, #1A1A1A 55%, #1E1E1E 100%)',
                 border: '1px solid #C9A96E44', padding: '36px', position: 'relative', overflow: 'hidden',
@@ -945,26 +945,26 @@ export default function CheckoutPage() {
               </div>
 
               {/* Order Summary card */}
-              <div style={{ backgroundColor: '#080808', border: '1px solid #141414', padding: '32px', position: 'sticky', top: '120px' }}>
+              <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '32px', position: 'sticky', top: '120px' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.25em', fontSize: '10px', marginBottom: '24px' }}
                   className="uppercase">Order Summary</p>
                 <div className="space-y-4 mb-6">
                   {items.map(item => (
-                    <div key={item.slug} className="flex justify-between items-start" style={{ borderBottom: '1px solid #1A1A1A', paddingBottom: '12px' }}>
+                    <div key={item.slug} className="flex justify-between items-start" style={{ borderBottom: '1px solid #E8DDD0', paddingBottom: '12px' }}>
                       <div>
-                        <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px', marginBottom: '2px' }}>{item.name}</p>
-                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px' }}>Qty: {item.quantity}</p>
+                        <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '14px', marginBottom: '2px' }}>{item.name}</p>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px' }}>Qty: {item.quantity}</p>
                       </div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '14px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '14px' }}>
                         ${(item.priceNum * item.quantity).toFixed(2)}
                       </p>
                     </div>
                   ))}
                 </div>
-                <div style={{ borderTop: '1px solid #1A1A1A', paddingTop: '16px' }}>
+                <div style={{ borderTop: '1px solid #E8DDD0', paddingTop: '16px' }}>
                   <div className="flex justify-between mb-1">
-                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px' }}>Subtotal</span>
-                    <span style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '18px' }}>${subtotal.toFixed(2)}</span>
+                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px' }}>Subtotal</span>
+                    <span style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '18px' }}>${subtotal.toFixed(2)}</span>
                   </div>
                   {discountApplied && (
                     <div className="flex justify-between mb-1">
@@ -979,11 +979,11 @@ export default function CheckoutPage() {
                       <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '13px' }}>+{estPointsEarned}</span>
                     </div>
                   )}
-                  <div className="flex justify-between pt-3" style={{ borderTop: '1px solid #1A1A1A', marginTop: '12px' }}>
+                  <div className="flex justify-between pt-3" style={{ borderTop: '1px solid #E8DDD0', marginTop: '12px' }}>
                     <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '14px', letterSpacing: '0.1em' }} className="uppercase">Total</span>
                     <span style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '22px' }}>${finalTotal.toFixed(2)}</span>
                   </div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', marginTop: '12px' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', marginTop: '12px' }}>
                     {showCardForm
                       ? 'Complete your card details above and confirm payment.'
                       : paymentMethod === 'stripe'
