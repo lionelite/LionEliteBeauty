@@ -3,12 +3,12 @@ export default function BeforeAfter() {
   return (
     <>
       {/* What You Get */}
-      <section id="what-you-get" style={{ backgroundColor: '#0D0D0D', padding: '100px 0' }}>
+      <section id="what-you-get" style={{ backgroundColor: '#FAF7F2', padding: '100px 0' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-16">
             <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
               className="text-xs uppercase tracking-widest mb-4">Everything Included</p>
-            <h2 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.5rem', lineHeight: '1.2' }}
+            <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.5rem', lineHeight: '1.2' }}
               className="font-normal">What You Get</h2>
             <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
           </div>
@@ -22,14 +22,14 @@ export default function BeforeAfter() {
               { item: 'Performance + recovery insights', desc: 'Clear action steps targeting your specific gaps.' },
               { item: 'Ongoing recommendations', desc: 'Continued guidance as you progress and optimize over time.' },
             ].map(({ item, desc }) => (
-              <div key={item} style={{ backgroundColor: '#161616', border: '1px solid #2A2A2A', padding: '28px' }}
+              <div key={item} style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '28px' }}
                 className="flex gap-4">
                 <span style={{ color: '#C9A96E', fontSize: '16px', flexShrink: 0, marginTop: '2px' }}>✔</span>
                 <div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '14px', fontWeight: '500', marginBottom: '6px' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '14px', fontWeight: '500', marginBottom: '6px' }}>
                     {item}
                   </p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', lineHeight: '1.6' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.6' }}>
                     {desc}
                   </p>
                 </div>
@@ -46,10 +46,10 @@ export default function BeforeAfter() {
             <div>
               <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
                 className="text-xs uppercase tracking-widest mb-5">Ideal Candidate</p>
-              <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.4rem', lineHeight: '1.2' }}
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.4rem', lineHeight: '1.2' }}
                 className="font-normal mb-6">Who This Is For</h2>
               <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '28px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.9' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.9' }}>
                 This program is built for individuals who are serious about understanding and optimizing their body — not just following trends.
               </p>
             </div>
@@ -66,7 +66,7 @@ export default function BeforeAfter() {
                   <div style={{ width: '28px', height: '28px', backgroundColor: '#C9A96E', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <span style={{ color: '#FFFFFF', fontSize: '12px' }}>→</span>
                   </div>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#7A7A7A', fontSize: '14px', lineHeight: '1.5' }}>
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.5' }}>
                     {point}
                   </p>
                 </div>

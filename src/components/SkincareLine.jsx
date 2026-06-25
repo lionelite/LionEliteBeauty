@@ -80,25 +80,25 @@ export default function SkincareLine() {
   const isDark = (bg) => bg === '#1A1A1A' || bg === '#2A2A2A'
 
   return (
-    <section id="skincare" style={{ backgroundColor: '#FAFAF8', padding: '100px 0' }}>
+    <section id="skincare" style={{ backgroundColor: '#FAF7F2', padding: '100px 0' }}>
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
         <div className="text-center mb-6">
           <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }}
             className="uppercase mb-4">Lion Elite Beauty</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.5rem', lineHeight: '1.2' }}
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.5rem', lineHeight: '1.2' }}
             className="font-normal">
             Advanced Peptide Skincare Collection
           </h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto' }}>
             Peptide-powered formulations designed to support the appearance of healthier, more nourished skin. Premium ingredients. Visible results with consistent use.
           </p>
         </div>
 
         {/* Connection callout */}
-        <div style={{ backgroundColor: '#2A2A2A', padding: '20px 40px', maxWidth: '680px', margin: '0 auto 60px', textAlign: 'center' }}>
+        <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E8DDD0', padding: '20px 40px', maxWidth: '680px', margin: '0 auto 60px', textAlign: 'center' }}>
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', letterSpacing: '0.05em' }}>
             <span style={{ color: '#C9A96E' }}>Coming soon:</span> Optimization Program clients will receive direct access to lionelitewellness.com peptide protocols — integrated with your personalized plan.
           </p>
@@ -181,21 +181,21 @@ export default function SkincareLine() {
         </div>
 
         {/* Bundle CTA */}
-        <div style={{ marginTop: '48px', backgroundColor: '#2A2A2A', padding: '40px 48px' }}
+        <div style={{ marginTop: '48px', backgroundColor: '#FFFFFF', border: '1px solid #E8DDD0', padding: '40px 48px' }}
           className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '8px' }}
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '8px' }}
               className="uppercase">Best Value</p>
-            <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.3rem' }}>
+            <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.3rem' }}>
               Complete Skincare System
             </p>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '13px', marginTop: '6px' }}>
+            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', marginTop: '6px' }}>
               All 6 products · Save on the full protocol
             </p>
           </div>
           <div className="flex items-center gap-6">
             <div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px', textDecoration: 'line-through' }}>$559.99</p>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', textDecoration: 'line-through' }}>$559.99</p>
               <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '2rem' }}>$499.99</p>
             </div>
             <Link to="/skincare"

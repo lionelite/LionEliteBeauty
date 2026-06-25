@@ -64,7 +64,7 @@ export default function WhyLionElite() {
             <div>
               <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
                 className="text-xs uppercase tracking-widest mb-5">Our Approach</p>
-              <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.4rem', lineHeight: '1.2' }}
+              <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.4rem', lineHeight: '1.2' }}
                 className="font-normal mb-6">
                 Why This Is<br />
                 <span style={{ color: '#C9A96E' }}>Different</span>
@@ -73,7 +73,7 @@ export default function WhyLionElite() {
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.9', marginBottom: '16px' }}>
                 Most companies sell products.
               </p>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '1.3rem', lineHeight: '1.7' }}>
+              <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.3rem', lineHeight: '1.7' }}>
                 We build <span style={{ color: '#C9A96E' }}>systems.</span>
               </p>
             </div>
@@ -100,9 +100,9 @@ export default function WhyLionElite() {
                 },
               ].map((item) => (
                 <div key={item.number} style={{ borderLeft: `3px solid ${item.accent}`, paddingLeft: '24px' }}>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#D0D0D0', fontSize: '10px', letterSpacing: '0.2em', marginBottom: '6px' }}
+                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '10px', letterSpacing: '0.2em', marginBottom: '6px' }}
                     className="uppercase">{item.number}</p>
-                  <h3 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '1.05rem', marginBottom: '8px' }}
+                  <h3 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.05rem', marginBottom: '8px' }}
                     className="font-normal">{item.title}</h3>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.7' }}>
                     {item.description}
@@ -119,7 +119,7 @@ export default function WhyLionElite() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
             className="text-xs uppercase tracking-widest mb-5">The System</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.4rem', lineHeight: '1.2' }}
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.4rem', lineHeight: '1.2' }}
             className="font-normal mb-6">
             A Results-Driven Experience
           </h2>
@@ -133,7 +133,7 @@ export default function WhyLionElite() {
             {['Test', 'Adjust', 'Optimize', 'Repeat'].map((item, i, arr) => (
               <div key={item} className="flex items-center">
                 <div style={{
-                  backgroundColor: i % 2 === 0 ? '#C9A96E' : '#1A1A1A',
+                  backgroundColor: i % 2 === 0 ? '#C9A96E' : '#2A2A2A',
                   padding: '18px 28px',
                   minWidth: '110px',
                 }}>
@@ -147,7 +147,7 @@ export default function WhyLionElite() {
           </div>
 
           <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E8DDD0', padding: '48px' }}>
-            <p style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '1.4rem', lineHeight: '1.7', maxWidth: '580px', margin: '0 auto' }}>
+            <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.4rem', lineHeight: '1.7', maxWidth: '580px', margin: '0 auto' }}>
               "Clients who stay consistent see the biggest transformations."
             </p>
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.2em', marginTop: '20px' }}

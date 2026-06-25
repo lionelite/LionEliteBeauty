@@ -122,7 +122,7 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              <h1 style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.4rem', lineHeight: '1.15', marginBottom: '10px', letterSpacing: '-0.01em' }}
+              <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.4rem', lineHeight: '1.15', marginBottom: '10px', letterSpacing: '-0.01em' }}
                 className="font-normal">{p.name}</h1>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '11px', letterSpacing: '0.2em', marginBottom: '24px' }}
                 className="uppercase">{p.tagline}</p>
@@ -135,7 +135,7 @@ export default function ProductPage() {
 
               {/* Kit includes */}
               {p.kitIncludes && (
-                <div style={{ backgroundColor: '#111', border: `1px solid ${p.accent}22`, padding: '20px 24px', marginBottom: '28px' }}>
+                <div style={{ backgroundColor: '#F5F0E8', border: `1px solid ${p.accent}22`, padding: '20px 24px', marginBottom: '28px' }}>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '12px' }} className="uppercase">Kit Includes</p>
                   <ul className="space-y-2">
                     {p.kitIncludes.map(item => (
@@ -154,7 +154,7 @@ export default function ProductPage() {
                   {p.originalPrice && (
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', textDecoration: 'line-through' }}>{p.originalPrice}</p>
                   )}
-                  <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '2.2rem' }}>{p.price}</p>
+                  <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.2rem' }}>{p.price}</p>
                 </div>
                 <button onClick={handleAddToCart}
                   style={{
@@ -187,7 +187,7 @@ export default function ProductPage() {
       {/* What you'll notice + Timeline */}
       <section style={{ backgroundColor: '#F5F0E8', padding: '80px 0', borderTop: '1px solid #E8DDD0' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-px" style={{ backgroundColor: '#141414' }}>
+          <div className="grid md:grid-cols-2 gap-px" style={{ backgroundColor: '#E0D5C5' }}>
 
             {/* What You'll Notice */}
             <div style={{ backgroundColor: '#F5F0E8', padding: '48px 40px' }}>
@@ -251,7 +251,7 @@ export default function ProductPage() {
       {/* Details */}
       <section style={{ backgroundColor: '#F5F0E8', padding: '80px 0', borderTop: '1px solid #E8DDD0' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-px" style={{ backgroundColor: '#141414' }}>
+          <div className="grid md:grid-cols-3 gap-px" style={{ backgroundColor: '#E0D5C5' }}>
 
             {/* Key Ingredients */}
             <div style={{ backgroundColor: '#F5F0E8', padding: '48px 40px' }}>
@@ -261,7 +261,7 @@ export default function ProductPage() {
               <ul className="space-y-5">
                 {p.keyIngredients.map(ing => (
                   <li key={ing.name}>
-                    <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px', marginBottom: '4px' }}>{ing.name}</p>
+                    <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '14px', marginBottom: '4px' }}>{ing.name}</p>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.6' }}>{ing.role}</p>
                   </li>
                 ))}
@@ -278,7 +278,7 @@ export default function ProductPage() {
                   <li key={b.title} className="flex items-start gap-3">
                     <div style={{ width: '5px', height: '5px', backgroundColor: p.accent, borderRadius: '50%', flexShrink: 0, marginTop: '7px' }}></div>
                     <div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FAFAF8', fontSize: '13px', fontWeight: '500', marginBottom: '3px' }}>{b.title}</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '13px', fontWeight: '500', marginBottom: '3px' }}>{b.title}</p>
                       <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.6' }}>{b.desc}</p>
                     </div>
                   </li>
@@ -315,15 +315,15 @@ export default function ProductPage() {
               </p>
             </div>
 
-            <div className={`grid gap-px grid-cols-${relatedProducts.length > 1 ? '2' : '1'} max-w-2xl`} style={{ backgroundColor: '#1A1A1A' }}>
+            <div className={`grid gap-px grid-cols-${relatedProducts.length > 1 ? '2' : '1'} max-w-2xl`} style={{ backgroundColor: '#E0D5C5' }}>
               {relatedProducts.map(rp => {
                 const rpDark = rp.bg === '#1A1A1A' || rp.bg === '#2A2A2A'
                 return (
                   <Link key={rp.slug} to={`/skincare/${rp.slug}`}
                     style={{ backgroundColor: '#FAF7F2', padding: '36px', textDecoration: 'none', display: 'block' }}
-                    className="group hover:bg-[#0F0F0F] transition-colors">
+                    className="group hover:bg-[#F5F0E8] transition-colors">
                     <ProductBottle accent={rp.accent} label={rp.label} />
-                    <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '14px', marginTop: '20px', marginBottom: '6px', textAlign: 'center' }}>{rp.name}</p>
+                    <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '14px', marginTop: '20px', marginBottom: '6px', textAlign: 'center' }}>{rp.name}</p>
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: rp.accent, fontSize: '10px', letterSpacing: '0.15em', textAlign: 'center' }} className="uppercase">
                       {rp.price} · {rp.size}
                     </p>

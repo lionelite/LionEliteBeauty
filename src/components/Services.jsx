@@ -6,7 +6,7 @@ export default function Services() {
         <div className="text-center mb-16">
           <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
             className="text-xs uppercase tracking-widest mb-4">The Problem</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.5rem', lineHeight: '1.2' }}
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.5rem', lineHeight: '1.2' }}
             className="font-normal">
             Most People Are Guessing<br />
             <span style={{ color: '#C9A96E' }}>With Their Health.</span>
@@ -35,7 +35,7 @@ export default function Services() {
             <div key={item.title}
               style={{ backgroundColor: '#FFFFFF', border: '1px solid #E8DDD0', padding: '40px 32px' }}>
               <span style={{ fontSize: '28px', display: 'block', marginBottom: '20px' }}>{item.icon}</span>
-              <h3 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '1.15rem', marginBottom: '14px' }}
+              <h3 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.15rem', marginBottom: '14px' }}
                 className="font-normal">{item.title}</h3>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.8' }}>
                 {item.description}
@@ -45,8 +45,8 @@ export default function Services() {
         </div>
 
         {/* Result banner */}
-        <div style={{ backgroundColor: '#1A1A1A', padding: '48px', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Georgia, serif', color: '#FAFAF8', fontSize: '1.5rem', lineHeight: '1.6', maxWidth: '600px', margin: '0 auto' }}>
+        <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E8DDD0', padding: '48px', textAlign: 'center' }}>
+          <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.5rem', lineHeight: '1.6', maxWidth: '600px', margin: '0 auto' }}>
             "Wasted time. Wasted money.<br />
             <span style={{ color: '#C9A96E' }}>Inconsistent results.</span>"
           </p>

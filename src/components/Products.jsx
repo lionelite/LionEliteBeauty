@@ -37,10 +37,10 @@ export default function Products() {
         <div className="text-center mb-20">
           <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em' }}
             className="text-xs uppercase tracking-widest mb-4">The Process</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '2.5rem', lineHeight: '1.2' }}
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.5rem', lineHeight: '1.2' }}
             className="font-normal">How It Works</h2>
           <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto 0' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '15px', lineHeight: '1.8', maxWidth: '520px', margin: '20px auto 0' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.8', maxWidth: '520px', margin: '20px auto 0' }}>
             No guessing. No random protocols. Just real data + strategic execution.
           </p>
         </div>
@@ -51,17 +51,17 @@ export default function Products() {
               style={{ backgroundColor: '#F5F0E8', borderTop: `3px solid ${step.accent}`, padding: '40px 32px' }}>
               <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: step.accent, fontSize: '11px', letterSpacing: '0.25em', marginBottom: '8px' }}
                 className="uppercase">Step {step.number}</p>
-              <h3 style={{ fontFamily: 'Georgia, serif', color: '#1A1A1A', fontSize: '1.15rem', lineHeight: '1.4', marginBottom: '16px' }}
+              <h3 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.15rem', lineHeight: '1.4', marginBottom: '16px' }}
                 className="font-normal">{step.title}</h3>
               <div style={{ width: '28px', height: '1px', backgroundColor: step.accent, marginBottom: '16px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px' }}>
+              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.7', marginBottom: '20px' }}>
                 {step.description}
               </p>
               <ul className="space-y-2">
                 {step.details.map(d => (
                   <li key={d} className="flex items-center gap-2">
                     <div style={{ width: '4px', height: '4px', backgroundColor: step.accent, borderRadius: '50%', flexShrink: 0 }}></div>
-                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '12px' }}>{d}</span>
+                    <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px' }}>{d}</span>
                   </li>
                 ))}
               </ul>
@@ -70,8 +70,8 @@ export default function Products() {
         </div>
 
         {/* Visual flow */}
-        <div style={{ backgroundColor: '#1A1A1A', padding: '48px', marginTop: '60px', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#CACACA', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '24px' }} className="uppercase">
+        <div style={{ backgroundColor: '#F5F0E8', padding: '48px', marginTop: '60px', textAlign: 'center' }}>
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '10px', letterSpacing: '0.3em', marginBottom: '24px' }} className="uppercase">
             Your Optimization Cycle
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
