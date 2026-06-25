@@ -191,6 +191,12 @@ export default function Navbar() {
             Ingredients
           </Link>
 
+          <Link to="/vip"
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
+            className="text-sm uppercase tracking-wider hover:text-[#C9A96E] transition-colors">
+            VIP Account
+          </Link>
+
           {location.pathname.startsWith('/skincare') && (
             <Link to="/cart"
               style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none', position: 'relative', padding: '8px 4px' }}
@@ -328,6 +334,9 @@ export default function Navbar() {
             <Link to="/ingredients" onClick={() => setMenuOpen(false)}
               style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
               className="text-sm uppercase">Ingredients</Link>
+            <Link to="/vip" onClick={() => setMenuOpen(false)}
+              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5A5A5A', letterSpacing: '0.1em', textDecoration: 'none' }}
+              className="text-sm uppercase">VIP Account</Link>
           </div>
 
           <Link to="/apply"

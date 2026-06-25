@@ -45,6 +45,8 @@ export default function ApplyPage() {
   const prefilledName = searchParams.get('name') || ''
   const prefilledEmail = searchParams.get('email') || ''
   const [form, setForm] = useState({ ...initialForm, goal: programTag, name: prefilledName, email: prefilledEmail })
+  // Only show Foundation ($299) tier when coming via ?program=foundation
+  const showFoundationTier = programTag === 'foundation'
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
   const [errors, setErrors] = useState({})
@@ -349,9 +351,13 @@ export default function ApplyPage() {
                             border: '1px solid #E0D5C5', cursor: paySending ? 'not-allowed' : 'pointer',
                           }}
                           className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-all">
-                          Pay via Zelle Instead
+                          Pay via Zelle — +1 (216) 326-0050
                         </button>
                       </div>
+
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#9A9A9A', fontSize: '10px', marginTop: '8px', marginBottom: selectedTier === 'vip' && showCardForm && clientSecret ? '0' : '0' }}>
+                        Send payment to <strong>+1 (216) 326-0050</strong> via Zelle. Include your name in the memo.
+                      </p>
 
                       {selectedTier === 'vip' && showCardForm && clientSecret && (
                         <div style={{
@@ -388,8 +394,8 @@ export default function ApplyPage() {
                       )}
                     </div>
 
-                    {/* Foundation — Secondary */}
-                    <div style={{
+                    {/* Foundation — Secondary (only shown for foundation applications) */}
+                    {showFoundationTier && <div style={{
                       backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '18px 20px',
                       marginBottom: '12px',
                     }}>
@@ -422,7 +428,7 @@ export default function ApplyPage() {
                             border: '1px solid #E0D5C5', cursor: paySending ? 'not-allowed' : 'pointer',
                           }}
                           className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-all">
-                          Pay via Zelle Instead
+                          Pay via Zelle — +1 (216) 326-0050
                         </button>
                       </div>
 
@@ -459,7 +465,7 @@ export default function ApplyPage() {
                           </Elements>
                         </div>
                       )}
-                    </div>
+                    </div>}
 
                     {payError && (
                       <div style={{ backgroundColor: '#FFF0F0', border: '1px solid #E05A5A44', padding: '14px 18px', marginTop: '16px' }}>
