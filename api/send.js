@@ -231,7 +231,7 @@ function adminBody({ name, email, phone, program, experience, struggle, timeline
 }
 
 // ── Customer confirmation ──────────────────────────────────────────────────
-function clientConfirmation({ name, program, items, orderNumber, address, paymentMethod, stripePaymentId, total, subtotal, discountAmount, experience, struggle, timeline, investment, commitment, health, tier, vipId }) {
+function clientConfirmation({ name, email, program, items, orderNumber, address, paymentMethod, stripePaymentId, total, subtotal, discountAmount, experience, struggle, timeline, investment, commitment, health, tier, vipId }) {
   const isOrder = !!items
   const title = isOrder ? 'Your order is confirmed.' : 'We\u2019ve received your application.'
   const greeting = `Hi ${name},`
@@ -442,7 +442,7 @@ export default async function handler(req, res) {
             address: body.address,
             paymentMethod: body.paymentMethod,
             stripePaymentId: body.stripePaymentId,
-            subtotal, total, discountAmount,
+            subtotal, total, discountAmount, email: body.email,
           })),
         }),
       ])
@@ -508,7 +508,7 @@ export default async function handler(req, res) {
           to: [body.email],
           subject: 'Application Received — Lion Elite',
           html: wrap(clientConfirmation({
-            name: body.name, program: body.program,
+            name: body.name, email: body.email, program: body.program,
             experience: body.experience, struggle: body.struggle,
             timeline: body.timeline, investment: body.investment,
             commitment: body.commitment, health: body.health,
