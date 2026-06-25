@@ -98,7 +98,7 @@ export default function Navbar() {
                   </Link>
                 ))}
                 <div style={{ borderTop: '1px solid #E8DDD0', padding: '8px 0' }}>
-                  <Link to="/apply"
+                  <Link to="/apply?program=foundation"
                     style={{ display: 'block', padding: '14px 22px', textDecoration: 'none' }}
                     className="hover:bg-[#FAFAF8] transition-colors group">
                     <div className="flex items-center gap-3">
@@ -247,8 +247,9 @@ export default function Navbar() {
         }}
           className="md:hidden px-6 py-6 flex flex-col gap-1">
 
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '8px' }}
-            className="uppercase">Programs</p>
+          <Link to="/programs/optimization" onClick={() => setMenuOpen(false)}
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '9px', letterSpacing: '0.25em', marginBottom: '8px', textDecoration: 'none', display: 'block' }}
+            className="uppercase">Programs</Link>
 
           {programs.map(p => (
             <Link key={p.label} to={p.href}
@@ -265,7 +266,7 @@ export default function Navbar() {
           ))}
 
           <div style={{ borderTop: '1px solid #E0D5C5', margin: '8px 0', paddingTop: '8px' }}>
-            <Link to="/apply"
+            <Link to="/apply?program=foundation"
               style={{ textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid #F0EAE0' }}
               className="flex items-center gap-3 group">
               <div style={{ width: '7px', height: '7px', backgroundColor: '#8A9E85', borderRadius: '50%', flexShrink: 0 }}></div>
@@ -278,8 +279,15 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '9px', letterSpacing: '0.25em', marginTop: '16px', marginBottom: '8px' }}
-            className="uppercase">Skincare</p>
+          <Link to="/programs/optimization" onClick={() => setMenuOpen(false)}
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.1em', padding: '12px 0', textDecoration: 'none', display: 'block' }}
+            className="uppercase hover:opacity-70 transition-opacity">
+            View all programs →
+          </Link>
+
+          <Link to="/skincare" onClick={() => setMenuOpen(false)}
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '9px', letterSpacing: '0.25em', marginTop: '16px', marginBottom: '8px', textDecoration: 'none', display: 'block' }}
+            className="uppercase">Skincare</Link>
 
           {skincareItems.map(s => (
             <Link key={s.label} to={s.href}
@@ -294,6 +302,12 @@ export default function Navbar() {
               <span style={{ color: '#C9A96E', fontSize: '14px' }}>→</span>
             </Link>
           ))}
+
+          <Link to="/skincare" onClick={() => setMenuOpen(false)}
+            style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '11px', letterSpacing: '0.1em', padding: '12px 0', textDecoration: 'none', display: 'block', borderBottom: '1px solid #F0EAE0' }}
+            className="uppercase hover:opacity-70 transition-opacity">
+            View all products →
+          </Link>
 
           <div style={{ paddingTop: '16px' }} className="flex flex-col gap-4">
             {location.pathname.startsWith('/skincare') && (
