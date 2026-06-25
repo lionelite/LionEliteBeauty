@@ -7,12 +7,17 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { createHash } from 'crypto'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DATA_PATH = join(__dirname, 'vip-data.json')
 
 let STORE = {}
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'lionelite-admin-secret'
+
+function hashPassword(pw) {
+  return createHash('sha256').update(pw).digest('hex')
+}
 
 // Load persisted data if available
 function load() {
@@ -43,7 +48,7 @@ function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 }
 
-function makeAccount(name, email, program, tier) {
+function makeAccount(name, email, program, tier, passwordHash) {
   return {
     vipId: generateVipId(),
     name,
@@ -52,6 +57,7 @@ function makeAccount(name, email, program, tier) {
     tier: tier || null,
     paid: false,
     created: new Date().toISOString(),
+    passwordHash: passwordHash || null,
     progress: [], // [{ step: 'week-1', label: 'Week 1 Setup', completed: false, completedAt: null }]
     token: generateToken(),
     notes: '',
@@ -65,7 +71,7 @@ export default async function handler(req, res) {
 
   load() // Always refresh from disk
 
-  const { action, email, name, program, tier, vipId, token, paid, notes, progress: progressData } = req.body
+  const { action, email, name, program, tier, vipId, token, paid, notes, password, progress: progressData } = req.body
   const key = email?.trim().toLowerCase()
 
   if (action === 'register') {
@@ -79,7 +85,8 @@ export default async function handler(req, res) {
         token: existing.token,
       })
     }
-    const account = makeAccount(name || key.split('@')[0], key, program, tier)
+    const pwHash = password ? hashPassword(password) : null
+    const account = makeAccount(name || key.split('@')[0], key, program, tier, pwHash)
     STORE[key] = account
     save()
     console.log('VIP account created:', account.vipId, key)
@@ -104,12 +111,25 @@ export default async function handler(req, res) {
   }
 
   if (action === 'login') {
-    if (!vipId) return res.status(400).json({ error: 'VIP ID is required' })
     if (!key) return res.status(400).json({ error: 'Email is required' })
     const account = STORE[key]
     if (!account) return res.status(404).json({ error: 'No VIP account found with this email.' })
-    if (account.vipId !== vipId) return res.status(403).json({ error: 'VIP ID does not match this account.' })
-    return res.status(200).json({ ...account, token: account.token })
+
+    // Two login methods:
+    // 1) Email + password (primary, easier for users)
+    // 2) Email + VIP ID (legacy fallback)
+    if (password) {
+      const pwHash = hashPassword(password)
+      if (!account.passwordHash || account.passwordHash !== pwHash) {
+        return res.status(403).json({ error: 'Invalid password.' })
+      }
+      return res.status(200).json({ ...account, token: account.token })
+    }
+    if (vipId) {
+      if (account.vipId !== vipId) return res.status(403).json({ error: 'VIP ID does not match this account.' })
+      return res.status(200).json({ ...account, token: account.token })
+    }
+    return res.status(400).json({ error: 'Password or VIP ID is required.' })
   }
 
   if (action === 'list-all') {
@@ -175,6 +195,19 @@ export default async function handler(req, res) {
     }
     save()
     return res.status(200).json({ ...STORE[key] })
+  }
+
+  if (action === 'set-password') {
+    // Allows existing accounts to set or reset their password
+    if (!key) return res.status(400).json({ error: 'Email is required' })
+    if (!password) return res.status(400).json({ error: 'Password is required' })
+    const account = STORE[key]
+    if (!account) return res.status(404).json({ error: 'No VIP account found with this email.' })
+    // Require VIP ID auth to set a password (or existing password)
+    const pwHash = hashPassword(password)
+    account.passwordHash = pwHash
+    save()
+    return res.status(200).json({ message: 'Password set successfully.', vipId: account.vipId })
   }
 
   return res.status(400).json({ error: 'Invalid action' })

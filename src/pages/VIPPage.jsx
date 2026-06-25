@@ -31,8 +31,10 @@ export default function VIPPage() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [vipId, setVipId] = useState('')
   const [vipEmail, setVipEmail] = useState('')
-  const [loginVipId, setLoginVipId] = useState('')
   const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [loginVipId, setLoginVipId] = useState('')
+  const [useVipIdLogin, setUseVipIdLogin] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [account, setAccount] = useState(null)
@@ -48,10 +50,13 @@ export default function VIPPage() {
     setError('')
     setLoading(true)
     try {
+      const body = useVipIdLogin
+        ? { action: 'login', email: loginEmail, vipId: loginVipId }
+        : { action: 'login', email: loginEmail, password: loginPassword }
       const res = await fetch('/api/vip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'login', email: loginEmail, vipId: loginVipId }),
+        body: JSON.stringify(body),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error || 'Invalid credentials'); setLoading(false); return }
@@ -96,26 +101,45 @@ export default function VIPPage() {
             <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2rem', marginBottom: '8px' }} className="font-normal">Access Your VIP Account</h1>
             <div style={{ width: '32px', height: '1px', backgroundColor: '#C9A96E', margin: '0 auto 24px' }}></div>
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '14px', lineHeight: '1.7' }}>
-              Enter the VIP ID and email address you received after enrolling to view your program details.
+              {useVipIdLogin
+                ? 'Enter the VIP ID and email address you received after enrolling.'
+                : 'Sign in with the email and password you created during enrollment.'}
             </p>
           </div>
 
           <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '40px' }}>
             <form onSubmit={handleLogin}>
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.15em', display: 'block', marginBottom: '8px' }} className="uppercase">VIP ID</label>
-                <input type="text" value={loginVipId} onChange={e => setLoginVipId(e.target.value)}
-                  placeholder="e.g. LEO-123ABC"
-                  style={{ width: '100%', padding: '14px 16px', border: '1px solid #E0D5C5', backgroundColor: '#FAF7F2', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '14px', color: '#2A2A2A', outline: 'none', letterSpacing: '0.12em', boxSizing: 'border-box' }}
-                  required />
-              </div>
-              <div style={{ marginBottom: '28px' }}>
                 <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.15em', display: 'block', marginBottom: '8px' }} className="uppercase">Email Address</label>
                 <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)}
                   placeholder="you@email.com"
                   style={{ width: '100%', padding: '14px 16px', border: '1px solid #E0D5C5', backgroundColor: '#FAF7F2', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '14px', color: '#2A2A2A', outline: 'none', boxSizing: 'border-box' }}
                   required />
               </div>
+
+              {useVipIdLogin ? (
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.15em', display: 'block', marginBottom: '8px' }} className="uppercase">VIP ID</label>
+                  <input type="text" value={loginVipId} onChange={e => setLoginVipId(e.target.value)}
+                    placeholder="e.g. LEV-XXXXXXXX"
+                    style={{ width: '100%', padding: '14px 16px', border: '1px solid #E0D5C5', backgroundColor: '#FAF7F2', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '14px', color: '#2A2A2A', outline: 'none', letterSpacing: '0.12em', boxSizing: 'border-box' }}
+                    required />
+                </div>
+              ) : (
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.15em', display: 'block', marginBottom: '8px' }} className="uppercase">Password</label>
+                  <input type="password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)}
+                    placeholder="Your VIP account password"
+                    style={{ width: '100%', padding: '14px 16px', border: '1px solid #E0D5C5', backgroundColor: '#FAF7F2', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '14px', color: '#2A2A2A', outline: 'none', boxSizing: 'border-box' }}
+                    required />
+                </div>
+              )}
+
+              <button type="button" onClick={() => { setUseVipIdLogin(!useVipIdLogin); setError('') }}
+                style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#9A9A9A', fontSize: '11px', letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer', marginBottom: '20px', display: 'block', textDecoration: 'underline' }}>
+                {useVipIdLogin ? 'Sign in with password instead \u2192' : 'Sign in with VIP ID instead \u2192'}
+              </button>
+
               {error && <p style={{ color: '#C0392B', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', marginBottom: '16px', textAlign: 'center' }}>{error}</p>}
               <button type="submit" disabled={loading}
                 style={{ width: '100%', backgroundColor: '#C9A96E', color: '#000', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.2em', padding: '16px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }} className="uppercase">
@@ -125,7 +149,7 @@ export default function VIPPage() {
           </div>
 
           <p style={{ textAlign: 'center', marginTop: '24px', fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '11px' }}>
-            Don\u2019t have a VIP ID yet?{' '}
+            Don\u2019t have an account yet?{' '}
             <Link to="/apply" style={{ color: '#C9A96E', textDecoration: 'none' }}>Enroll in a program \u2192</Link>
           </p>
         </div>

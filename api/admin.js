@@ -5,7 +5,7 @@
 // Simple admin authentication for the business dashboard.
 
 const ADMIN_EMAIL = 'admin@lionelitebeauty.com'
-const ADMIN_PASSWORD = 'lionelite2024'
+const ADMIN_PASSWORD = 'LionElite9903'
 const VIP_ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'lionelite-admin-secret'
 
 function generateAdminToken() {

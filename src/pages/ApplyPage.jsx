@@ -62,6 +62,7 @@ export default function ApplyPage() {
   const [showCardForm, setShowCardForm] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
   const [creatingVipAfterPayment, setCreatingVipAfterPayment] = useState(false)
+  const [vipPassword, setVipPassword] = useState('')
 
   useEffect(() => { window.scrollTo(0, 0) }, [submitted])
 
@@ -170,6 +171,7 @@ export default function ApplyPage() {
           name: form.name,
           program: programs.find(p => p.value === form.goal)?.label || form.goal,
           tier: tierKey,
+          password: vipPassword,
         }),
       })
       const vipData = await vipRes.json()
@@ -215,6 +217,7 @@ export default function ApplyPage() {
         name: form.name,
         program: programs.find(p => p.value === form.goal)?.label || form.goal,
         tier: selectedTier,
+        password: vipPassword,
       }),
     })
       .then(r => r.json())
@@ -305,6 +308,17 @@ export default function ApplyPage() {
                   </p>
 
                   <div style={{ borderTop: '1px solid #E8DDD0', paddingTop: '24px' }}>
+
+                    {/* ── Create Password ── */}
+                    <div style={{ backgroundColor: '#FAF7F2', border: '1px solid #E0D5C5', padding: '16px 20px', marginBottom: '20px' }}>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '9px', letterSpacing: '0.15em', marginBottom: '8px' }} className="uppercase">Create Your VIP Account Password</p>
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', marginBottom: '10px', lineHeight: '1.5' }}>
+                        You'll use this password to log in to your VIP portal. Keep it safe — you can also log in with your VIP ID.
+                      </p>
+                      <input type="password" value={vipPassword} onChange={e => setVipPassword(e.target.value)}
+                        placeholder="Choose a password"
+                        style={{ width: '100%', padding: '12px 14px', border: '1px solid #E0D5C5', backgroundColor: '#FFFFFF', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '13px', color: '#2A2A2A', outline: 'none', boxSizing: 'border-box' }} />
+                    </div>
 
                     {/* VIP — Primary */}
                     <div style={{
