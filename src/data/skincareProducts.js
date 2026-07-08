@@ -11,7 +11,7 @@ export const skincareProducts = [
     priceNum: 69.99,
     tagline: 'High-concentration copper peptide serum — pure, potent, precise',
     accent: '#C9A96E',
-    bg: '#1A1A1A',
+    bg: '#F5F0E8',
     label: 'GHK-Cu',
     headline: 'Pure copper peptide. No filler. No shortcuts.',
     description:
