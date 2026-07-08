@@ -151,7 +151,12 @@ export default function SkincarePage() {
                     <div style={{ backgroundColor: isDark ? '#111' : '#EDE7DC', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '340px', padding: '60px' }}>
                       <div className="text-center">
                         <div style={{ marginBottom: '32px' }}>
-                          <ProductBottle accent={p.accent} label={p.label} isDark={isDark} />
+                          {p.image ? (
+                            <img src={p.image} alt={p.name}
+                              style={{ maxWidth: '160px', height: 'auto', display: 'block', margin: '0 auto' }} />
+                          ) : (
+                            <ProductBottle accent={p.accent} label={p.label} isDark={isDark} />
+                          )}
                         </div>
                         <p style={{ fontFamily: 'Georgia, serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '1rem', marginBottom: '6px' }}>{p.shortName}</p>
                         <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#3A3A3A' : '#9A9A9A', fontSize: '11px', letterSpacing: '0.15em' }} className="uppercase">{p.size}</p>
