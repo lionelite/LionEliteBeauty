@@ -218,6 +218,7 @@ export default function ApplyPage() {
         program: programs.find(p => p.value === form.goal)?.label || form.goal,
         tier: selectedTier,
         password: vipPassword,
+        paid: true, // Card payment confirmed — auto-activate
       }),
     })
       .then(r => r.json())

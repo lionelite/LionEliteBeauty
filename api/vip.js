@@ -103,6 +103,8 @@ export default async function handler(req, res) {
     }
     const pwHash = password ? hashPassword(password) : null
     const account = makeAccount(name || key.split('@')[0], key, program, tier, pwHash)
+    // Auto-mark as paid for card payments
+    if (paid === true) account.paid = true
     STORE[key] = account
     save()
     console.log('VIP account created:', account.vipId, key)
@@ -130,6 +132,14 @@ export default async function handler(req, res) {
     if (!key) return res.status(400).json({ error: 'Email is required' })
     const account = STORE[key]
     if (!account) return res.status(404).json({ error: 'No VIP account found with this email.' })
+
+    // Payment gate: only allow access if paid
+    if (!account.paid) {
+      return res.status(403).json({
+        error: 'Your account is pending payment confirmation. You will receive access once your payment is confirmed. If you paid by card and this is an error, please contact us at orders@lionelitebeauty.com.',
+        paymentPending: true,
+      })
+    }
 
     // Two login methods:
     // 1) Email + password (primary, easier for users)

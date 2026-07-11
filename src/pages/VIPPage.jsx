@@ -59,7 +59,15 @@ export default function VIPPage() {
         : { action: 'login', email: loginEmail, password: loginPassword }
       const res = await fetch('/api/vip', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
       const data = await res.json()
-      if (!res.ok) { setError(data.error || 'Invalid credentials'); setLoading(false); return }
+      if (!res.ok) {
+        if (data.paymentPending) {
+          setError('Your account is pending payment confirmation. If you paid via Zelle or CashApp, we\'ll activate your account once payment is confirmed. If you paid by card, please contact orders@lionelitebeauty.com.')
+        } else {
+          setError(data.error || 'Invalid credentials')
+        }
+        setLoading(false)
+        return
+      }
       setAccount(data)
       setLoggedIn(true)
       const key = programKeyMap[data.program]
