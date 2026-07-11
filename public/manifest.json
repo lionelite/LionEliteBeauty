@@ -1,0 +1,19 @@
+{
+  "name": "Lion Elite Beauty",
+  "short_name": "Lion Elite",
+  "description": "Premium peptide skincare and personalized wellness programs. Your coaching portal.",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#FAF7F2",
+  "theme_color": "#C9A96E",
+  "orientation": "portrait-primary",
+  "categories": ["health", "fitness", "lifestyle"],
+  "lang": "en-US",
+  "scope": "/",
+  "icons": [
+    { "src": "/images/pwa-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/images/pwa-512x512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/images/pwa-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

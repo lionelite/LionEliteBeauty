@@ -58,9 +58,25 @@ function makeAccount(name, email, program, tier, passwordHash) {
     paid: false,
     created: new Date().toISOString(),
     passwordHash: passwordHash || null,
-    progress: [], // [{ step: 'week-1', label: 'Week 1 Setup', completed: false, completedAt: null }]
+    progress: [], // [{ step: 'week-1', label: 'Week 1 Setup', done: false, completedAt: null }]
     token: generateToken(),
     notes: '',
+    // Extended coaching portal fields
+    phone: '',
+    dob: '',
+    emergencyContact: '',
+    timezone: '',
+    goals: { primary: '', secondary: [], targetTimeline: '' },
+    measurements: { weight: '', height: '', bodyFat: '', updated: null },
+    healthData: null, // health screening questionnaire responses
+    habits: null, // current habits baseline
+    checkins: [], // [{ date, type: 'daily'|'weekly', responses: {}, adherence: 0 }]
+    plan: { phase: '', nutrition: null, training: null, cardio: null, recovery: null, habits: [] },
+    callSchedule: { credits: 0, lastCall: null, nextCall: null, history: [] },
+    questionnaires: {}, // { healthScreening: null, lifestyle: null, familyHistory: null, ... }
+    coachNotes: '',
+    adminNotes: '',
+    riskFlags: { level: 'green', notes: '' },
   }
 }
 
@@ -71,7 +87,7 @@ export default async function handler(req, res) {
 
   load() // Always refresh from disk
 
-  const { action, email, name, program, tier, vipId, token, paid, notes, password, progress: progressData } = req.body
+  const { action, email, name, program, tier, vipId, token, paid, notes, password, progress: progressData, healthData, habits, questionnaires, checkin, goals, plan, callSchedule, riskFlags, coachNotes, phone, dob, timezone, measurements } = req.body
   const key = email?.trim().toLowerCase()
 
   if (action === 'register') {
@@ -208,6 +224,43 @@ export default async function handler(req, res) {
     account.passwordHash = pwHash
     save()
     return res.status(200).json({ message: 'Password set successfully.', vipId: account.vipId })
+  }
+
+  if (action === 'update-client') {
+    // Admin or client updates their profile data
+    const { token: authToken } = req.body
+    if (!authToken || authToken !== ADMIN_TOKEN) {
+      return res.status(403).json({ error: 'Unauthorized' })
+    }
+    if (!key) return res.status(400).json({ error: 'Email is required' })
+    if (!STORE[key]) return res.status(404).json({ error: 'Account not found' })
+
+    if (healthData !== undefined) STORE[key].healthData = healthData
+    if (habits !== undefined) STORE[key].habits = habits
+    if (questionnaires !== undefined) STORE[key].questionnaires = { ...(STORE[key].questionnaires || {}), ...questionnaires }
+    if (goals !== undefined) STORE[key].goals = goals
+    if (plan !== undefined) STORE[key].plan = plan
+    if (callSchedule !== undefined) STORE[key].callSchedule = callSchedule
+    if (riskFlags !== undefined) STORE[key].riskFlags = riskFlags
+    if (coachNotes !== undefined) STORE[key].coachNotes = coachNotes
+    if (phone !== undefined) STORE[key].phone = phone
+    if (dob !== undefined) STORE[key].dob = dob
+    if (timezone !== undefined) STORE[key].timezone = timezone
+    if (measurements !== undefined) STORE[key].measurements = measurements
+    save()
+    return res.status(200).json({ ...STORE[key] })
+  }
+
+  if (action === 'add-checkin') {
+    // Client submits a daily or weekly check-in
+    if (!key) return res.status(400).json({ error: 'Email is required' })
+    if (!STORE[key]) return res.status(404).json({ error: 'Account not found' })
+    if (!checkin) return res.status(400).json({ error: 'Check-in data is required' })
+
+    STORE[key].checkins = STORE[key].checkins || []
+    STORE[key].checkins.push({ ...checkin, date: checkin.date || new Date().toISOString() })
+    save()
+    return res.status(200).json({ checkins: STORE[key].checkins })
   }
 
   return res.status(400).json({ error: 'Invalid action' })
