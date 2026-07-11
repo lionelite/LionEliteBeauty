@@ -1,0 +1,57 @@
+{
+  "demo@lionelitebeauty.com": {
+    "vipId": "LEV-DEMO001",
+    "name": "Demo Client",
+    "email": "demo@lionelitebeauty.com",
+    "program": "Muscle & Recovery",
+    "tier": "vip",
+    "paid": true,
+    "passwordHash": "d3ad9315b7be5dd53b31a273b3b3aba5defe700808305aa16a3062b76658a791",
+    "token": "demo-token-123",
+    "notes": "Welcome to Lion Elite! This is a demo account to explore the portal.",
+    "created": "2026-07-11T22:00:00.000Z",
+    "progress": [],
+    "goals": {
+      "primary": "Build muscle and improve recovery",
+      "secondary": [
+        "Improve sleep quality",
+        "Increase energy"
+      ],
+      "targetTimeline": "3 months"
+    },
+    "measurements": {
+      "weight": "185",
+      "height": "5'10\"",
+      "bodyFat": "15",
+      "updated": "2026-07-11T22:00:00.000Z"
+    },
+    "plan": {
+      "phase": "Week 1-2: Foundation",
+      "nutrition": "High protein, moderate carb approach. 180g protein, 220g carbs, 60g fat.",
+      "training": "4-day upper/lower split with progressive overload.",
+      "recovery": "8+ hours sleep target, 2 rest days, foam rolling protocol.",
+      "habits": [
+        "Daily hydration tracking",
+        "Meal prep Sundays",
+        "Morning mobility 10min"
+      ]
+    },
+    "checkins": [],
+    "callSchedule": {
+      "credits": 1,
+      "nextCall": "2026-08-01T14:00:00.000Z",
+      "history": []
+    },
+    "phone": "+1 (555) 123-4567",
+    "timezone": "EST",
+    "dob": "1990-01-15",
+    "riskFlags": {
+      "level": "green",
+      "notes": ""
+    },
+    "coachNotes": "Demo client for portal testing.",
+    "healthData": null,
+    "habits": null,
+    "questionnaires": {}
+  }
+}
