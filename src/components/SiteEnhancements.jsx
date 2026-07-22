@@ -12,7 +12,6 @@ function setReactInputValue(input, value) {
 
 export default function SiteEnhancements() {
   useEffect(() => {
-    // Carry an affiliate code from cart/share links into checkout.
     const params = new URLSearchParams(window.location.search)
     const incoming = String(params.get('discount') || '').trim().toUpperCase()
     if (incoming === SUPPORTED_REP_CODE) sessionStorage.setItem(ACTIVE_CODE_KEY, incoming)
@@ -41,12 +40,14 @@ export default function SiteEnhancements() {
     }
 
     const enhancePage = () => {
-      // Remove any legacy PRE-ORDER badge anywhere on the storefront.
       document.querySelectorAll('span, p, div').forEach(el => {
         if (el.children.length === 0 && el.textContent?.trim().toLowerCase() === 'pre-order') {
           const parent = el.parentElement
-          if (parent && parent.children.length === 1) parent.style.display = 'none'
-          else el.style.display = 'none'
+          if (parent && parent.children.length === 1) {
+            if (parent.style.display !== 'none') parent.style.display = 'none'
+          } else if (el.style.display !== 'none') {
+            el.style.display = 'none'
+          }
         }
       })
 
@@ -57,7 +58,6 @@ export default function SiteEnhancements() {
       const activeCode = sessionStorage.getItem(ACTIVE_CODE_KEY)
       if (activeCode === SUPPORTED_REP_CODE) {
         if (!input.disabled && input.value.toUpperCase() !== 'LION10') {
-          // Checkout's legacy state accepts LION10; network attribution remains COLIN10.
           setReactInputValue(input, 'lion10')
           const apply = [...document.querySelectorAll('button')].find(b => b.textContent?.trim().toLowerCase() === 'apply')
           apply?.click()
