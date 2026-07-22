@@ -31,6 +31,7 @@ import ProgramsTerms from './pages/ProgramsTerms'
 import ProgramCheckoutPage from './pages/ProgramCheckoutPage'
 import AdminPage from './pages/AdminPage'
 import VIPPage from './pages/VIPPage'
+import RepPortalPage from './pages/RepPortalPage'
 import SEO from './components/SEO'
 
 function HomePage() {
@@ -81,6 +82,8 @@ export default function App() {
           <Route path="/programs/checkout" element={<ProgramCheckoutPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/vip" element={<VIPPage />} />
+          <Route path="/rep" element={<RepPortalPage />} />
+          <Route path="/rep/login" element={<RepPortalPage />} />
         </Routes>
       </CartProvider>
     </BrowserRouter>
