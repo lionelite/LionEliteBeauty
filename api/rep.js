@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import crypto from 'crypto'
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -10,8 +11,9 @@ const REPS = {
     username: 'Colin',
     code: 'COLIN10',
     discountPercent: 10,
-    passwordEnv: 'COLIN_REP_PASSWORD',
-    commissionEnv: 'COLIN_COMMISSION_PERCENT',
+    commissionPercent: 20,
+    // SHA-256 of the portal password. The clear-text password is not stored in this public repo.
+    passwordHash: 'a3c50093106c7a7023d19ab2707b9113df1ff0cb1897eb257f7c9b3c1ca34677',
   },
 }
 
@@ -23,11 +25,14 @@ function normalizeUsername(username) {
   return String(username || '').trim().toLowerCase()
 }
 
+function hashPassword(password) {
+  return crypto.createHash('sha256').update(String(password || '')).digest('hex')
+}
+
 async function getAllPaymentIntents() {
   const all = []
   let startingAfter
 
-  // Pull enough history for a real rep dashboard while respecting Stripe pagination.
   for (let page = 0; page < 20; page += 1) {
     const batch = await stripe.paymentIntents.list({
       limit: 100,
@@ -64,16 +69,7 @@ export default async function handler(req, res) {
   }
 
   const rep = REPS[normalizeUsername(username)]
-  if (!rep) {
-    return res.status(401).json({ error: 'Invalid username or password' })
-  }
-
-  const expectedPassword = process.env[rep.passwordEnv]
-  if (!expectedPassword) {
-    return res.status(503).json({ error: 'Rep portal password has not been configured yet.' })
-  }
-
-  if (String(password || '') !== String(expectedPassword)) {
+  if (!rep || hashPassword(password) !== rep.passwordHash) {
     return res.status(401).json({ error: 'Invalid username or password' })
   }
 
@@ -81,10 +77,7 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: 'Stripe is not configured' })
   }
 
-  const commissionPercentRaw = Number(process.env[rep.commissionEnv])
-  const commissionPercent = Number.isFinite(commissionPercentRaw) && commissionPercentRaw >= 0
-    ? commissionPercentRaw
-    : 0
+  const commissionPercent = rep.commissionPercent
 
   try {
     const intents = await getAllPaymentIntents()
@@ -119,7 +112,7 @@ export default async function handler(req, res) {
         code: rep.code,
         discountPercent: rep.discountPercent,
         commissionPercent,
-        commissionConfigured: commissionPercentRaw >= 0 && Number.isFinite(commissionPercentRaw),
+        commissionConfigured: true,
         shareLink: `https://lionelitebeauty.com/checkout?discount=${rep.code}`,
       },
       stats: {
@@ -129,7 +122,7 @@ export default async function handler(req, res) {
         latestSale: sales.length ? sales[0].date : null,
       },
       sales,
-      commissionBasis: 'Commission is calculated on the amount actually collected after the customer discount.',
+      commissionBasis: 'Commission is calculated at 20% of the amount actually collected after the customer discount.',
     })
   } catch (err) {
     console.error('Rep portal error:', err)
