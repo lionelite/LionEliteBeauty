@@ -32,6 +32,7 @@ import ProgramCheckoutPage from './pages/ProgramCheckoutPage'
 import AdminPage from './pages/AdminPage'
 import VIPPage from './pages/VIPPage'
 import RepPortalPage from './pages/RepPortalPage'
+import SiteEnhancements from './components/SiteEnhancements'
 import SEO from './components/SEO'
 
 function HomePage() {
@@ -58,6 +59,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <CartProvider>
+        <SiteEnhancements />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/programs/optimization" element={<OptimizationPage />} />
