@@ -61,7 +61,7 @@ export default function SkincarePage() {
           </div>
 
           <div className="grid grid-cols-1 gap-px" style={{ backgroundColor: '#E8DDD0' }}>
-            {skincareProducts.map((p, i) => {
+            {skincareProducts.filter(p => p.slug !== 'rejuvenate-serum').map((p, i) => {
               const isDark = p.bg === '#1A1A1A' || p.bg === '#2A2A2A'
               return (
                 <div key={p.slug} style={{ backgroundColor: p.bg }}>
