@@ -4,6 +4,11 @@ const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null
 
+const DISCOUNT_CODES = {
+  LION10: { percent: 10, rep: null },
+  COLIN10: { percent: 10, rep: 'Colin' },
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
@@ -14,20 +19,25 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { items, discountApplied } = req.body
+    const { items, discountApplied, discountCode } = req.body
 
     if (!items || !items.length) {
       return res.status(400).json({ error: 'No items in order' })
     }
 
-    // Calculate total amount in cents
     let totalCents = Math.round(
       items.reduce((sum, i) => sum + (i.priceNum || 0) * i.quantity, 0) * 100
     )
 
-    // Apply 10% discount if WELCOME10 was applied
-    if (discountApplied) {
-      totalCents = Math.round(totalCents * 0.9)
+    const normalizedCode = String(discountCode || '').trim().toUpperCase()
+    const discount = discountApplied ? DISCOUNT_CODES[normalizedCode] : null
+
+    if (discountApplied && !discount) {
+      return res.status(400).json({ error: 'Invalid discount code' })
+    }
+
+    if (discount) {
+      totalCents = Math.round(totalCents * (1 - discount.percent / 100))
     }
 
     if (totalCents < 50) {
@@ -45,13 +55,16 @@ export default async function handler(req, res) {
       ],
       metadata: {
         items: items.map(i => `${i.name} × ${i.quantity}`).join(', '),
-        discountApplied: discountApplied ? 'WELCOME10' : 'none',
+        discountCode: discount ? normalizedCode : 'none',
+        rep: discount?.rep || 'none',
+        discountPercent: discount ? String(discount.percent) : '0',
       },
     })
 
     return res.status(200).json({
       clientSecret: paymentIntent.client_secret,
       amount: totalCents,
+      discountCode: discount ? normalizedCode : null,
     })
   } catch (err) {
     console.error('Stripe error:', err)
