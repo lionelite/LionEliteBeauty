@@ -3,7 +3,7 @@ export const skincareProducts = [
     slug: 'ghk-cu-serum',
     name: 'GHK-Cu Intensive Serum',
     shortName: 'GHK-Cu Serum',
-    image: '/images/ghk-cu-bottle.png',
+    image: '/images/ghk-cu-serum-30ml.webp',
     price: '$69.99',
     size: '30ml',
     badge: 'Pre-Order',
