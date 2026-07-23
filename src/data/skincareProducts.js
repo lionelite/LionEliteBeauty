@@ -6,8 +6,8 @@ export const skincareProducts = [
     image: '/images/ghk-cu-serum-30ml.webp',
     price: '$69.99',
     size: '30ml',
-    badge: 'Pre-Order',
-    badgeColor: '#C9A96E',
+    badge: 'In Stock',
+    badgeColor: '#5BA87A',
     priceNum: 69.99,
     tagline: 'High-concentration copper peptide serum — pure, potent, precise',
     accent: '#C9A96E',
@@ -15,7 +15,7 @@ export const skincareProducts = [
     label: 'GHK-Cu',
     headline: 'Pure copper peptide. No filler. No shortcuts.',
     description:
-      'We\'re formulating the most concentrated GHK-Cu serum we\'ve ever created. No unnecessary additives — just a high-potency copper peptide complex designed to support the appearance of firmer, smoother, more youthful-looking skin. Purpose-built for those who want maximum peptide density in every drop.',
+      'Our high-concentration GHK-Cu serum is made with a peptide-first formula and no unnecessary additives — just a high-potency copper peptide complex designed to support the appearance of firmer, smoother, more youthful-looking skin. Purpose-built for those who want maximum peptide density in every drop.',
     whatYouNotice: [
       'Pure GHK-Cu complex — maximum peptide density',
       'Designed to support the appearance of skin firmness and density',
