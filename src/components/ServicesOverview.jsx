@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom'
 
 const skincare = [
-  { name: 'GHK-Cu Intensive Serum', tagline: 'High-potency copper peptide complex — pre-order now', price: '$69.99', accent: '#C9A96E', slug: 'ghk-cu-serum' },
+  { name: 'GHK-Cu Intensive Serum', tagline: 'High-potency copper peptide complex', price: '$69.99', accent: '#C9A96E', slug: 'ghk-cu-serum' },
   { name: 'GHK-Cu Peptide Face Wash', tagline: 'Helps nourish & support daily skin health', price: '$69.99', accent: '#C9A96E', slug: 'ghk-cu-face-wash' },
-  { name: 'Rejuvenate Serum', tagline: 'Supports the appearance of firmer, smoother skin', price: '$119.99', accent: '#8A9E85', slug: 'rejuvenate-serum' },
-  { name: 'Collagen Boost Face Cream', tagline: 'Supports the appearance of skin firmness overnight', price: '$99.99', accent: '#C9A96E', slug: 'collagen-boost-cream' },
   { name: 'KPV Recovery Moisturizer', tagline: 'Helps calm the appearance of redness & sensitivity', price: '$79.99', accent: '#8A7AB0', slug: 'kpv-moisturizer' },
   { name: 'Hydra Boost Body Wash', tagline: 'Helps nourish & hydrate skin all over', price: '$49.99', accent: '#7A9FBF', slug: 'hydra-boost-body-wash' },
-  { name: 'Post-Procedure Recovery Kit', tagline: 'Supports recovery appearance & skin comfort', price: '$189.99', accent: '#C9A96E', slug: 'recovery-kit' },
 ]
 
 const programs = [
@@ -24,7 +21,6 @@ export default function ServicesOverview() {
     <section id="services" style={{ backgroundColor: '#FAF7F2', padding: '100px 0' }}>
       <div className="max-w-7xl mx-auto px-6">
 
-        {/* Section header */}
         <div className="text-center mb-20">
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.3em', fontSize: '10px' }}
             className="uppercase mb-4">What We Offer</p>
@@ -37,7 +33,6 @@ export default function ServicesOverview() {
           </p>
         </div>
 
-        {/* ── SKINCARE ── */}
         <div className="mb-20">
           <div className="flex items-center gap-4 mb-10">
             <div style={{ width: '32px', height: '1px', backgroundColor: '#8A9E85' }}></div>
@@ -46,7 +41,7 @@ export default function ServicesOverview() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-px" style={{ backgroundColor: '#E0D5C5' }}>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-px" style={{ backgroundColor: '#E0D5C5' }}>
             {skincare.map((product) => (
               <div key={product.name}
                 style={{ backgroundColor: '#FFFFFF', padding: '32px' }}
@@ -73,7 +68,7 @@ export default function ServicesOverview() {
           <div style={{ backgroundColor: '#F5F0E8', border: '1px solid #E0D5C5', padding: '20px 32px', marginTop: '1px' }}
             className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', letterSpacing: '0.1em' }} className="uppercase">
-              Complete Skincare Bundle — All Products
+              Current Skincare Collection — 4 Products
             </p>
             <Link to="/skincare"
               style={{
@@ -83,12 +78,11 @@ export default function ServicesOverview() {
                 padding: '12px 28px', textDecoration: 'none',
               }}
               className="uppercase hover:opacity-90 transition-opacity whitespace-nowrap">
-              Shop the Bundle — $499.99
+              Shop Skincare →
             </Link>
           </div>
         </div>
 
-        {/* ── WELLNESS PROGRAMS ── */}
         <div>
           <div className="flex items-center gap-4 mb-10">
             <div style={{ width: '32px', height: '1px', backgroundColor: '#8A9E85' }}></div>
