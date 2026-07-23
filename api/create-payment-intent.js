@@ -29,7 +29,12 @@ export default async function handler(req, res) {
       items.reduce((sum, i) => sum + (i.priceNum || 0) * i.quantity, 0) * 100
     )
 
-    const normalizedCode = String(discountCode || '').trim().toUpperCase()
+    // Older checkout builds only sent discountApplied. Preserve LION10 as the
+    // default in that case, while allowing referral codes such as COLIN10 to
+    // be passed explicitly by the current checkout bridge.
+    const normalizedCode = String(discountCode || (discountApplied ? 'LION10' : ''))
+      .trim()
+      .toUpperCase()
     const discount = discountApplied ? DISCOUNT_CODES[normalizedCode] : null
 
     if (discountApplied && !discount) {
