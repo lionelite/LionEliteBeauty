@@ -17,51 +17,55 @@ function setReactInputValue(input, value) {
 
 export default function ColinDiscountBridge() {
   useEffect(() => {
-    if (window.location.pathname !== '/checkout') return
+    let appliedForVisit = false
 
-    const params = new URLSearchParams(window.location.search)
-    const requestedCode = (params.get('discount') || '').trim().toUpperCase()
-    const savedCode = (sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
-    const activeCode = requestedCode || savedCode
+    const syncColinDiscount = () => {
+      const onCheckout = window.location.pathname === '/checkout'
+      if (!onCheckout) {
+        appliedForVisit = false
+        return
+      }
 
-    if (activeCode !== 'COLIN10') return
+      const params = new URLSearchParams(window.location.search)
+      const requestedCode = (params.get('discount') || '').trim().toUpperCase()
+      const savedCode = (sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
+      const activeCode = requestedCode || savedCode
 
-    sessionStorage.setItem(ACTIVE_CODE_KEY, 'COLIN10')
+      if (activeCode !== 'COLIN10' || appliedForVisit) return
 
-    // The existing checkout accepts LION10 in its local form state. We use
-    // that existing 10% calculation for the UI, while the fetch bridge below
-    // sends COLIN10 to the server so Stripe records Colin attribution.
-    let attempts = 0
-    const applyToCheckout = () => {
-      attempts += 1
+      sessionStorage.setItem(ACTIVE_CODE_KEY, 'COLIN10')
+
+      // Checkout currently uses its existing LION10 branch for the visible 10%
+      // calculation. The payment request is translated back to COLIN10 below so
+      // Stripe stores Colin attribution and the server validates the correct code.
       const inputs = Array.from(document.querySelectorAll('input[placeholder="Enter code"]'))
       const input = inputs.find(el => !el.disabled)
-      if (!input) return attempts < 30
+      if (!input) return
 
       setReactInputValue(input, 'lion10')
 
-      const container = input.parentElement
-      const button = container?.querySelector('button')
+      const button = input.parentElement?.querySelector('button')
       if (button && !button.disabled) {
         button.click()
-        // Keep the customer-facing field showing the code they entered.
+        appliedForVisit = true
         requestAnimationFrame(() => {
-          if (input) input.value = 'COLIN10'
+          input.value = 'COLIN10'
         })
-        return false
       }
-      return attempts < 30
     }
 
-    const timer = window.setInterval(() => {
-      const keepTrying = applyToCheckout()
-      if (!keepTrying) window.clearInterval(timer)
-    }, 150)
+    // Keep this alive for React Router client-side navigation from /cart to
+    // /checkout. The component itself stays mounted, so a one-time pathname
+    // check would miss that transition.
+    const timer = window.setInterval(syncColinDiscount, 150)
+    syncColinDiscount()
 
     const originalFetch = window.fetch.bind(window)
     window.fetch = async (input, init = {}) => {
       const url = typeof input === 'string' ? input : input?.url || ''
-      if (url.includes('/api/create-payment-intent') && init?.body) {
+      const savedCode = (sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
+
+      if (savedCode === 'COLIN10' && url.includes('/api/create-payment-intent') && init?.body) {
         try {
           const body = JSON.parse(init.body)
           if (body.discountApplied) {
@@ -72,6 +76,7 @@ export default function ColinDiscountBridge() {
           // Leave non-JSON requests untouched.
         }
       }
+
       return originalFetch(input, init)
     }
 
