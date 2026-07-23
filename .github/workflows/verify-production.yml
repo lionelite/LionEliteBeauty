@@ -1,0 +1,125 @@
+name: Verify Production
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  verify-production:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for Lion Elite Beauty production and verify GHK-Cu
+        id: verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERIFY_URL="https://lionelitebeauty.com/api/verify-ghk-cu"
+          PRODUCT_URL="https://lionelitebeauty.com/skincare/ghk-cu-serum"
+          HOME_URL="https://lionelitebeauty.com/"
+          EXPECTED_COMMIT="${GITHUB_SHA}"
+
+          success=0
+          response=""
+          product_status=""
+          home_status=""
+
+          for attempt in $(seq 1 30); do
+            echo "Production verification attempt ${attempt}/30"
+
+            response="$(curl -fsSL --max-time 20 "$VERIFY_URL" 2>/dev/null || true)"
+            product_status="$(curl -sSL -o /tmp/product.html -w '%{http_code}' --max-time 20 "$PRODUCT_URL" || true)"
+            home_status="$(curl -sSL -o /tmp/home.html -w '%{http_code}' --max-time 20 "$HOME_URL" || true)"
+
+            if python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$home_status" <<'PY'
+import json, sys
+raw, expected_commit, product_status, home_status = sys.argv[1:]
+try:
+    data = json.loads(raw)
+except Exception:
+    raise SystemExit(1)
+
+product = data.get('product') or {}
+checks = [
+    data.get('ok') is True,
+    product.get('slug') == 'ghk-cu-serum',
+    product.get('badge') == 'In Stock',
+    product.get('price') == '$69.99',
+    product.get('priceNum') == 69.99,
+    product.get('purchasable') is True,
+    product.get('route') == '/skincare/ghk-cu-serum',
+    product_status == '200',
+    home_status == '200',
+]
+# Vercel exposes the Git commit SHA when available. Require it to match
+# when present; tolerate null if the hosting environment omits it.
+deployed_commit = data.get('commit')
+if deployed_commit:
+    checks.append(deployed_commit == expected_commit)
+raise SystemExit(0 if all(checks) else 1)
+PY
+            then
+              success=1
+              break
+            fi
+
+            sleep 10
+          done
+
+          if [ "$success" -ne 1 ]; then
+            echo "Production verification failed after retries."
+            echo "Verification response: $response"
+            echo "Product HTTP status: $product_status"
+            echo "Homepage HTTP status: $home_status"
+            exit 1
+          fi
+
+          mkdir -p verification
+          python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$home_status" <<'PY'
+import json, sys
+from datetime import datetime, timezone
+raw, expected_commit, product_status, home_status = sys.argv[1:]
+data = json.loads(raw)
+report = {
+    'verified': True,
+    'verified_at_utc': datetime.now(timezone.utc).isoformat(),
+    'expected_git_commit': expected_commit,
+    'deployed_git_commit': data.get('commit'),
+    'environment': data.get('environment'),
+    'homepage': {
+        'url': 'https://lionelitebeauty.com/',
+        'http_status': int(home_status),
+    },
+    'product_page': {
+        'url': 'https://lionelitebeauty.com/skincare/ghk-cu-serum',
+        'http_status': int(product_status),
+    },
+    'product': data.get('product'),
+}
+with open('verification/production-latest.json', 'w') as f:
+    json.dump(report, f, indent=2)
+    f.write('\n')
+PY
+
+          cat verification/production-latest.json
+
+      - name: Commit verified production report
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add verification/production-latest.json
+          if git diff --cached --quiet; then
+            echo "Verification report unchanged."
+            exit 0
+          fi
+          git commit -m "chore: record verified production state [skip ci]"
+          git push
