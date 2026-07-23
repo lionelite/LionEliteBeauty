@@ -26,37 +26,39 @@ export default function ColinDiscountBridge() {
         return
       }
 
+      const inputs = Array.from(document.querySelectorAll('input[placeholder="Enter code"]'))
+      const input = inputs.find(el => !el.disabled)
+
       const params = new URLSearchParams(window.location.search)
       const requestedCode = (params.get('discount') || '').trim().toUpperCase()
       const savedCode = (sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
-      const activeCode = requestedCode || savedCode
+      const typedCode = (input?.value || '').trim().toUpperCase()
+      const activeCode = requestedCode || savedCode || typedCode
 
-      if (activeCode !== 'COLIN10' || appliedForVisit) return
+      if (activeCode !== 'COLIN10' || appliedForVisit || !input) return
 
       sessionStorage.setItem(ACTIVE_CODE_KEY, 'COLIN10')
 
-      // Checkout currently uses its existing LION10 branch for the visible 10%
-      // calculation. The payment request is translated back to COLIN10 below so
-      // Stripe stores Colin attribution and the server validates the correct code.
-      const inputs = Array.from(document.querySelectorAll('input[placeholder="Enter code"]'))
-      const input = inputs.find(el => !el.disabled)
-      if (!input) return
-
+      // Checkout's existing 10% UI branch recognizes LION10. Translate COLIN10
+      // into that branch for calculation, then translate the payment request back
+      // to COLIN10 below so Stripe keeps Colin attribution.
       setReactInputValue(input, 'lion10')
 
       const button = input.parentElement?.querySelector('button')
       if (button && !button.disabled) {
-        button.click()
-        appliedForVisit = true
-        requestAnimationFrame(() => {
-          input.value = 'COLIN10'
-        })
+        // Give React one tick to receive the translated input value before Apply.
+        window.setTimeout(() => {
+          button.click()
+          appliedForVisit = true
+          requestAnimationFrame(() => {
+            input.value = 'COLIN10'
+          })
+        }, 0)
       }
     }
 
     // Keep this alive for React Router client-side navigation from /cart to
-    // /checkout. The component itself stays mounted, so a one-time pathname
-    // check would miss that transition.
+    // /checkout and for customers manually typing COLIN10 into the code field.
     const timer = window.setInterval(syncColinDiscount, 150)
     syncColinDiscount()
 
