@@ -17,49 +17,70 @@ function setReactInputValue(input, value) {
 
 export default function ColinDiscountBridge() {
   useEffect(() => {
-    let appliedForVisit = false
+    let appliedPath = ''
 
     const syncColinDiscount = () => {
-      const onCheckout = window.location.pathname === '/checkout'
-      if (!onCheckout) {
-        appliedForVisit = false
+      const path = window.location.pathname
+      const isCart = path === '/cart'
+      const isCheckout = path === '/checkout'
+
+      if (!isCart && !isCheckout) {
+        appliedPath = ''
         return
       }
 
       const inputs = Array.from(document.querySelectorAll('input[placeholder="Enter code"]'))
-      const input = inputs.find(el => !el.disabled)
+      const input = inputs.find(el => !el.disabled) || inputs[0]
+      if (!input) return
 
       const params = new URLSearchParams(window.location.search)
       const requestedCode = (params.get('discount') || '').trim().toUpperCase()
       const savedCode = (sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
-      const typedCode = (input?.value || '').trim().toUpperCase()
+      const typedCode = (input.value || '').trim().toUpperCase()
       const activeCode = requestedCode || savedCode || typedCode
 
-      if (activeCode !== 'COLIN10' || appliedForVisit || !input) return
+      if (activeCode !== 'COLIN10') return
 
       sessionStorage.setItem(ACTIVE_CODE_KEY, 'COLIN10')
 
-      // Checkout's existing 10% UI branch recognizes LION10. Translate COLIN10
-      // into that branch for calculation, then translate the payment request back
-      // to COLIN10 below so Stripe keeps Colin attribution.
-      setReactInputValue(input, 'lion10')
-
       const button = input.parentElement?.querySelector('button')
-      if (button && !button.disabled) {
-        // Give React one tick to receive the translated input value before Apply.
-        window.setTimeout(() => {
-          button.click()
-          appliedForVisit = true
-          requestAnimationFrame(() => {
-            input.value = 'COLIN10'
-          })
-        }, 0)
+      if (!button || button.disabled) return
+
+      const buttonText = (button.textContent || '').trim().toUpperCase()
+      if (buttonText === 'REMOVE') {
+        appliedPath = path
+        return
       }
+
+      if (appliedPath === path) return
+
+      if (isCart) {
+        // Cart now understands COLIN10 directly. Re-fire the React input event and
+        // trigger Apply once so pasted/autofilled codes work just like typed codes.
+        setReactInputValue(input, 'COLIN10')
+        window.setTimeout(() => {
+          const currentText = (button.textContent || '').trim().toUpperCase()
+          if (currentText === 'APPLY') button.click()
+          appliedPath = path
+        }, 0)
+        return
+      }
+
+      // Checkout's legacy visible-discount branch still recognizes LION10.
+      // Feed that value into React for the 10% calculation while retaining
+      // COLIN10 in sessionStorage and in the payment request for Colin attribution.
+      setReactInputValue(input, 'LION10')
+      window.setTimeout(() => {
+        const currentText = (button.textContent || '').trim().toUpperCase()
+        if (currentText === 'APPLY') button.click()
+        appliedPath = path
+        requestAnimationFrame(() => {
+          input.value = 'COLIN10'
+        })
+      }, 0)
     }
 
-    // Keep this alive for React Router client-side navigation from /cart to
-    // /checkout and for customers manually typing COLIN10 into the code field.
-    const timer = window.setInterval(syncColinDiscount, 150)
+    const timer = window.setInterval(syncColinDiscount, 120)
     syncColinDiscount()
 
     const originalFetch = window.fetch.bind(window)
