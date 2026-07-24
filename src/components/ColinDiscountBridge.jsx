@@ -17,76 +17,59 @@ function setReactInputValue(input, value) {
 
 export default function ColinDiscountBridge() {
   useEffect(() => {
-    let appliedPath = ''
+    let replayingApply = false
 
-    const syncColinDiscount = () => {
-      const path = window.location.pathname
-      const isCart = path === '/cart'
-      const isCheckout = path === '/checkout'
-
-      if (!isCart && !isCheckout) {
-        appliedPath = ''
-        return
+    const rememberColin = (event) => {
+      const input = event.target
+      if (!(input instanceof window.HTMLInputElement)) return
+      if (input.placeholder !== 'Enter code') return
+      if (String(input.value || '').trim().toUpperCase() === 'COLIN10') {
+        sessionStorage.setItem(ACTIVE_CODE_KEY, 'COLIN10')
       }
+    }
 
-      const inputs = Array.from(document.querySelectorAll('input[placeholder="Enter code"]'))
-      const input = inputs.find(el => !el.disabled) || inputs[0]
+    // Checkout's legacy handler only recognizes LION10. Keep COLIN10 visible while
+    // the customer types; translate to LION10 only for the actual Apply handler,
+    // then immediately restore the visible field to COLIN10.
+    const handleApplyCapture = (event) => {
+      if (replayingApply || window.location.pathname !== '/checkout') return
+
+      const button = event.target?.closest?.('button')
+      if (!button) return
+      if (String(button.textContent || '').trim().toUpperCase() !== 'APPLY') return
+
+      const input = button.parentElement?.querySelector('input[placeholder="Enter code"]')
       if (!input) return
 
-      const params = new URLSearchParams(window.location.search)
-      const requestedCode = (params.get('discount') || '').trim().toUpperCase()
-      const savedCode = (sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
-      const typedCode = (input.value || '').trim().toUpperCase()
-      const activeCode = requestedCode || savedCode || typedCode
+      const code = String(input.value || '').trim().toUpperCase()
+      if (code !== 'COLIN10') return
 
-      if (activeCode !== 'COLIN10') return
-
+      event.preventDefault()
+      event.stopPropagation()
+      event.stopImmediatePropagation?.()
       sessionStorage.setItem(ACTIVE_CODE_KEY, 'COLIN10')
 
-      const button = input.parentElement?.querySelector('button')
-      if (!button || button.disabled) return
-
-      const buttonText = (button.textContent || '').trim().toUpperCase()
-      if (buttonText === 'REMOVE') {
-        appliedPath = path
-        return
-      }
-
-      if (appliedPath === path) return
-
-      if (isCart) {
-        // Cart now understands COLIN10 directly. Re-fire the React input event and
-        // trigger Apply once so pasted/autofilled codes work just like typed codes.
-        setReactInputValue(input, 'COLIN10')
-        window.setTimeout(() => {
-          const currentText = (button.textContent || '').trim().toUpperCase()
-          if (currentText === 'APPLY') button.click()
-          appliedPath = path
-        }, 0)
-        return
-      }
-
-      // Checkout's legacy visible-discount branch still recognizes LION10.
-      // Feed that value into React for the 10% calculation while retaining
-      // COLIN10 in sessionStorage and in the payment request for Colin attribution.
       setReactInputValue(input, 'LION10')
+      replayingApply = true
+
       window.setTimeout(() => {
-        const currentText = (button.textContent || '').trim().toUpperCase()
-        if (currentText === 'APPLY') button.click()
-        appliedPath = path
-        requestAnimationFrame(() => {
+        button.click()
+        replayingApply = false
+        window.setTimeout(() => {
           input.value = 'COLIN10'
-        })
+        }, 0)
       }, 0)
     }
 
-    const timer = window.setInterval(syncColinDiscount, 120)
-    syncColinDiscount()
+    document.addEventListener('input', rememberColin, true)
+    document.addEventListener('click', handleApplyCapture, true)
 
+    // Preserve COLIN10 attribution at payment time. The server validates COLIN10
+    // directly and records rep=Colin in Stripe metadata.
     const originalFetch = window.fetch.bind(window)
     window.fetch = async (input, init = {}) => {
       const url = typeof input === 'string' ? input : input?.url || ''
-      const savedCode = (sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
+      const savedCode = String(sessionStorage.getItem(ACTIVE_CODE_KEY) || '').trim().toUpperCase()
 
       if (savedCode === 'COLIN10' && url.includes('/api/create-payment-intent') && init?.body) {
         try {
@@ -104,7 +87,8 @@ export default function ColinDiscountBridge() {
     }
 
     return () => {
-      window.clearInterval(timer)
+      document.removeEventListener('input', rememberColin, true)
+      document.removeEventListener('click', handleApplyCapture, true)
       window.fetch = originalFetch
     }
   }, [])
