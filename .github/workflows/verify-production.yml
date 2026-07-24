@@ -17,19 +17,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Wait for Lion Elite Beauty production and verify GHK-Cu
+      - name: Wait for Lion Elite Beauty production and verify storefront
         id: verify
         shell: bash
         run: |
           set -euo pipefail
           VERIFY_URL="https://lionelitebeauty.com/api/verify-ghk-cu"
           PRODUCT_URL="https://lionelitebeauty.com/skincare/ghk-cu-serum"
+          CART_URL="https://lionelitebeauty.com/cart"
+          CHECKOUT_URL="https://lionelitebeauty.com/checkout"
           HOME_URL="https://lionelitebeauty.com/"
           EXPECTED_COMMIT="${GITHUB_SHA}"
 
           success=0
           response=""
           product_status=""
+          cart_status=""
+          checkout_status=""
           home_status=""
 
           for attempt in $(seq 1 30); do
@@ -37,11 +41,13 @@ jobs:
 
             response="$(curl -fsSL --max-time 20 "$VERIFY_URL" 2>/dev/null || true)"
             product_status="$(curl -sSL -o /tmp/product.html -w '%{http_code}' --max-time 20 "$PRODUCT_URL" || true)"
+            cart_status="$(curl -sSL -o /tmp/cart.html -w '%{http_code}' --max-time 20 "$CART_URL" || true)"
+            checkout_status="$(curl -sSL -o /tmp/checkout.html -w '%{http_code}' --max-time 20 "$CHECKOUT_URL" || true)"
             home_status="$(curl -sSL -o /tmp/home.html -w '%{http_code}' --max-time 20 "$HOME_URL" || true)"
 
-            if python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$home_status" <<'PY'
+            if python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$cart_status" "$checkout_status" "$home_status" <<'PY'
 import json, sys
-raw, expected_commit, product_status, home_status = sys.argv[1:]
+raw, expected_commit, product_status, cart_status, checkout_status, home_status = sys.argv[1:]
 try:
     data = json.loads(raw)
 except Exception:
@@ -57,6 +63,8 @@ checks = [
     product.get('purchasable') is True,
     product.get('route') == '/skincare/ghk-cu-serum',
     product_status == '200',
+    cart_status == '200',
+    checkout_status == '200',
     home_status == '200',
 ]
 # Vercel exposes the Git commit SHA when available. Require it to match
@@ -78,15 +86,17 @@ PY
             echo "Production verification failed after retries."
             echo "Verification response: $response"
             echo "Product HTTP status: $product_status"
+            echo "Cart HTTP status: $cart_status"
+            echo "Checkout HTTP status: $checkout_status"
             echo "Homepage HTTP status: $home_status"
             exit 1
           fi
 
           mkdir -p verification
-          python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$home_status" <<'PY'
+          python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$cart_status" "$checkout_status" "$home_status" <<'PY'
 import json, sys
 from datetime import datetime, timezone
-raw, expected_commit, product_status, home_status = sys.argv[1:]
+raw, expected_commit, product_status, cart_status, checkout_status, home_status = sys.argv[1:]
 data = json.loads(raw)
 report = {
     'verified': True,
@@ -101,6 +111,14 @@ report = {
     'product_page': {
         'url': 'https://lionelitebeauty.com/skincare/ghk-cu-serum',
         'http_status': int(product_status),
+    },
+    'cart_page': {
+        'url': 'https://lionelitebeauty.com/cart',
+        'http_status': int(cart_status),
+    },
+    'checkout_page': {
+        'url': 'https://lionelitebeauty.com/checkout',
+        'http_status': int(checkout_status),
     },
     'product': data.get('product'),
 }
