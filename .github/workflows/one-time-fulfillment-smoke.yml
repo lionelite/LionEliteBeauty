@@ -1,0 +1,78 @@
+name: One-Time Fulfillment Smoke Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/one-time-fulfillment-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  fulfillment-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Exercise production order storage and tracking email
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://www.lionelitebeauty.com'
+          ADMIN_PASSWORD="$(python3 - <<'PY'
+import re
+text = open('api/admin.js', encoding='utf-8').read()
+m = re.search(r"const ADMIN_PASSWORD = '([^']+)'", text)
+if not m:
+    raise SystemExit('Admin password not found for smoke test')
+print(m.group(1))
+PY
+          )"
+          ORDER="LEB-QA-$(date +%s)"
+
+          echo "Creating synthetic QA order: $ORDER"
+          CREATE="$(curl -fsS "$BASE/api/orders" \
+            -H 'content-type: application/json' \
+            --data-binary "{\"action\":\"create\",\"orderNumber\":\"$ORDER\",\"name\":\"Lion Elite QA\",\"email\":\"info@lionelitewellness.com\",\"phone\":\"\",\"address\":\"QA TEST - DO NOT SHIP\",\"items\":[{\"name\":\"GHK-Cu Intensive Serum\",\"quantity\":1,\"price\":69.99}],\"paymentMethod\":\"stripe\",\"stripePaymentId\":\"qa_no_charge\",\"discountCode\":\"None\"}")"
+          python3 - "$CREATE" "$ORDER" <<'PY'
+import json, sys
+obj=json.loads(sys.argv[1]); order=sys.argv[2]
+assert obj.get('success') is True, obj
+saved=obj.get('order') or {}
+assert saved.get('orderNumber') == order, saved
+assert saved.get('fulfillmentStatus') == 'processing', saved
+assert saved.get('total') == 69.99, saved
+print('CREATE_OK')
+PY
+
+          echo 'Listing orders through admin authentication'
+          LIST="$(curl -fsS "$BASE/api/orders" \
+            -H 'content-type: application/json' \
+            --data-binary "{\"action\":\"list\",\"username\":\"admin\",\"password\":\"$ADMIN_PASSWORD\"}")"
+          python3 - "$LIST" "$ORDER" <<'PY'
+import json, sys
+obj=json.loads(sys.argv[1]); order=sys.argv[2]
+assert obj.get('authenticated') is True and obj.get('role') == 'admin', obj
+rows=obj.get('orders') or []
+assert any(x.get('orderNumber') == order for x in rows), rows[:3]
+print('LIST_OK')
+PY
+
+          echo 'Sending tracking notification to business QA inbox'
+          TRACK="$(curl -fsS "$BASE/api/orders" \
+            -H 'content-type: application/json' \
+            --data-binary "{\"action\":\"update-tracking\",\"username\":\"admin\",\"password\":\"$ADMIN_PASSWORD\",\"orderNumber\":\"$ORDER\",\"carrier\":\"USPS\",\"trackingNumber\":\"TEST-$ORDER\"}")"
+          python3 - "$TRACK" "$ORDER" <<'PY'
+import json, sys
+obj=json.loads(sys.argv[1]); order=sys.argv[2]
+assert obj.get('success') is True, obj
+saved=obj.get('order') or {}
+assert saved.get('orderNumber') == order, saved
+assert saved.get('fulfillmentStatus') == 'shipped', saved
+assert saved.get('carrier') == 'USPS', saved
+assert saved.get('trackingSentAt'), saved
+print('TRACKING_OK', order)
+PY
