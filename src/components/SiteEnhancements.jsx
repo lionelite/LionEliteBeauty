@@ -20,6 +20,16 @@ export default function SiteEnhancements() {
     window.fetch = async (input, init = {}) => {
       const url = typeof input === 'string' ? input : input?.url || ''
       const activeCode = sessionStorage.getItem(ACTIVE_CODE_KEY)
+      let orderBody = null
+
+      if (init?.body && url.includes('/api/send')) {
+        try {
+          const parsed = JSON.parse(init.body)
+          if (parsed.type === 'order') orderBody = parsed
+        } catch {
+          orderBody = null
+        }
+      }
 
       if (activeCode === SUPPORTED_REP_CODE && init?.body && (url.includes('/api/create-payment-intent') || url.includes('/api/send'))) {
         try {
@@ -30,13 +40,34 @@ export default function SiteEnhancements() {
           }
           if (url.includes('/api/send') && body.type === 'order') {
             body.discountCode = SUPPORTED_REP_CODE
+            orderBody = body
           }
           init = { ...init, body: JSON.stringify(body) }
         } catch {
           // Preserve the original request if it is not JSON.
         }
       }
-      return originalFetch(input, init)
+
+      const response = await originalFetch(input, init)
+
+      // Once both admin + customer confirmation emails succeed, persist the same
+      // order in the fulfillment database using the exact confirmation number.
+      if (url.includes('/api/send') && orderBody?.type === 'order' && response.ok) {
+        try {
+          const result = await response.clone().json()
+          if (result?.orderNumber) {
+            await originalFetch('/api/orders', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'create', orderNumber: result.orderNumber, ...orderBody }),
+            })
+          }
+        } catch (err) {
+          console.error('Order persistence error:', err)
+        }
+      }
+
+      return response
     }
 
     const enhancePage = () => {
