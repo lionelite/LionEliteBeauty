@@ -32,6 +32,7 @@ import ProgramCheckoutPage from './pages/ProgramCheckoutPage'
 import AdminPage from './pages/AdminPage'
 import VIPPage from './pages/VIPPage'
 import RepPortalPage from './pages/RepPortalPage'
+import OrdersPage from './pages/OrdersPage'
 import SiteEnhancements from './components/SiteEnhancements'
 import ColinDiscountBridge from './components/ColinDiscountBridge'
 import SEO from './components/SEO'
@@ -88,6 +89,8 @@ export default function App() {
           <Route path="/vip" element={<VIPPage />} />
           <Route path="/rep" element={<RepPortalPage />} />
           <Route path="/rep/login" element={<RepPortalPage />} />
+          <Route path="/rep/orders" element={<OrdersPage />} />
+          <Route path="/admin/orders" element={<OrdersPage />} />
         </Routes>
       </CartProvider>
     </BrowserRouter>
