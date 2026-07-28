@@ -2,6 +2,10 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// Where owner/admin notifications go. Configurable so alerts land in an inbox
+// the owner actually watches; falls back to the original hardcoded address.
+const ADMIN_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL || 'orders@lionelitebeauty.com'
+
 function generateOrderNumber() {
   const date = new Date()
   const y = date.getFullYear()
@@ -436,7 +440,7 @@ export default async function handler(req, res) {
       const [adminRes, clientRes] = await Promise.all([
         resend.emails.send({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
-          to: ['orders@lionelitebeauty.com'],
+          to: [ADMIN_EMAIL],
           subject: `New Order #${orderNumber}: ${items.map(i => i.name).join(', ')} — ${body.name}`,
           html: wrap(adminBody({
             name: body.name, email: body.email,
@@ -473,7 +477,7 @@ export default async function handler(req, res) {
       const [adminRes, clientRes] = await Promise.all([
         resend.emails.send({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
-          to: ['orders@lionelitebeauty.com'],
+          to: [ADMIN_EMAIL],
           subject: `Program Enrollment: ${tierInfo.label} — ${progName} — ${body.name} ${body.vipId ? `(${body.vipId})` : ''}`,
           html: wrap(programAdminBody({
             name: body.name, email: body.email,
@@ -505,7 +509,7 @@ export default async function handler(req, res) {
       const [adminRes, clientRes] = await Promise.all([
         resend.emails.send({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
-          to: ['orders@lionelitebeauty.com'],
+          to: [ADMIN_EMAIL],
           subject: `New Application: ${body.program} — ${body.name}`,
           html: wrap(adminBody({
             name: body.name, email: body.email,
