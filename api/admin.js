@@ -4,15 +4,28 @@
 //
 // Simple admin authentication for the business dashboard.
 
-const ADMIN_EMAIL = 'admin@lionelitebeauty.com'
-const ADMIN_PASSWORD = 'LionElite9903'
-const VIP_ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'lionelite-admin-secret'
+import { verifyAdminLogin, adminApiToken, secureToken, safeEqual } from './_auth.js'
 
+// Credentials and tokens are environment-only and fail closed — no literals in
+// source, no published defaults. See api/_auth.js.
 function generateAdminToken() {
-  return 'adm-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+  return `adm-${secureToken(24)}`
 }
 
+// NOTE: serverless instances do not share memory, so this session is only
+// valid on the instance that issued it. It is a convenience gate in front of
+// the env-backed admin token, not the security boundary itself.
 let adminSession = null
+const SESSION_TTL_MS = 12 * 60 * 60 * 1000
+
+function sessionValid(token) {
+  if (!adminSession || !token) return false
+  if (Date.now() - Date.parse(adminSession.loggedInAt) > SESSION_TTL_MS) {
+    adminSession = null
+    return false
+  }
+  return safeEqual(token, adminSession.token)
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -22,30 +35,33 @@ export default async function handler(req, res) {
   const { action, email, password, token } = req.body
 
   if (action === 'login') {
-    if (email?.trim().toLowerCase() !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-      return res.status(403).json({ error: 'Invalid credentials' })
+    const login = verifyAdminLogin(email, password)
+    if (!login.ok) {
+      return res.status(login.status).json({ error: login.error })
     }
     adminSession = { token: generateAdminToken(), loggedInAt: new Date().toISOString() }
     return res.status(200).json({
       message: 'Login successful',
       token: adminSession.token,
-      email: ADMIN_EMAIL,
-      vipAdminToken: VIP_ADMIN_TOKEN,
+      email: login.email,
+      // The privileged API token is returned only to an authenticated admin
+      // and is never defaulted; if unset server-side this is null.
+      vipAdminToken: adminApiToken(),
     })
   }
 
   if (action === 'get-vip-token') {
-    if (!token || token !== adminSession?.token) {
+    if (!sessionValid(token)) {
       return res.status(403).json({ error: 'Not authenticated' })
     }
-    return res.status(200).json({ vipAdminToken: VIP_ADMIN_TOKEN })
+    return res.status(200).json({ vipAdminToken: adminApiToken() })
   }
 
   if (action === 'verify') {
-    if (!token || token !== adminSession?.token) {
+    if (!sessionValid(token)) {
       return res.status(403).json({ error: 'Not authenticated' })
     }
-    return res.status(200).json({ valid: true, email: ADMIN_EMAIL })
+    return res.status(200).json({ valid: true, email: process.env.ADMIN_EMAIL || null })
   }
 
   if (action === 'logout') {

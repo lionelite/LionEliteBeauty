@@ -93,7 +93,9 @@ export default function VIPPage() {
       await fetch('/api/vip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'update-client', email: account.email, token: 'lionelite-admin-secret', ...data }),
+        // Privileged tokens must never be embedded in client code. The client
+        // updates its own record using the session token issued at login.
+        body: JSON.stringify({ action: 'update-client', email: account.email, token: account.token, ...data }),
       })
       setSaveMsg('Saved')
       setTimeout(() => setSaveMsg(''), 2000)

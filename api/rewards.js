@@ -45,6 +45,24 @@ function makeUser(email, name) {
 function userKey(email) { return `rewards:user:${email.toLowerCase().trim()}` }
 function emailKey(rewardId) { return `rewards:email:${rewardId}` }
 
+// Orders live under the same Redis namespace used by api/orders.js. Read-only
+// here except for stamping the one-time rewardsGranted flag.
+function orderKey(orderNumber) { return `orders:beauty:${orderNumber}` }
+
+async function loadOrder(orderNumber) {
+  const r = getRedis()
+  const raw = r ? await r.get(orderKey(orderNumber)) : memStore.get(orderKey(orderNumber))
+  if (!raw) return null
+  return typeof raw === 'string' ? JSON.parse(raw) : raw
+}
+
+async function markOrderRewarded(order) {
+  const r = getRedis()
+  const payload = JSON.stringify(order)
+  if (r) await r.set(orderKey(order.orderNumber), payload)
+  else memStore.set(orderKey(order.orderNumber), payload)
+}
+
 // ── Storage operations ────────────────────────────────────────────────────
 async function storeUser(user) {
   const r = getRedis()
@@ -119,17 +137,42 @@ export default async function handler(req, res) {
     }
 
     // ── Add points after purchase ───────────────────────────────────────
+    // SECURITY: points are derived from a stored, paid order — never from an
+    // amount supplied by the caller. Each order can grant points exactly once,
+    // and the order's email must match the account being credited.
     if (action === 'add-points') {
       const user = await loadUser(email)
       if (!user) {
         return res.status(404).json({ error: 'Account not found' })
       }
 
-      const earned = orderAmountCents ? pointsForOrder(orderAmountCents) : 0
+      const orderNumber = String(req.body.orderNumber || '').trim()
+      if (!orderNumber) {
+        return res.status(400).json({ error: 'orderNumber is required' })
+      }
+
+      const order = await loadOrder(orderNumber)
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' })
+      }
+      if (String(order.email || '').toLowerCase() !== String(email).toLowerCase()) {
+        return res.status(403).json({ error: 'Order does not belong to this account' })
+      }
+      if (order.paymentStatus !== 'paid') {
+        return res.status(409).json({ error: 'Order is not paid' })
+      }
+      if (order.rewardsGranted) {
+        return res.status(200).json({ ...user, pointsEarned: 0, message: 'Points already granted for this order.' })
+      }
+
+      const earned = pointsForOrder(Math.round(Number(order.total || 0) * 100))
       user.points += earned
       user.lifetimePoints += earned
       user.orderCount += 1
       await storeUser(user)
+
+      order.rewardsGranted = true
+      await markOrderRewarded(order)
 
       return res.status(200).json({
         ...user,
