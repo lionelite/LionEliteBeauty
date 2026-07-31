@@ -33,6 +33,7 @@ import AdminPage from './pages/AdminPage'
 import VIPPage from './pages/VIPPage'
 import RepPortalPage from './pages/RepPortalPage'
 import OrdersPage from './pages/OrdersPage'
+import PeptideCheckInPage from './pages/PeptideCheckInPage'
 import SiteEnhancements from './components/SiteEnhancements'
 import ColinDiscountBridge from './components/ColinDiscountBridge'
 import SEO from './components/SEO'
@@ -78,6 +79,7 @@ export default function App() {
           <Route path="/ingredients" element={<StartHerePage />} />
           <Route path="/skin-system" element={<SkinSystemPage />} />
           <Route path="/apply" element={<ApplyPage />} />
+          <Route path="/client-check-in" element={<PeptideCheckInPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/policies/skincare" element={<SkincarePolicies />} />
