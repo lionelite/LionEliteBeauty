@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { skincareProducts } from '../data/skincareProducts'
 import SEO from '../components/SEO'
+import ProductImage from '../components/ProductImage'
 
 function ProductBottle({ accent, label, large }) {
   const w = large ? '90px' : '64px'
@@ -108,12 +109,12 @@ export default function ProductPage() {
             {/* Product visual */}
             <div style={{ backgroundColor: isDark ? '#111' : p.bg, padding: '80px 60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div className="text-center">
-                {p.image ? (
-                  <img src={p.image} alt={p.name}
-                    style={{ maxWidth: '260px', height: 'auto', display: 'block', margin: '0 auto' }} />
-                ) : (
-                  <ProductBottle accent={p.accent} label={p.label} large />
-                )}
+                <ProductImage
+                  src={p.image}
+                  alt={p.name}
+                  style={{ maxWidth: '260px', height: 'auto', display: 'block', margin: '0 auto' }}
+                  fallback={<ProductBottle accent={p.accent} label={p.label} large />}
+                />
                 <p style={{ fontFamily: 'Georgia, serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '1.1rem', marginTop: '32px', marginBottom: '6px' }}>{p.name}</p>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#6A6A6A' : '#9A9A9A', fontSize: '11px', letterSpacing: '0.2em' }} className="uppercase">{p.size}</p>
               </div>

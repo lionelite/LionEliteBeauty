@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { skincareProducts } from '../data/skincareProducts'
+import ProductImage from './ProductImage'
 
 export default function SkincareLine() {
   const isDark = (bg) => bg === '#1A1A1A' || bg === '#2A2A2A'
@@ -38,26 +39,25 @@ export default function SkincareLine() {
 
               <div style={{ padding: '32px 28px 0', flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ minHeight: '170px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      style={{ maxWidth: p.slug === 'ghk-cu-serum' ? '130px' : '110px', maxHeight: '170px', width: 'auto', height: 'auto', display: 'block', objectFit: 'contain' }}
-                    />
-                  ) : (
-                    <div style={{
-                      width: '70px', height: '110px', backgroundColor: p.accent,
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                      position: 'relative',
-                    }}>
-                      <div style={{ position: 'absolute', top: '-8px', width: '30px', height: '10px', backgroundColor: p.accent, opacity: 0.6 }}></div>
-                      <p style={{ fontFamily: 'Georgia, serif', color: '#FFFFFF', fontSize: '7px', letterSpacing: '0.15em', textAlign: 'center', lineHeight: '2', opacity: 0.9 }}>
-                        LION<br />ELITE
-                      </p>
-                      <div style={{ width: '24px', height: '0.5px', backgroundColor: 'rgba(255,255,255,0.4)', margin: '4px 0' }}></div>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '6px', letterSpacing: '0.1em', opacity: 0.7 }}>{p.label || 'GHK-Cu'}</p>
-                    </div>
-                  )}
+                  <ProductImage
+                    src={p.image}
+                    alt={p.name}
+                    style={{ maxWidth: p.slug === 'ghk-cu-serum' ? '130px' : '110px', maxHeight: '170px', width: 'auto', height: 'auto', display: 'block', objectFit: 'contain' }}
+                    fallback={
+                      <div style={{
+                        width: '70px', height: '110px', backgroundColor: p.accent,
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                        position: 'relative',
+                      }}>
+                        <div style={{ position: 'absolute', top: '-8px', width: '30px', height: '10px', backgroundColor: p.accent, opacity: 0.6 }}></div>
+                        <p style={{ fontFamily: 'Georgia, serif', color: '#FFFFFF', fontSize: '7px', letterSpacing: '0.15em', textAlign: 'center', lineHeight: '2', opacity: 0.9 }}>
+                          LION<br />ELITE
+                        </p>
+                        <div style={{ width: '24px', height: '0.5px', backgroundColor: 'rgba(255,255,255,0.4)', margin: '4px 0' }}></div>
+                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '6px', letterSpacing: '0.1em', opacity: 0.7 }}>{p.label || 'GHK-Cu'}</p>
+                      </div>
+                    }
+                  />
                 </div>
 
                 <p style={{
