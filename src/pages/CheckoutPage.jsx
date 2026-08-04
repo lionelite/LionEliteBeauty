@@ -251,20 +251,44 @@ export default function CheckoutPage() {
     }
     setSending(true)
     try {
-      await fetch('/api/send', {
+      const orderPayload = {
+        type: 'order',
+        name: d.name, email: d.email,
+        phone: d.phone || 'Not provided',
+        address: `${d.address}, ${d.city}, ${d.state} ${d.zip}`,
+        discountCode: d.discountApplied ? d.discountCode : 'None',
+        items: d.items.map(i => ({ name: i.name, quantity: i.quantity, price: i.priceNum })),
+        paymentMethod: d.paymentMethod,
+        ...(stripePaymentId ? { stripePaymentId } : {}),
+      }
+
+      // Send order emails (owner + customer). fetch() does NOT throw on a 5xx,
+      // so check response.ok — a silent failure here previously meant no owner
+      // email AND no order record (the /api/orders create is chained off a
+      // successful /api/send). Retry once, then fall back to recording the
+      // order directly so a paid order can never vanish.
+      let sendRes = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'order',
-          name: d.name, email: d.email,
-          phone: d.phone || 'Not provided',
-          address: `${d.address}, ${d.city}, ${d.state} ${d.zip}`,
-          discountCode: d.discountApplied ? d.discountCode : 'None',
-          items: d.items.map(i => ({ name: i.name, quantity: i.quantity, price: i.priceNum })),
-          paymentMethod: d.paymentMethod,
-          ...(stripePaymentId ? { stripePaymentId } : {}),
-        }),
+        body: JSON.stringify(orderPayload),
       })
+      if (!sendRes.ok) {
+        sendRes = await fetch('/api/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload),
+        })
+      }
+      if (!sendRes.ok) {
+        console.error('Order notification failed after retry; recording order directly')
+        const stamp = new Date().toISOString().slice(0, 10).replaceAll('-', '')
+        const fallbackNumber = `LEB-${stamp}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
+        await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'create', orderNumber: fallbackNumber, ...orderPayload }),
+        }).catch(fallbackErr => console.error('Order record fallback failed:', fallbackErr))
+      }
 
       // Add points if user has a rewards account
       const finalTotalVal = d.discountApplied ? (d.items.reduce((s, i) => s + (i.priceNum || 0) * i.quantity, 0) * 0.9) : d.items.reduce((s, i) => s + (i.priceNum || 0) * i.quantity, 0)

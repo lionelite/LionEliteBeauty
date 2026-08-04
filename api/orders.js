@@ -120,6 +120,70 @@ function trackingEmailHtml(order) {
   </div>`
 }
 
+// Internal "NEW ORDER — ACTION REQUIRED" owner notification (Beauty-branded),
+// mirroring the Lion Elite Wellness order alert. Sent to the shop owner when an
+// order is created — never to the customer.
+function newOrderEmailHtml(order) {
+  const rows = (order.items || []).map(i => `
+        <tr>
+          <td style="padding:10px 12px;border-top:1px solid #E0D5C5;color:#2A2A2A;font-size:14px;">${i.name}</td>
+          <td align="center" style="padding:10px 12px;border-top:1px solid #E0D5C5;color:#2A2A2A;font-size:14px;">${i.quantity}</td>
+          <td align="right" style="padding:10px 12px;border-top:1px solid #E0D5C5;color:#C9A96E;font-weight:bold;font-size:14px;">$${(Number(i.price || 0) * Number(i.quantity || 1)).toFixed(2)}</td>
+        </tr>`).join('')
+  const paid = order.paymentStatus === 'paid'
+  const adminUrl = `${process.env.SITE_URL || 'https://lionelitebeauty.com'}/orders`
+  return `
+  <div style="font-family:Arial,sans-serif;background:#0c0c0c;padding:24px 12px;color:#2A2A2A;">
+    <div style="max-width:600px;margin:0 auto;border-radius:12px;overflow:hidden;">
+      <div style="background:#C9A96E;padding:16px 24px;color:#141007;font-size:16px;font-weight:bold;letter-spacing:1px;">&#128722;&nbsp; NEW ORDER — ACTION REQUIRED</div>
+      <div style="background:#141007;padding:22px 24px;">
+        <div style="color:#D9B85A;font-size:11px;letter-spacing:4px;text-transform:uppercase;">Lion Elite Beauty — Internal Notification</div>
+        <div style="color:#D9B85A;font-family:Georgia,serif;font-size:28px;padding-top:6px;">Order #${order.orderNumber}</div>
+        <div style="color:#C9C2AD;font-size:14px;padding-top:8px;">Payment via <strong style="color:#C9A96E;">${order.paymentMethod}</strong> — <strong style="color:${paid ? '#7bbf7b' : '#e0b84d'};">${paid ? 'paid' : 'pending confirmation'}</strong></div>
+      </div>
+      <div style="background:#F5F0E8;padding:22px 24px 6px;">
+        <a href="${adminUrl}" style="display:block;background:#C9A96E;color:#141007;text-decoration:none;text-align:center;font-size:14px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase;padding:16px;">Open Orders Dashboard →</a>
+      </div>
+      <div style="background:#F5F0E8;padding:14px 24px 0;">
+        <p style="color:#C9A96E;font-size:12px;font-weight:bold;letter-spacing:1px;margin:0;text-transform:uppercase;">Customer</p>
+        <p style="color:#2A2A2A;font-size:15px;margin:6px 0 0;">${order.name || ''}</p>
+        <p style="color:#C9A96E;font-size:13px;margin:0;">${order.email}</p>
+        ${order.phone ? `<p style="color:#555;font-size:13px;margin:0;">${order.phone}</p>` : ''}
+        ${order.address ? `<p style="color:#555;font-size:13px;margin:4px 0 0;">${order.address}</p>` : ''}
+      </div>
+      <div style="background:#F5F0E8;padding:16px 24px 24px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FAF7F2;border:1px solid #E0D5C5;">
+          <tr>
+            <td style="padding:9px 12px;color:#8a8672;font-size:11px;letter-spacing:1px;">PRODUCT</td>
+            <td align="center" style="padding:9px 12px;color:#8a8672;font-size:11px;letter-spacing:1px;">QTY</td>
+            <td align="right" style="padding:9px 12px;color:#8a8672;font-size:11px;letter-spacing:1px;">PRICE</td>
+          </tr>
+          ${rows}
+          <tr>
+            <td colspan="2" align="right" style="padding:12px;border-top:2px solid #E0D5C5;color:#2A2A2A;font-weight:bold;">Total</td>
+            <td align="right" style="padding:12px;border-top:2px solid #E0D5C5;color:#C9A96E;font-weight:bold;">$${Number(order.total || 0).toFixed(2)}</td>
+          </tr>
+        </table>
+        ${order.discountCode ? `<p style="color:#777;font-size:12px;margin:10px 0 0;">Discount code: <strong>${order.discountCode}</strong>${order.rep ? ` (rep: ${order.rep})` : ''}</p>` : ''}
+      </div>
+    </div>
+  </div>`
+}
+
+// Fire-and-forget owner notification. Non-fatal: a failure here must never fail
+// the customer's order. No-ops if the email provider isn't configured.
+async function sendNewOrderNotification(order) {
+  if (!process.env.RESEND_API_KEY) return { skipped: 'no_resend_key' }
+  const to = process.env.ORDER_NOTIFICATION_EMAIL || 'orders@lionelitebeauty.com'
+  await resend.emails.send({
+    from: 'Lion Elite Beauty <orders@lionelitebeauty.com>',
+    to: [to],
+    subject: `🛒 New Order #${order.orderNumber} — Lion Elite Beauty — $${Number(order.total || 0).toFixed(2)}`,
+    html: newOrderEmailHtml(order),
+  })
+  return { sent: true, to }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
@@ -163,6 +227,15 @@ export default async function handler(req, res) {
       }
 
       await saveOrder(order)
+
+      // Notify the owner a new order came in. Non-fatal: never block the
+      // customer's successful checkout on a notification failure.
+      try {
+        await sendNewOrderNotification(order)
+      } catch (notifyErr) {
+        console.error('New-order notification failed:', notifyErr)
+      }
+
       return res.status(200).json({ success: true, order })
     }
 
