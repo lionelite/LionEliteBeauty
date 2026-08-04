@@ -1,16 +1,13 @@
 import Stripe from 'stripe'
-import crypto from 'crypto'
+import { authenticateDashboard } from './_auth.js'
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null
 
-const ADMIN = {
-  username: 'admin',
-  // SHA-256 of LionElite9903. The clear-text password is not stored in the repo.
-  passwordHash: 'c0917845c70b20b3c9146ba17a32d1a617bf2a80158ea94750144e0f854a3469',
-}
-
+// Non-secret rep metadata only. Credentials live in the REP_CREDENTIALS
+// environment variable and are verified in api/_auth.js — no password material
+// is stored in this repository.
 const REPS = {
   colin: {
     name: 'Colin',
@@ -18,7 +15,6 @@ const REPS = {
     code: 'COLIN10',
     discountPercent: 10,
     commissionPercent: 20,
-    passwordHash: 'a3c50093106c7a7023d19ab2707b9113df1ff0cb1897eb257f7c9b3c1ca34677',
   },
 }
 
@@ -28,10 +24,6 @@ function normalizeCode(code) {
 
 function normalizeUsername(username) {
   return String(username || '').trim().toLowerCase()
-}
-
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(String(password || '')).digest('hex')
 }
 
 async function getAllPaymentIntents() {
@@ -172,20 +164,22 @@ export default async function handler(req, res) {
   }
 
   const normalizedUsername = normalizeUsername(username)
-  const suppliedHash = hashPassword(password)
+
+  // Credentials verified against the environment; fails closed when unset.
+  const auth = authenticateDashboard(username, password)
+  if (!auth) {
+    return res.status(401).json({ error: 'Invalid username or password' })
+  }
 
   try {
     const intents = await getAllPaymentIntents()
 
-    if (normalizedUsername === ADMIN.username) {
-      if (suppliedHash !== ADMIN.passwordHash) {
-        return res.status(401).json({ error: 'Invalid username or password' })
-      }
+    if (auth.role === 'admin') {
       return res.status(200).json(buildAdminDashboard(intents))
     }
 
     const rep = REPS[normalizedUsername]
-    if (!rep || suppliedHash !== rep.passwordHash) {
+    if (!rep) {
       return res.status(401).json({ error: 'Invalid username or password' })
     }
 

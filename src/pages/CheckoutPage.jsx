@@ -279,14 +279,18 @@ export default function CheckoutPage() {
           body: JSON.stringify(orderPayload),
         })
       }
-      if (!sendRes.ok) {
+      // Capture the order number so rewards can be tied to a real, paid order.
+      let placedOrderNumber = null
+      if (sendRes.ok) {
+        placedOrderNumber = await sendRes.json().then(j => j?.orderNumber || null).catch(() => null)
+      } else {
         console.error('Order notification failed after retry; recording order directly')
         const stamp = new Date().toISOString().slice(0, 10).replaceAll('-', '')
-        const fallbackNumber = `LEB-${stamp}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
+        placedOrderNumber = `LEB-${stamp}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`
         await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'create', orderNumber: fallbackNumber, ...orderPayload }),
+          body: JSON.stringify({ action: 'create', orderNumber: placedOrderNumber, ...orderPayload }),
         }).catch(fallbackErr => console.error('Order record fallback failed:', fallbackErr))
       }
 
@@ -303,7 +307,7 @@ export default function CheckoutPage() {
           body: JSON.stringify({
             action: 'add-points',
             email: rewEmail,
-            orderAmountCents: Math.round(finalTotalVal * 100),
+            orderNumber: placedOrderNumber,
           }),
         })
         if (ptsRes.ok) {
@@ -329,7 +333,7 @@ export default function CheckoutPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'add-points', email: rewEmail,
-            orderAmountCents: Math.round(finalTotalVal * 100),
+            orderNumber: placedOrderNumber,
           }),
         })
         if (ptsRes.ok) {

@@ -1,21 +1,12 @@
 import { Redis } from '@upstash/redis'
 import { Resend } from 'resend'
-import crypto from 'crypto'
+import Stripe from 'stripe'
+import { authenticateDashboard } from './_auth.js'
+import { priceOrder } from './_pricing.js'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const ADMIN = {
-  username: 'admin',
-  passwordHash: 'c0917845c70b20b3c9146ba17a32d1a617bf2a80158ea94750144e0f854a3469',
-}
-
-const REPS = {
-  colin: {
-    username: 'Colin',
-    code: 'COLIN10',
-    passwordHash: 'a3c50093106c7a7023d19ab2707b9113df1ff0cb1897eb257f7c9b3c1ca34677',
-  },
-}
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null
 
 let redis
 const memStore = new Map()
@@ -26,10 +17,6 @@ function getRedis() {
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
   if (url && token) redis = new Redis({ url, token })
   return redis
-}
-
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(String(password || '')).digest('hex')
 }
 
 function normalizeCode(code) {
@@ -77,17 +64,29 @@ async function listOrders() {
   return orders
 }
 
-function authenticate(username, password) {
-  const normalized = String(username || '').trim().toLowerCase()
-  const suppliedHash = hashPassword(password)
-  if (normalized === ADMIN.username && suppliedHash === ADMIN.passwordHash) {
-    return { role: 'admin', code: null, name: 'Administrator' }
+// Credentials come from the environment and fail closed — see api/_auth.js.
+const authenticate = authenticateDashboard
+
+/**
+ * Confirm a Stripe payment actually succeeded and matches the server-computed
+ * total before an order may be recorded as paid. Without this, anyone could
+ * POST an order claiming `paymentMethod: 'stripe'` and have it marked paid.
+ */
+async function verifyStripePayment(paymentIntentId, expectedCents) {
+  if (!stripe) return { ok: false, reason: 'stripe_not_configured' }
+  try {
+    const intent = await stripe.paymentIntents.retrieve(String(paymentIntentId))
+    if (!intent || intent.status !== 'succeeded') {
+      return { ok: false, reason: `payment_status_${intent?.status || 'unknown'}` }
+    }
+    if (Number(intent.amount_received ?? intent.amount) !== Number(expectedCents)) {
+      return { ok: false, reason: 'amount_mismatch' }
+    }
+    return { ok: true }
+  } catch (err) {
+    console.error('Stripe verification failed:', err?.message)
+    return { ok: false, reason: 'verification_error' }
   }
-  const rep = REPS[normalized]
-  if (rep && suppliedHash === rep.passwordHash) {
-    return { role: 'rep', code: rep.code, name: rep.username }
-  }
-  return null
 }
 
 function carrierTrackingUrl(carrier, trackingNumber) {
@@ -198,11 +197,32 @@ export default async function handler(req, res) {
       const existing = await loadOrder(body.orderNumber)
       if (existing) return res.status(200).json({ success: true, order: existing, duplicate: true })
 
-      const subtotal = body.items.reduce((sum, i) => sum + Number(i.price || 0) * Number(i.quantity || 1), 0)
-      const discounted = body.discountCode && body.discountCode !== 'None'
-      const total = discounted ? subtotal * 0.9 : subtotal
+      // SECURITY: recompute money server-side from the catalog. Item prices in
+      // the request body are ignored; only product identity + quantity is used.
       const code = normalizeCode(body.discountCode)
-      const rep = Object.values(REPS).find(r => r.code === code)
+      const priced = priceOrder({
+        items: body.items,
+        discountCode: code,
+        discountApplied: Boolean(code),
+      })
+      if (!priced.ok) {
+        return res.status(400).json({ error: priced.error })
+      }
+
+      // A 'paid' status is only granted after Stripe confirms the charge
+      // succeeded for exactly the server-computed amount.
+      let paymentStatus = 'pending'
+      let paymentNote = null
+      if (body.paymentMethod === 'stripe') {
+        if (!body.stripePaymentId) {
+          paymentStatus = 'pending'
+          paymentNote = 'missing_payment_intent'
+        } else {
+          const verified = await verifyStripePayment(body.stripePaymentId, priced.totalCents)
+          paymentStatus = verified.ok ? 'paid' : 'unverified'
+          if (!verified.ok) paymentNote = verified.reason
+        }
+      }
 
       const order = {
         orderNumber: body.orderNumber,
@@ -212,14 +232,16 @@ export default async function handler(req, res) {
         email: String(body.email || '').trim().toLowerCase(),
         phone: body.phone || '',
         address: body.address || '',
-        items: body.items,
-        subtotal: Math.round(subtotal * 100) / 100,
-        total: Math.round(total * 100) / 100,
+        items: priced.lines.map(l => ({ name: l.name, slug: l.slug, quantity: l.quantity, price: l.price })),
+        subtotal: Math.round(priced.subtotalCents) / 100,
+        total: Math.round(priced.totalCents) / 100,
         paymentMethod: body.paymentMethod || 'unknown',
-        paymentStatus: body.paymentMethod === 'stripe' ? 'paid' : 'pending',
+        paymentStatus,
+        paymentNote,
         stripePaymentId: body.stripePaymentId || null,
-        discountCode: code || null,
-        rep: rep?.username || null,
+        discountCode: priced.code || null,
+        rep: priced.rep || null,
+        rewardsGranted: false,
         fulfillmentStatus: 'processing',
         carrier: '',
         trackingNumber: '',

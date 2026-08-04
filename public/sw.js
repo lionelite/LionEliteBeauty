@@ -18,8 +18,12 @@ self.addEventListener('fetch', e => {
   e.respondWith(
     fetch(e.request)
       .then(r => {
-        const clone = r.clone()
-        caches.open(CACHE).then(c => c.put(e.request, clone))
+        // Only cache successful, same-origin, basic responses. Caching a 404
+        // or 5xx previously let an error page be re-served from cache.
+        if (r && r.ok && r.type === 'basic') {
+          const clone = r.clone()
+          caches.open(CACHE).then(c => c.put(e.request, clone))
+        }
         return r
       })
       .catch(() => caches.match(e.request).then(m => m || caches.match('/')))

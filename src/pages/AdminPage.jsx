@@ -37,9 +37,12 @@ export default function AdminPage() {
       const data = await res.json()
       if (!res.ok) { setError(data.error); setLoading(false); return }
       setToken(data.token)
-      setVipAdminToken(data.vipAdminToken || 'lionelite-admin-secret')
+      // No fallback: if the server did not issue a privileged token, admin
+      // features stay locked rather than silently using a published default.
+      setVipAdminToken(data.vipAdminToken || '')
       setLoggedIn(true)
-      fetchAccounts(data.vipAdminToken || 'lionelite-admin-secret')
+      if (data.vipAdminToken) fetchAccounts(data.vipAdminToken)
+      else setError('Admin API token is not configured on the server.')
     } catch { setError('Connection error'); setLoading(false) }
   }
 
@@ -363,9 +366,8 @@ export default function AdminPage() {
               <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.5rem', marginBottom: '24px' }} className="font-normal">Settings</h1>
               <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E0D5C5', padding: '28px' }}>
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '9px', letterSpacing: '0.2em', marginBottom: '16px' }} className="uppercase">Admin Account</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', margin: '0 0 8px' }}>Email: <strong>admin@lionelitebeauty.com</strong></p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', margin: '0 0 8px' }}>Password: <strong>LionElite9903</strong></p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '11px', margin: '16px 0 0' }}>Data is stored in a JSON file on the server. For production, consider migrating to a database.</p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', margin: '0 0 8px' }}>Signed in as <strong>{email || 'administrator'}</strong></p>
+                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#BABABA', fontSize: '11px', margin: '16px 0 0' }}>Credentials are managed as server environment variables and are never displayed here. Accounts are stored in the managed datastore.</p>
               </div>
             </div>
           )}

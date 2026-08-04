@@ -4,48 +4,85 @@
 //
 // VIP accounts with file persistence and progress tracking.
 
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { createHash } from 'crypto'
+import { Redis } from '@upstash/redis'
+import { secureToken, secureId, verifyAdminToken } from './_auth.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DATA_PATH = join(__dirname, 'vip-data.json')
 
 let STORE = {}
-const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'lionelite-admin-secret'
 
 function hashPassword(pw) {
   return createHash('sha256').update(pw).digest('hex')
 }
 
-// Load persisted data if available
-function load() {
-  try {
-    if (existsSync(DATA_PATH)) {
-      STORE = JSON.parse(readFileSync(DATA_PATH, 'utf-8'))
-    }
-  } catch { STORE = {} }
+// ── Persistence ───────────────────────────────────────────────────────────
+// The serverless filesystem is read-only and ephemeral, so the previous
+// writeFileSync persistence silently discarded every account created after
+// deploy (paid coaching clients included). Accounts now live in Redis; the
+// bundled JSON file is used only as a read-only seed for local development.
+const STORE_KEY = 'vip:accounts'
+
+let redis
+function getRedis() {
+  if (redis) return redis
+  const url = process.env.KV_URL || process.env.REDIS_URL || process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+  if (url && token) redis = new Redis({ url, token })
+  return redis
 }
 
-function save() {
+function seedFromDisk() {
   try {
-    writeFileSync(DATA_PATH, JSON.stringify(STORE, null, 2))
-  } catch (e) {
-    console.error('VIP save error:', e)
+    if (existsSync(DATA_PATH)) return JSON.parse(readFileSync(DATA_PATH, 'utf-8'))
+  } catch { /* ignore */ }
+  return {}
+}
+
+// Durable load. Must be awaited before touching STORE.
+async function load() {
+  const r = getRedis()
+  if (!r) {
+    STORE = seedFromDisk()
+    return STORE
   }
+  try {
+    const raw = await r.get(STORE_KEY)
+    if (raw) {
+      STORE = typeof raw === 'string' ? JSON.parse(raw) : raw
+    } else {
+      STORE = seedFromDisk()
+      if (Object.keys(STORE).length) await r.set(STORE_KEY, JSON.stringify(STORE))
+    }
+  } catch (e) {
+    console.error('VIP load error:', e)
+    STORE = seedFromDisk()
+  }
+  return STORE
 }
 
-load()
+/**
+ * Durable save. Throws when no store is configured so a caller can surface the
+ * failure instead of silently losing a paying customer's account.
+ */
+async function save() {
+  const r = getRedis()
+  if (!r) {
+    throw new Error('VIP_STORE_UNAVAILABLE: Redis is not configured; refusing to accept data that cannot be persisted.')
+  }
+  await r.set(STORE_KEY, JSON.stringify(STORE))
+}
 
 function generateVipId() {
-  const p1 = Math.random().toString(36).substring(2, 6).toUpperCase()
-  const p2 = Math.random().toString(36).substring(2, 6).toUpperCase()
-  return `LEV-${p1}-${p2}`
+  return secureId('LEV')
 }
 
 function generateToken() {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+  return secureToken()
 }
 
 function makeAccount(name, email, program, tier, passwordHash) {
@@ -85,7 +122,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  load() // Always refresh from disk
+  await load() // Always refresh from the durable store
 
   const { action, email, name, program, tier, vipId, token, paid, notes, password, progress: progressData, healthData, habits, questionnaires, checkin, goals, plan, callSchedule, riskFlags, coachNotes, phone, dob, timezone, measurements } = req.body
   const key = email?.trim().toLowerCase()
@@ -106,7 +143,7 @@ export default async function handler(req, res) {
     // Auto-mark as paid for card payments
     if (paid === true) account.paid = true
     STORE[key] = account
-    save()
+    await save()
     console.log('VIP account created:', account.vipId, key)
     return res.status(200).json({
       message: `Welcome to the Lion Elite VIP family, ${account.name}!`,
@@ -160,8 +197,9 @@ export default async function handler(req, res) {
 
   if (action === 'list-all') {
     const { token: adminToken } = req.body
-    if (!adminToken || adminToken !== ADMIN_TOKEN) {
-      return res.status(403).json({ error: 'Unauthorized' })
+    const adminCheck = verifyAdminToken(adminToken)
+    if (!adminCheck.ok) {
+      return res.status(adminCheck.status).json({ error: adminCheck.error })
     }
     const list = Object.values(STORE).map(a => ({
       vipId: a.vipId,
@@ -179,8 +217,9 @@ export default async function handler(req, res) {
 
   if (action === 'update-status') {
     const { token: adminToken } = req.body
-    if (!adminToken || adminToken !== ADMIN_TOKEN) {
-      return res.status(403).json({ error: 'Unauthorized' })
+    const adminCheck = verifyAdminToken(adminToken)
+    if (!adminCheck.ok) {
+      return res.status(adminCheck.status).json({ error: adminCheck.error })
     }
     if (!key) return res.status(400).json({ error: 'Email is required' })
     if (!STORE[key]) return res.status(404).json({ error: 'Account not found' })
@@ -189,14 +228,15 @@ export default async function handler(req, res) {
     if (tier) STORE[key].tier = tier
     if (program) STORE[key].program = program
     if (notes !== undefined) STORE[key].notes = notes
-    save()
+    await save()
     return res.status(200).json({ ...STORE[key] })
   }
 
   if (action === 'update-progress') {
     const { token: adminToken } = req.body
-    if (!adminToken || adminToken !== ADMIN_TOKEN) {
-      return res.status(403).json({ error: 'Unauthorized' })
+    const adminCheck = verifyAdminToken(adminToken)
+    if (!adminCheck.ok) {
+      return res.status(adminCheck.status).json({ error: adminCheck.error })
     }
     if (!key) return res.status(400).json({ error: 'Email is required' })
     if (!STORE[key]) return res.status(404).json({ error: 'Account not found' })
@@ -204,22 +244,23 @@ export default async function handler(req, res) {
     if (progressData) {
       STORE[key].progress = progressData
     }
-    save()
+    await save()
     return res.status(200).json({ ...STORE[key] })
   }
 
   if (action === 'set-program-steps') {
     // Admin sets the program steps for a client
     const { token: adminToken } = req.body
-    if (!adminToken || adminToken !== ADMIN_TOKEN) {
-      return res.status(403).json({ error: 'Unauthorized' })
+    const adminCheck = verifyAdminToken(adminToken)
+    if (!adminCheck.ok) {
+      return res.status(adminCheck.status).json({ error: adminCheck.error })
     }
     if (!key) return res.status(400).json({ error: 'Email is required' })
     if (!STORE[key]) return res.status(404).json({ error: 'Account not found' })
     if (progressData) {
       STORE[key].progress = progressData
     }
-    save()
+    await save()
     return res.status(200).json({ ...STORE[key] })
   }
 
@@ -232,7 +273,7 @@ export default async function handler(req, res) {
     // Require VIP ID auth to set a password (or existing password)
     const pwHash = hashPassword(password)
     account.passwordHash = pwHash
-    save()
+    await save()
     return res.status(200).json({ message: 'Password set successfully.', vipId: account.vipId })
   }
 
@@ -257,7 +298,7 @@ export default async function handler(req, res) {
     if (dob !== undefined) STORE[key].dob = dob
     if (timezone !== undefined) STORE[key].timezone = timezone
     if (measurements !== undefined) STORE[key].measurements = measurements
-    save()
+    await save()
     return res.status(200).json({ ...STORE[key] })
   }
 
@@ -269,7 +310,7 @@ export default async function handler(req, res) {
 
     STORE[key].checkins = STORE[key].checkins || []
     STORE[key].checkins.push({ ...checkin, date: checkin.date || new Date().toISOString() })
-    save()
+    await save()
     return res.status(200).json({ checkins: STORE[key].checkins })
   }
 

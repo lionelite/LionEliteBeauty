@@ -1,13 +1,9 @@
 import Stripe from 'stripe'
+import { priceOrder } from './_pricing.js'
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null
-
-const DISCOUNT_CODES = {
-  LION10: { percent: 10, rep: null },
-  COLIN10: { percent: 10, rep: 'Colin' },
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -21,55 +17,38 @@ export default async function handler(req, res) {
   try {
     const { items, discountApplied, discountCode } = req.body
 
-    if (!items || !items.length) {
-      return res.status(400).json({ error: 'No items in order' })
+    // SECURITY: the amount is computed from the server-side catalog. Prices in
+    // the request body are ignored entirely — previously a caller could set
+    // their own price and be charged it.
+    const priced = priceOrder({ items, discountCode, discountApplied })
+    if (!priced.ok) {
+      return res.status(400).json({ error: priced.error })
     }
 
-    let totalCents = Math.round(
-      items.reduce((sum, i) => sum + (i.priceNum || 0) * i.quantity, 0) * 100
-    )
-
-    // Older checkout builds only sent discountApplied. Preserve LION10 as the
-    // default in that case, while allowing referral codes such as COLIN10 to
-    // be passed explicitly by the current checkout bridge.
-    const normalizedCode = String(discountCode || (discountApplied ? 'LION10' : ''))
-      .trim()
-      .toUpperCase()
-    const discount = discountApplied ? DISCOUNT_CODES[normalizedCode] : null
-
-    if (discountApplied && !discount) {
-      return res.status(400).json({ error: 'Invalid discount code' })
-    }
-
-    if (discount) {
-      totalCents = Math.round(totalCents * (1 - discount.percent / 100))
-    }
-
-    if (totalCents < 50) {
+    if (priced.totalCents < 50) {
       return res.status(400).json({ error: 'Order total too low' })
     }
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: totalCents,
+      amount: priced.totalCents,
       currency: 'usd',
-      payment_method_types: [
-        'card',
-        'klarna',
-        'afterpay_clearpay',
-        'affirm',
-      ],
+      payment_method_types: ['card', 'klarna', 'afterpay_clearpay', 'affirm'],
       metadata: {
-        items: items.map(i => `${i.name} × ${i.quantity}`).join(', '),
-        discountCode: discount ? normalizedCode : 'none',
-        rep: discount?.rep || 'none',
-        discountPercent: discount ? String(discount.percent) : '0',
+        items: priced.lines.map(l => `${l.name} × ${l.quantity}`).join(', ').slice(0, 480),
+        discountCode: priced.code || 'none',
+        rep: priced.rep || 'none',
+        subtotalCents: String(priced.subtotalCents),
+        discountCents: String(priced.discountCents),
       },
     })
 
     return res.status(200).json({
       clientSecret: paymentIntent.client_secret,
-      amount: totalCents,
-      discountCode: discount ? normalizedCode : null,
+      // Authoritative figures so the UI can display exactly what will be charged.
+      amount: priced.totalCents,
+      subtotalCents: priced.subtotalCents,
+      discountCents: priced.discountCents,
+      discountCode: priced.code,
     })
   } catch (err) {
     console.error('Stripe error:', err)
