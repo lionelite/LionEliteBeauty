@@ -2,7 +2,11 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const FROM = process.env.ORDER_FROM_EMAIL || 'Lion Elite Beauty <orders@lionelitebeauty.com>'
-const ADMIN = process.env.ORDER_NOTIFICATION_EMAIL || 'orders@lionelitebeauty.com'
+// Defaults to the inbox the owner actually reads, mirroring the Wellness store
+// (src/app/api/order-confirmation/route.ts pins STORE_EMAIL to the same address).
+// The previous default, orders@lionelitebeauty.com, is not a monitored mailbox —
+// order alerts were being "sent" successfully and landing nowhere anyone looked.
+const ADMIN = process.env.ORDER_NOTIFICATION_EMAIL || 'info@lionelitewellness.com'
 
 function esc(value = '') {
   return String(value)
@@ -49,7 +53,9 @@ export default async function handler(req, res) {
   const b = req.body || {}
   if (!b.email || !b.name) return res.status(400).json({ error: 'Name and email are required' })
 
-  const id = orderNumber()
+  // Prefer the order number the caller already persisted, so the email and the
+  // stored order share one id. Only mint a new one when there is no record.
+  const id = String(b.orderNumber || '').trim() || orderNumber()
   const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'full', timeStyle: 'short' })
 
   try {
@@ -78,8 +84,13 @@ export default async function handler(req, res) {
         ${b.address ? `<p style="margin-top:24px"><strong>Shipping to:</strong><br>${esc(b.address)}</p>` : ''}
       `)
 
+      // skipAdmin is set when /api/orders already recorded the order and sent the
+      // owner notification, so a successful checkout produces one owner email and
+      // one customer email rather than two of each.
       await Promise.all([
-        sendEmail({ from: FROM, to: [ADMIN], replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ORDER — ${money(total)} — ${b.name}`, html: adminHtml }),
+        ...(b.skipAdmin
+          ? []
+          : [sendEmail({ from: FROM, to: [ADMIN], replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ORDER — ${money(total)} — ${b.name}`, html: adminHtml })]),
         sendEmail({ from: FROM, to: [b.email], subject: `Lion Elite Beauty Order Confirmed — ${id}`, html: clientHtml }),
       ])
       return res.status(200).json({ success: true, orderNumber: id, total })
