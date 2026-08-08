@@ -262,36 +262,48 @@ export default function CheckoutPage() {
         ...(stripePaymentId ? { stripePaymentId } : {}),
       }
 
-      // Send order emails (owner + customer). fetch() does NOT throw on a 5xx,
-      // so check response.ok — a silent failure here previously meant no owner
-      // email AND no order record (the /api/orders create is chained off a
-      // successful /api/send). Retry once, then fall back to recording the
-      // order directly so a paid order can never vanish.
+      // Record the order BEFORE emailing anyone — the same order of operations the
+      // Wellness store uses (saveOrder, then send). Previously /api/orders create
+      // ran only in the else-branch of a failed /api/send, so a *successful*
+      // checkout stored no order at all: the admin dashboard was missing every
+      // order that went through cleanly, which is the opposite of the intent.
+      const stamp = new Date().toISOString().slice(0, 10).replaceAll('-', '')
+      const placedOrderNumber = `LEB-${stamp}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`
+
+      // create persists the order and sends the owner notification. It is
+      // idempotent on orderNumber, so a retry cannot double-record or double-notify.
+      let recorded = false
+      try {
+        const orderRes = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'create', orderNumber: placedOrderNumber, ...orderPayload }),
+        })
+        recorded = orderRes.ok
+        if (!orderRes.ok) console.error('Order record failed:', orderRes.status)
+      } catch (recordErr) {
+        console.error('Order record failed:', recordErr)
+      }
+
+      // Customer confirmation. fetch() does NOT throw on a 5xx, so check
+      // response.ok and retry once. skipAdmin is set only when the order was
+      // recorded — if recording failed, /api/send still sends the owner copy, so
+      // a paid order can never pass with nobody notified.
+      const sendPayload = { ...orderPayload, orderNumber: placedOrderNumber, skipAdmin: recorded }
       let sendRes = await fetch('/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderPayload),
+        body: JSON.stringify(sendPayload),
       })
       if (!sendRes.ok) {
         sendRes = await fetch('/api/send', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderPayload),
+          body: JSON.stringify(sendPayload),
         })
       }
-      // Capture the order number so rewards can be tied to a real, paid order.
-      let placedOrderNumber = null
-      if (sendRes.ok) {
-        placedOrderNumber = await sendRes.json().then(j => j?.orderNumber || null).catch(() => null)
-      } else {
-        console.error('Order notification failed after retry; recording order directly')
-        const stamp = new Date().toISOString().slice(0, 10).replaceAll('-', '')
-        placedOrderNumber = `LEB-${stamp}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`
-        await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'create', orderNumber: placedOrderNumber, ...orderPayload }),
-        }).catch(fallbackErr => console.error('Order record fallback failed:', fallbackErr))
+      if (!sendRes.ok && recorded) {
+        console.error('Customer confirmation failed after retry; order is recorded and the owner was notified')
       }
 
       // Add points if user has a rewards account

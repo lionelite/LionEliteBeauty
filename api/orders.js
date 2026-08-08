@@ -173,7 +173,7 @@ function newOrderEmailHtml(order) {
 // the customer's order. No-ops if the email provider isn't configured.
 async function sendNewOrderNotification(order) {
   if (!process.env.RESEND_API_KEY) return { skipped: 'no_resend_key' }
-  const to = process.env.ORDER_NOTIFICATION_EMAIL || 'orders@lionelitebeauty.com'
+  const to = process.env.ORDER_NOTIFICATION_EMAIL || 'info@lionelitewellness.com'
   await resend.emails.send({
     from: 'Lion Elite Beauty <orders@lionelitebeauty.com>',
     to: [to],
