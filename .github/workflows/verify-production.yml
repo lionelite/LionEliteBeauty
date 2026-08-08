@@ -3,6 +3,7 @@ name: Verify Production
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -46,34 +47,34 @@ jobs:
             home_status="$(curl -sSL -o /tmp/home.html -w '%{http_code}' --max-time 20 "$HOME_URL" || true)"
 
             if python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$cart_status" "$checkout_status" "$home_status" <<'PY'
-import json, sys
-raw, expected_commit, product_status, cart_status, checkout_status, home_status = sys.argv[1:]
-try:
-    data = json.loads(raw)
-except Exception:
-    raise SystemExit(1)
+          import json, sys
+          raw, expected_commit, product_status, cart_status, checkout_status, home_status = sys.argv[1:]
+          try:
+              data = json.loads(raw)
+          except Exception:
+              raise SystemExit(1)
 
-product = data.get('product') or {}
-checks = [
-    data.get('ok') is True,
-    product.get('slug') == 'ghk-cu-serum',
-    product.get('badge') == 'In Stock',
-    product.get('price') == '$69.99',
-    product.get('priceNum') == 69.99,
-    product.get('purchasable') is True,
-    product.get('route') == '/skincare/ghk-cu-serum',
-    product_status == '200',
-    cart_status == '200',
-    checkout_status == '200',
-    home_status == '200',
-]
-# Vercel exposes the Git commit SHA when available. Require it to match
-# when present; tolerate null if the hosting environment omits it.
-deployed_commit = data.get('commit')
-if deployed_commit:
-    checks.append(deployed_commit == expected_commit)
-raise SystemExit(0 if all(checks) else 1)
-PY
+          product = data.get('product') or {}
+          checks = [
+              data.get('ok') is True,
+              product.get('slug') == 'ghk-cu-serum',
+              product.get('badge') == 'In Stock',
+              product.get('price') == '$69.99',
+              product.get('priceNum') == 69.99,
+              product.get('purchasable') is True,
+              product.get('route') == '/skincare/ghk-cu-serum',
+              product_status == '200',
+              cart_status == '200',
+              checkout_status == '200',
+              home_status == '200',
+          ]
+          # Vercel exposes the Git commit SHA when available. Require it to match
+          # when present; tolerate null if the hosting environment omits it.
+          deployed_commit = data.get('commit')
+          if deployed_commit:
+              checks.append(deployed_commit == expected_commit)
+          raise SystemExit(0 if all(checks) else 1)
+          PY
             then
               success=1
               break
@@ -94,38 +95,38 @@ PY
 
           mkdir -p verification
           python3 - "$response" "$EXPECTED_COMMIT" "$product_status" "$cart_status" "$checkout_status" "$home_status" <<'PY'
-import json, sys
-from datetime import datetime, timezone
-raw, expected_commit, product_status, cart_status, checkout_status, home_status = sys.argv[1:]
-data = json.loads(raw)
-report = {
-    'verified': True,
-    'verified_at_utc': datetime.now(timezone.utc).isoformat(),
-    'expected_git_commit': expected_commit,
-    'deployed_git_commit': data.get('commit'),
-    'environment': data.get('environment'),
-    'homepage': {
-        'url': 'https://lionelitebeauty.com/',
-        'http_status': int(home_status),
-    },
-    'product_page': {
-        'url': 'https://lionelitebeauty.com/skincare/ghk-cu-serum',
-        'http_status': int(product_status),
-    },
-    'cart_page': {
-        'url': 'https://lionelitebeauty.com/cart',
-        'http_status': int(cart_status),
-    },
-    'checkout_page': {
-        'url': 'https://lionelitebeauty.com/checkout',
-        'http_status': int(checkout_status),
-    },
-    'product': data.get('product'),
-}
-with open('verification/production-latest.json', 'w') as f:
-    json.dump(report, f, indent=2)
-    f.write('\n')
-PY
+          import json, sys
+          from datetime import datetime, timezone
+          raw, expected_commit, product_status, cart_status, checkout_status, home_status = sys.argv[1:]
+          data = json.loads(raw)
+          report = {
+              'verified': True,
+              'verified_at_utc': datetime.now(timezone.utc).isoformat(),
+              'expected_git_commit': expected_commit,
+              'deployed_git_commit': data.get('commit'),
+              'environment': data.get('environment'),
+              'homepage': {
+                  'url': 'https://lionelitebeauty.com/',
+                  'http_status': int(home_status),
+              },
+              'product_page': {
+                  'url': 'https://lionelitebeauty.com/skincare/ghk-cu-serum',
+                  'http_status': int(product_status),
+              },
+              'cart_page': {
+                  'url': 'https://lionelitebeauty.com/cart',
+                  'http_status': int(cart_status),
+              },
+              'checkout_page': {
+                  'url': 'https://lionelitebeauty.com/checkout',
+                  'http_status': int(checkout_status),
+              },
+              'product': data.get('product'),
+          }
+          with open('verification/production-latest.json', 'w') as f:
+              json.dump(report, f, indent=2)
+              f.write('\n')
+          PY
 
           cat verification/production-latest.json
 
