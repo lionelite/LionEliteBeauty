@@ -1,0 +1,33 @@
+name: CI
+
+# Runs the API test suite and a production build on every push and PR.
+#
+# This exists because PR #5 rewrote api/orders.js and silently changed the
+# new-order notification behaviour with nothing to catch it — the repo had a
+# test file but no test script and no workflow that ran one, so the suite was
+# dead weight. Orders then arrived with no owner email for days.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run API tests
+        run: npm test
+      - name: Production build
+        run: npm run build
