@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -6,169 +6,105 @@ import { skincareProducts } from '../data/skincareProducts'
 import SEO from '../components/SEO'
 import ProductImage from '../components/ProductImage'
 
-function ProductBottle({ accent, label, isDark }) {
-  return (
-    <div style={{
-      width: '56px', height: '88px', backgroundColor: accent,
-      display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', position: 'relative', margin: '0 auto',
-    }}>
-      <div style={{ position: 'absolute', top: '-6px', width: '24px', height: '8px', backgroundColor: accent, opacity: 0.6 }}></div>
-      <p style={{ fontFamily: 'Georgia, serif', color: '#FFFFFF', fontSize: '6px', letterSpacing: '0.15em', textAlign: 'center', lineHeight: '2', opacity: 0.9 }}>LION<br />ELITE</p>
-      <div style={{ width: '18px', height: '0.5px', backgroundColor: 'rgba(255,255,255,0.4)', margin: '3px 0' }}></div>
-      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '5px', letterSpacing: '0.1em', opacity: 0.7 }}>{label}</p>
-    </div>
-  )
-}
+const goals = ['All', 'Firm + Smooth', 'Calm + Recover', 'Hydrate + Glow', 'Build My Routine']
 
 export default function SkincarePage() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
+  const [goal, setGoal] = useState('All')
+  const products = useMemo(() => goal === 'All' ? skincareProducts : skincareProducts.filter(p => (p.goal || []).includes(goal)), [goal])
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Lion Elite Beauty Peptide Skincare',
+    description: 'A focused peptide skincare collection built around GHK-Cu, KPV and supportive barrier ingredients.'
+  }
 
   return (
-    <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
-      <SEO title="Advanced Peptide Skincare" description="Clinical-grade peptide-powered skincare for healthier, more radiant skin. GHK-Cu and KPV peptide formulations." />
+    <div style={{ backgroundColor: '#FAF8F4', minHeight: '100vh' }}>
+      <SEO title="Peptide Skincare Collection" description="Shop Lion Elite Beauty peptide skincare by skin goal: firm and smooth, calm and recover, hydrate and glow, or build a simple routine." jsonLd={jsonLd} />
       <Navbar />
 
-      {/* Hero */}
-      <section style={{ backgroundColor: '#FAF7F2', paddingTop: '140px', paddingBottom: '100px', borderBottom: '1px solid #E8DDD0' }}>
+      <section style={{ paddingTop: '145px', paddingBottom: '74px', borderBottom: '1px solid #E7DDD1' }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="max-w-2xl">
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', letterSpacing: '0.3em', fontSize: '10px' }}
-              className="uppercase mb-5">Lion Elite Beauty</p>
-            <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '3.2rem', lineHeight: '1.12', letterSpacing: '-0.02em' }}
-              className="font-normal mb-6">
-              Advanced Peptide<br />Skincare Collection.
-            </h1>
-            <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '24px' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '16px', lineHeight: '1.8', maxWidth: '480px' }}>
-              Peptide-powered formulations designed to support the appearance of healthier, more radiant skin. Premium ingredients, purposefully formulated — to help you feel confident in your own skin.
-            </p>
+          <div className="grid lg:grid-cols-12 gap-10 items-end">
+            <div className="lg:col-span-7">
+              <p style={eyebrow}>Peptide skincare, simplified</p>
+              <h1 style={heading}>Start with what your skin needs.</h1>
+            </div>
+            <div className="lg:col-span-5">
+              <p style={copy}>Four focused products. Clear jobs. A simple routine you can actually understand and use consistently.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Products */}
-      <section style={{ backgroundColor: '#FAFAF8', padding: '80px 0' }}>
+      <section style={{ padding: '54px 0 30px' }}>
         <div className="max-w-7xl mx-auto px-6">
-
-          <div className="flex items-center gap-4 mb-12">
-            <div style={{ width: '32px', height: '1px', backgroundColor: '#C9A96E' }}></div>
-            <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', letterSpacing: '0.25em', fontSize: '10px' }} className="uppercase">
-              All Products
-            </p>
+          <p style={eyebrow}>What does your skin need today?</p>
+          <div className="flex flex-wrap gap-2">
+            {goals.map(g => (
+              <button key={g} onClick={() => setGoal(g)} style={{ ...goalButton, background: goal === g ? '#C9AA73' : '#F3EDE4', color: '#4D4842' }}>{g}</button>
+            ))}
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 gap-px" style={{ backgroundColor: '#E8DDD0' }}>
-            {skincareProducts.map((p, i) => {
-              const isDark = p.bg === '#1A1A1A' || p.bg === '#2A2A2A'
-              return (
-                <div key={p.slug} style={{ backgroundColor: p.bg }}>
-                  <div className={`grid md:grid-cols-2 ${i % 2 === 1 ? '' : ''}`} >
-                    {/* Left: info */}
-                    <div style={{ padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      <div className="flex items-center gap-3 mb-6">
-                        <div style={{ backgroundColor: p.badgeColor, padding: '5px 14px' }}>
-                          <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '9px', letterSpacing: '0.2em' }} className="uppercase">{p.badge}</span>
-                        </div>
-                        <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#3A3A3A' : '#BABABA', fontSize: '11px' }}>{p.size}</span>
-                      </div>
-
-                      <h2 style={{ fontFamily: 'Georgia, serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '1.9rem', lineHeight: '1.2', marginBottom: '8px' }}
-                        className="font-normal">{p.name}</h2>
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '11px', letterSpacing: '0.18em', marginBottom: '20px' }}
-                        className="uppercase">{p.tagline}</p>
-
-                      <div style={{ width: '32px', height: '1px', backgroundColor: p.accent, marginBottom: '20px' }}></div>
-
-                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#CACACA' : '#6A6A6A', fontSize: '14px', lineHeight: '1.9', marginBottom: '28px', maxWidth: '400px' }}>
-                        {p.description}
-                      </p>
-
-                      <ul className="space-y-3 mb-8">
-                        {p.benefits.map(b => (
-                          <li key={b.title} className="flex items-start gap-3">
-                            <div style={{ width: '5px', height: '5px', backgroundColor: p.accent, borderRadius: '50%', flexShrink: 0, marginTop: '7px' }}></div>
-                            <div>
-                              <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '13px', fontWeight: '500' }}>{b.title}</span>
-                              <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#5A5A5A' : '#7A7A7A', fontSize: '13px' }}> — {b.desc}</span>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="flex items-center gap-6">
-                        {p.badge === 'Pre-Order' ? (
-                          <>
-                            <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: '1.8rem' }}>{p.price}</p>
-                            <Link to={`/skincare/${p.slug}`}
-                              style={{
-                                backgroundColor: p.accent, color: '#000',
-                                fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                                fontSize: '11px', letterSpacing: '0.18em',
-                                padding: '14px 28px', textDecoration: 'none',
-                              }}
-                              className="uppercase hover:opacity-90 transition-opacity">
-                              Pre-Order Now →
-                            </Link>
-                          </>
-                        ) : p.badge === 'Coming Soon' ? (
-                          <>
-                            <p style={{ fontFamily: 'Georgia, serif', color: p.accent, fontSize: '1.3rem', letterSpacing: '0.1em' }}>Coming Soon</p>
-                            <Link to={`/skincare/${p.slug}`}
-                              style={{
-                                border: `1px solid ${p.accent}`,
-                                color: p.accent,
-                                fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                                fontSize: '11px', letterSpacing: '0.18em',
-                                padding: '14px 28px', textDecoration: 'none',
-                              }}
-                              className="uppercase hover:opacity-90 transition-opacity">
-                              Learn More →
-                            </Link>
-                          </>
-                        ) : (
-                          <>
-                            <p style={{ fontFamily: 'Georgia, serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '1.8rem' }}>{p.price}</p>
-                            <Link to={`/skincare/${p.slug}`}
-                              style={{
-                                backgroundColor: p.accent,
-                                color: '#FFFFFF',
-                                fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                                fontSize: '11px', letterSpacing: '0.18em',
-                                padding: '14px 28px', textDecoration: 'none',
-                              }}
-                              className="uppercase hover:opacity-90 transition-opacity">
-                              View Details →
-                            </Link>
-                          </>
-                        )}
-                      </div>
+      <section style={{ padding: '34px 0 90px' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-5">
+            {products.map(p => (
+              <article key={p.slug} style={card}>
+                <div className="grid sm:grid-cols-[180px_1fr] gap-7 items-center">
+                  <Link to={`/skincare/${p.slug}`} style={{ background: '#F4EEE6', minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ProductImage src={p.image} alt={p.name} style={{ maxWidth: '140px', maxHeight: '185px', objectFit: 'contain' }} />
+                  </Link>
+                  <div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span style={{ ...eyebrow, color: p.accent, marginBottom: 0 }}>{p.step}</span>
+                      <span style={size}>{p.size}</span>
                     </div>
-
-                    {/* Right: visual */}
-                    <div style={{ backgroundColor: isDark ? '#111' : '#EDE7DC', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '340px', padding: '60px' }}>
-                      <div className="text-center">
-                        <div style={{ marginBottom: '32px' }}>
-                          <ProductImage
-                            src={p.image}
-                            alt={p.name}
-                            style={{ maxWidth: '160px', height: 'auto', display: 'block', margin: '0 auto' }}
-                            fallback={<ProductBottle accent={p.accent} label={p.label} isDark={isDark} />}
-                          />
-                        </div>
-                        <p style={{ fontFamily: 'Georgia, serif', color: isDark ? '#FAFAF8' : '#1A1A1A', fontSize: '1rem', marginBottom: '6px' }}>{p.shortName}</p>
-                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark ? '#3A3A3A' : '#9A9A9A', fontSize: '11px', letterSpacing: '0.15em' }} className="uppercase">{p.size}</p>
-                      </div>
+                    <h2 style={{ fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '1.55rem', lineHeight: 1.2, marginBottom: '9px' }}>{p.name}</h2>
+                    <p style={{ ...copy, fontSize: '13px', marginBottom: '18px' }}>{p.tagline}</p>
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      {(p.bestFor || []).slice(0, 3).map(x => <span key={x} style={pill}>{x}</span>)}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span style={{ fontFamily: 'Georgia, serif', color: '#302E2B', fontSize: '1.5rem' }}>{p.price}</span>
+                      <Link to={`/skincare/${p.slug}`} style={view}>View product →</Link>
                     </div>
                   </div>
                 </div>
-              )
-            })}
+              </article>
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-5 mt-5">
+            <div style={{ ...card, background: '#F3EDE4' }}>
+              <p style={eyebrow}>The core routine</p>
+              <h3 style={smallHeading}>Cleanse → Treat → Recover</h3>
+              <p style={copy}>Start with the face wash, add the GHK-Cu serum as your treatment step, then finish with KPV moisturizer when your skin needs hydration and comfort.</p>
+            </div>
+            <Link to="/ingredients" style={{ ...card, background: '#EFF1EC', textDecoration: 'none' }}>
+              <p style={eyebrow}>Ingredient Library</p>
+              <h3 style={smallHeading}>Want the deeper science?</h3>
+              <p style={copy}>See exactly which current products contain GHK-Cu, KPV, glycerin, panthenol, centella and more.</p>
+              <span style={view}>Explore ingredients →</span>
+            </Link>
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   )
 }
+
+const eyebrow = { color: '#A7895B', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '.27em', fontSize: '10px', textTransform: 'uppercase', marginBottom: '14px' }
+const heading = { fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '3rem', lineHeight: 1.08, letterSpacing: '-.025em' }
+const smallHeading = { fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '1.45rem', marginBottom: '12px' }
+const copy = { fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#716D67', fontSize: '15px', lineHeight: 1.8 }
+const goalButton = { border: '1px solid #DED2C4', padding: '12px 16px', fontSize: '10px', letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer' }
+const card = { background: '#FFFDF9', border: '1px solid #E4D9CC', padding: '24px' }
+const size = { color: '#A09991', fontSize: '10px' }
+const pill = { background: '#F3EDE4', border: '1px solid #E5DACE', padding: '6px 9px', color: '#716D67', fontSize: '9px', letterSpacing: '.06em' }
+const view = { color: '#A7895B', textDecoration: 'none', fontSize: '10px', letterSpacing: '.12em', textTransform: 'uppercase' }
