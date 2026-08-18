@@ -6,6 +6,7 @@ import { priceOrder } from './_pricing.js'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null
+const ORDERS_EMAIL = 'orders@lionelitebeauty.com'
 
 let redis
 const memStore = new Map()
@@ -51,9 +52,9 @@ async function loadOrder(orderNumber) {
 
 async function listOrders() {
   const r = getRedis()
-  let ids
-  if (r) ids = await r.zrange(INDEX_KEY, 0, 499, { rev: true })
-  else ids = JSON.parse(memStore.get(INDEX_KEY) || '[]').slice(0, 500)
+  const ids = r
+    ? await r.zrange(INDEX_KEY, 0, 499, { rev: true })
+    : JSON.parse(memStore.get(INDEX_KEY) || '[]').slice(0, 500)
 
   const orders = []
   for (const id of ids || []) {
@@ -69,12 +70,8 @@ async function verifyStripePayment(paymentIntentId, expectedCents) {
   if (!stripe) return { ok: false, reason: 'stripe_not_configured' }
   try {
     const intent = await stripe.paymentIntents.retrieve(String(paymentIntentId))
-    if (!intent || intent.status !== 'succeeded') {
-      return { ok: false, reason: `payment_status_${intent?.status || 'unknown'}` }
-    }
-    if (Number(intent.amount_received ?? intent.amount) !== Number(expectedCents)) {
-      return { ok: false, reason: 'amount_mismatch' }
-    }
+    if (!intent || intent.status !== 'succeeded') return { ok: false, reason: `payment_status_${intent?.status || 'unknown'}` }
+    if (Number(intent.amount_received ?? intent.amount) !== Number(expectedCents)) return { ok: false, reason: 'amount_mismatch' }
     return { ok: true }
   } catch (err) {
     console.error('Stripe verification failed:', err?.message)
@@ -94,103 +91,110 @@ function carrierTrackingUrl(carrier, trackingNumber) {
 
 function trackingEmailHtml(order) {
   const url = carrierTrackingUrl(order.carrier, order.trackingNumber)
-  const items = (order.items || []).map(i => `<li style="margin-bottom:6px;">${i.name} × ${i.quantity}</li>`).join('')
-  return `
-  <div style="font-family:Arial,sans-serif;background:#F5F0E8;padding:36px 16px;color:#2A2A2A;">
-    <div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid #E0D5C5;padding:36px;">
-      <p style="color:#C9A96E;letter-spacing:.22em;text-transform:uppercase;font-size:11px;margin:0 0 10px;">Lion Elite Beauty</p>
-      <h1 style="font-family:Georgia,serif;font-weight:400;font-size:28px;margin:0 0 18px;">Your order has shipped.</h1>
-      <p style="line-height:1.7;color:#555;">Hi ${order.name || 'there'}, your Lion Elite Beauty order <strong>#${order.orderNumber}</strong> is on the way.</p>
-      <div style="background:#FAF7F2;border:1px solid #E0D5C5;padding:20px;margin:24px 0;">
-        <p style="margin:0 0 8px;"><strong>Carrier:</strong> ${order.carrier}</p>
-        <p style="margin:0;"><strong>Tracking:</strong> ${order.trackingNumber}</p>
+  const items = (order.items || []).map(i => `<li style="margin-bottom:7px;">${i.name} × ${i.quantity}</li>`).join('')
+  return `<!doctype html><html><body style="margin:0;background:#fbf7f0;font-family:Arial,sans-serif;color:#34302e">
+    <div style="padding:34px 14px">
+      <div style="max-width:620px;margin:0 auto;background:#fffdfc;border:1px solid #e8ddd1;padding:38px">
+        <div style="font-family:Georgia,serif;letter-spacing:.18em;font-size:18px;color:#34302e">LION ELITE BEAUTY</div>
+        <div style="margin-top:6px;color:#c8a56a;letter-spacing:.22em;font-size:10px;text-transform:uppercase">Shipping Update</div>
+        <h1 style="font-family:Georgia,serif;font-weight:400;font-size:31px;margin:32px 0 16px">Your order is on its way.</h1>
+        <p style="line-height:1.75;color:#736a64">Hi ${order.name || 'there'}, your order <strong>#${order.orderNumber}</strong> has shipped.</p>
+        <div style="background:#f6eee7;border:1px solid #e8ddd1;padding:20px;margin:26px 0">
+          <div style="font-size:12px;color:#9b9088;text-transform:uppercase;letter-spacing:.15em;margin-bottom:10px">Shipping details</div>
+          <div style="margin-bottom:8px"><strong>Carrier:</strong> ${order.carrier}</div>
+          <div><strong>Tracking:</strong> ${order.trackingNumber}</div>
+        </div>
+        ${url ? `<a href="${url}" style="display:inline-block;background:#c8a56a;color:#fff;text-decoration:none;padding:14px 22px;letter-spacing:.12em;text-transform:uppercase;font-size:10px">Track package →</a>` : ''}
+        ${items ? `<div style="margin-top:30px;font-size:10px;color:#9b9088;text-transform:uppercase;letter-spacing:.15em">Items</div><ul style="padding-left:20px;color:#736a64;line-height:1.7">${items}</ul>` : ''}
+        <p style="margin-top:32px;color:#9b9088;font-size:12px;line-height:1.7">Questions? Reply to this email and our team will help.</p>
       </div>
-      ${url ? `<p style="margin:24px 0;"><a href="${url}" style="display:inline-block;background:#C9A96E;color:#000;text-decoration:none;padding:14px 22px;letter-spacing:.12em;text-transform:uppercase;font-size:11px;">Track Package →</a></p>` : ''}
-      ${items ? `<p style="font-size:12px;color:#777;text-transform:uppercase;letter-spacing:.12em;margin-top:28px;">Items</p><ul style="padding-left:20px;color:#555;line-height:1.6;">${items}</ul>` : ''}
-      <p style="margin-top:28px;color:#777;font-size:13px;line-height:1.7;">Questions? Reply to this email and our team will help.</p>
     </div>
-  </div>`
+  </body></html>`
 }
 
 function newOrderEmailHtml(order) {
-  const rows = (order.items || []).map(i => `
-        <tr>
-          <td style="padding:10px 12px;border-top:1px solid #E0D5C5;color:#2A2A2A;font-size:14px;">${i.name}</td>
-          <td align="center" style="padding:10px 12px;border-top:1px solid #E0D5C5;color:#2A2A2A;font-size:14px;">${i.quantity}</td>
-          <td align="right" style="padding:10px 12px;border-top:1px solid #E0D5C5;color:#C9A96E;font-weight:bold;font-size:14px;">$${(Number(i.price || 0) * Number(i.quantity || 1)).toFixed(2)}</td>
-        </tr>`).join('')
   const paid = order.paymentStatus === 'paid'
-  const adminUrl = `${process.env.SITE_URL || 'https://lionelitebeauty.com'}/orders`
-  return `
-  <div style="font-family:Arial,sans-serif;background:#0c0c0c;padding:24px 12px;color:#2A2A2A;">
-    <div style="max-width:600px;margin:0 auto;border-radius:12px;overflow:hidden;">
-      <div style="background:#C9A96E;padding:16px 24px;color:#141007;font-size:16px;font-weight:bold;letter-spacing:1px;">&#128722;&nbsp; NEW ORDER — ACTION REQUIRED</div>
-      <div style="background:#141007;padding:22px 24px;">
-        <div style="color:#D9B85A;font-size:11px;letter-spacing:4px;text-transform:uppercase;">Lion Elite Beauty — Internal Notification</div>
-        <div style="color:#D9B85A;font-family:Georgia,serif;font-size:28px;padding-top:6px;">Order #${order.orderNumber}</div>
-        <div style="color:#C9C2AD;font-size:14px;padding-top:8px;">Payment via <strong style="color:#C9A96E;">${order.paymentMethod}</strong> — <strong style="color:${paid ? '#7bbf7b' : '#e0b84d'};">${paid ? 'paid' : 'pending confirmation'}</strong></div>
-      </div>
-      <div style="background:#F5F0E8;padding:22px 24px 6px;">
-        <a href="${adminUrl}" style="display:block;background:#C9A96E;color:#141007;text-decoration:none;text-align:center;font-size:14px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase;padding:16px;">Open Orders Dashboard →</a>
-      </div>
-      <div style="background:#F5F0E8;padding:14px 24px 0;">
-        <p style="color:#C9A96E;font-size:12px;font-weight:bold;letter-spacing:1px;margin:0;text-transform:uppercase;">Customer</p>
-        <p style="color:#2A2A2A;font-size:15px;margin:6px 0 0;">${order.name || ''}</p>
-        <p style="color:#C9A96E;font-size:13px;margin:0;">${order.email}</p>
-        ${order.phone ? `<p style="color:#555;font-size:13px;margin:0;">${order.phone}</p>` : ''}
-        ${order.address ? `<p style="color:#555;font-size:13px;margin:4px 0 0;">${order.address}</p>` : ''}
-      </div>
-      <div style="background:#F5F0E8;padding:16px 24px 24px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FAF7F2;border:1px solid #E0D5C5;">
-          <tr>
-            <td style="padding:9px 12px;color:#8a8672;font-size:11px;letter-spacing:1px;">PRODUCT</td>
-            <td align="center" style="padding:9px 12px;color:#8a8672;font-size:11px;letter-spacing:1px;">QTY</td>
-            <td align="right" style="padding:9px 12px;color:#8a8672;font-size:11px;letter-spacing:1px;">PRICE</td>
-          </tr>
-          ${rows}
-          <tr>
-            <td colspan="2" align="right" style="padding:12px;border-top:2px solid #E0D5C5;color:#2A2A2A;font-weight:bold;">Total</td>
-            <td align="right" style="padding:12px;border-top:2px solid #E0D5C5;color:#C9A96E;font-weight:bold;">$${Number(order.total || 0).toFixed(2)}</td>
-          </tr>
-        </table>
-        ${order.discountCode ? `<p style="color:#777;font-size:12px;margin:10px 0 0;">Discount code: <strong>${order.discountCode}</strong>${order.rep ? ` (rep: ${order.rep})` : ''}</p>` : ''}
+  const adminUrl = `${process.env.SITE_URL || 'https://lionelitebeauty.com'}/admin/orders`
+  const rows = (order.items || []).map(i => `
+    <tr>
+      <td style="padding:13px 0;border-bottom:1px solid #e8ddd1;color:#4d4743;font-size:14px">${i.name}</td>
+      <td style="padding:13px 8px;border-bottom:1px solid #e8ddd1;text-align:center;color:#736a64;font-size:14px">${i.quantity}</td>
+      <td style="padding:13px 0;border-bottom:1px solid #e8ddd1;text-align:right;color:#a9854d;font-weight:bold;font-size:14px">$${(Number(i.price || 0) * Number(i.quantity || 1)).toFixed(2)}</td>
+    </tr>`).join('')
+
+  return `<!doctype html><html><body style="margin:0;background:#fbf7f0;font-family:Arial,sans-serif;color:#34302e">
+    <div style="padding:34px 14px">
+      <div style="max-width:640px;margin:0 auto;background:#fffdfc;border:1px solid #e8ddd1">
+        <div style="padding:36px 34px 28px;border-bottom:1px solid #e8ddd1;background:#fffdfc">
+          <div style="font-family:Georgia,serif;letter-spacing:.18em;font-size:19px;color:#34302e">LION ELITE BEAUTY</div>
+          <div style="margin-top:7px;color:#c8a56a;letter-spacing:.24em;font-size:10px;text-transform:uppercase">New Order · Internal Notification</div>
+          <h1 style="font-family:Georgia,serif;font-weight:400;font-size:34px;line-height:1.15;margin:30px 0 8px;color:#34302e">A new order has arrived.</h1>
+          <div style="font-family:Georgia,serif;font-size:20px;color:#a9854d">#${order.orderNumber}</div>
+        </div>
+
+        <div style="padding:26px 34px;background:#f6eee7;border-bottom:1px solid #e8ddd1">
+          <div style="display:inline-block;background:${paid ? '#eef5ef' : '#fbf1e2'};border:1px solid ${paid ? '#cfe0d2' : '#ead4ae'};color:${paid ? '#557661' : '#9a733f'};padding:7px 11px;border-radius:999px;font-size:10px;text-transform:uppercase;letter-spacing:.12em">${paid ? 'Payment confirmed' : 'Payment pending confirmation'}</div>
+          <div style="margin-top:12px;color:#736a64;font-size:13px">Payment via <strong style="color:#34302e;text-transform:capitalize">${order.paymentMethod}</strong></div>
+        </div>
+
+        <div style="padding:28px 34px 10px">
+          <a href="${adminUrl}" style="display:block;background:#c8a56a;color:#fff;text-decoration:none;text-align:center;padding:16px 18px;letter-spacing:.15em;text-transform:uppercase;font-size:10px">Open Orders Dashboard →</a>
+        </div>
+
+        <div style="padding:22px 34px">
+          <div style="color:#9b9088;font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px">Customer</div>
+          <div style="font-family:Georgia,serif;font-size:22px;color:#34302e;margin-bottom:5px">${order.name || ''}</div>
+          <div style="color:#a9854d;font-size:13px;margin-bottom:3px">${order.email}</div>
+          ${order.phone ? `<div style="color:#736a64;font-size:13px;margin-bottom:3px">${order.phone}</div>` : ''}
+          ${order.address ? `<div style="color:#736a64;font-size:13px;line-height:1.65;margin-top:8px">${order.address}</div>` : ''}
+        </div>
+
+        <div style="padding:10px 34px 34px">
+          <div style="color:#9b9088;font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px">Order summary</div>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="padding:10px 0;border-bottom:1px solid #c8a56a;color:#9b9088;font-size:10px;letter-spacing:.12em">PRODUCT</td>
+              <td style="padding:10px 8px;border-bottom:1px solid #c8a56a;text-align:center;color:#9b9088;font-size:10px;letter-spacing:.12em">QTY</td>
+              <td style="padding:10px 0;border-bottom:1px solid #c8a56a;text-align:right;color:#9b9088;font-size:10px;letter-spacing:.12em">PRICE</td>
+            </tr>
+            ${rows}
+            <tr>
+              <td colspan="2" style="padding:18px 0 0;text-align:right;font-family:Georgia,serif;font-size:18px;color:#34302e">Total</td>
+              <td style="padding:18px 0 0;text-align:right;font-family:Georgia,serif;font-size:22px;color:#a9854d">$${Number(order.total || 0).toFixed(2)}</td>
+            </tr>
+          </table>
+          ${order.discountCode ? `<div style="margin-top:14px;color:#9b9088;font-size:12px">Discount code: <strong style="color:#736a64">${order.discountCode}</strong>${order.rep ? ` · Rep: ${order.rep}` : ''}</div>` : ''}
+        </div>
       </div>
     </div>
-  </div>`
+  </body></html>`
 }
 
 async function sendNewOrderNotification(order) {
   if (!process.env.RESEND_API_KEY) return { skipped: 'no_resend_key' }
-  const to = process.env.ORDER_NOTIFICATION_EMAIL || 'info@lionelitewellness.com'
-  await resend.emails.send({
-    from: 'Lion Elite Beauty <orders@lionelitebeauty.com>',
-    to: [to],
+  const result = await resend.emails.send({
+    from: `Lion Elite Beauty <${ORDERS_EMAIL}>`,
+    to: [ORDERS_EMAIL],
     subject: `🛒 New Order #${order.orderNumber} — Lion Elite Beauty — $${Number(order.total || 0).toFixed(2)}`,
     html: newOrderEmailHtml(order),
   })
-  return { sent: true, to }
+  if (result?.error) throw new Error(result.error.message || 'Order notification failed')
+  return { sent: true, to: ORDERS_EMAIL }
 }
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
-
   const body = req.body || {}
 
   try {
     if (body.action === 'create') {
-      if (!body.orderNumber || !body.email || !Array.isArray(body.items)) {
-        return res.status(400).json({ error: 'Missing order data' })
-      }
+      if (!body.orderNumber || !body.email || !Array.isArray(body.items)) return res.status(400).json({ error: 'Missing order data' })
 
       const existing = await loadOrder(body.orderNumber)
       if (existing) return res.status(200).json({ success: true, order: existing, duplicate: true })
 
       const code = normalizeCode(body.discountCode)
-      const priced = priceOrder({
-        items: body.items,
-        discountCode: code,
-        discountApplied: Boolean(code),
-      })
+      const priced = priceOrder({ items: body.items, discountCode: code, discountApplied: Boolean(code) })
       if (!priced.ok) return res.status(400).json({ error: priced.error })
 
       let paymentStatus = 'pending'
@@ -231,13 +235,7 @@ export default async function handler(req, res) {
       }
 
       await saveOrder(order)
-
-      try {
-        await sendNewOrderNotification(order)
-      } catch (notifyErr) {
-        console.error('New-order notification failed:', notifyErr)
-      }
-
+      try { await sendNewOrderNotification(order) } catch (notifyErr) { console.error('New-order notification failed:', notifyErr) }
       return res.status(200).json({ success: true, order })
     }
 
@@ -287,12 +285,13 @@ export default async function handler(req, res) {
       order.fulfillmentStatus = 'shipped'
       order.updatedAt = new Date().toISOString()
 
-      await resend.emails.send({
-        from: 'Lion Elite Beauty <orders@lionelitebeauty.com>',
+      const result = await resend.emails.send({
+        from: `Lion Elite Beauty <${ORDERS_EMAIL}>`,
         to: [order.email],
         subject: `Your Lion Elite Beauty order #${order.orderNumber} has shipped`,
         html: trackingEmailHtml(order),
       })
+      if (result?.error) throw new Error(result.error.message || 'Tracking email failed')
 
       order.trackingSentAt = new Date().toISOString()
       await saveOrder(order)
