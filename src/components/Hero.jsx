@@ -2,121 +2,46 @@ import { Link } from 'react-router-dom'
 
 export default function Hero() {
   return (
-    <section id="hero" style={{ backgroundColor: '#FAF7F2', minHeight: '100vh', paddingTop: '80px', position: 'relative', overflow: 'hidden' }}
-      className="flex items-center">
-
-      {/* Background glow - soft natural warmth */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(ellipse at 50% 40%, rgba(201,169,110,0.08) 0%, transparent 65%), radial-gradient(ellipse at 80% 80%, rgba(138,158,133,0.05) 0%, transparent 50%)',
-      }}></div>
-
+    <section id="hero" style={{ backgroundColor: '#FAF8F4', minHeight: '92vh', paddingTop: '84px', position: 'relative', overflow: 'hidden' }} className="flex items-center">
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(circle at 18% 20%, rgba(216,194,188,.22), transparent 34%), radial-gradient(circle at 82% 76%, rgba(169,178,158,.18), transparent 34%)' }} />
       <div className="max-w-7xl mx-auto px-6 py-24 w-full" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* Top label */}
-        <div className="flex justify-center mb-10">
-          <div style={{ border: '1px solid #E0D5C5', padding: '8px 24px', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '6px', height: '6px', backgroundColor: '#C9A96E', borderRadius: '50%' }}></div>
-            <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#4A4A4A', letterSpacing: '0.3em', fontSize: '10px' }} className="uppercase">
-              Lion Elite Beauty · Peptide Skincare &amp; Wellness
-            </span>
-            <div style={{ width: '6px', height: '6px', backgroundColor: '#C9A96E', borderRadius: '50%' }}></div>
-          </div>
-        </div>
-
-        {/* Centered hero — text only, no stock photos */}
-        <div className="max-w-4xl mx-auto text-center mb-20">
-          <h1 style={{
-            fontFamily: 'Georgia, serif',
-            color: '#2A2A2A',
-            lineHeight: '1.08',
-            letterSpacing: '-0.02em',
-          }} className="text-5xl md:text-7xl font-normal mb-8">
-            Feel Good<br />In Your{' '}
-            <span style={{
-              background: 'linear-gradient(90deg, #C9A96E 0%, #B8A87A 50%, #C9A96E 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>Own Skin.</span>
+        <div className="max-w-4xl mx-auto text-center">
+          <p style={eyebrow}>Lion Elite Beauty</p>
+          <h1 style={{ fontFamily: 'Georgia, serif', color: '#302E2B', lineHeight: 1.03, letterSpacing: '-.035em' }} className="text-5xl md:text-7xl font-normal mb-8">
+            Look better. Feel better.<br />Perform better.
           </h1>
-
-          <p style={{
-            fontFamily: 'Helvetica Neue, Arial, sans-serif',
-            color: '#6A6A6A',
-            fontSize: '18px',
-            lineHeight: '1.9',
-            maxWidth: '600px',
-            margin: '0 auto 40px',
-          }}>
-            Peptide-powered skincare and personalized wellness programs — designed to help you look and feel your best, confidently and consistently.
+          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#716D67', fontSize: '18px', lineHeight: 1.85, maxWidth: '650px', margin: '0 auto 42px' }}>
+            Private optimization coaching and peptide-powered skincare for people who want a more intentional approach to how they look, feel, and perform.
           </p>
-
-          {/* Trust micro-signals */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mb-10">
-            {['Visible Results in 2–4 Weeks', 'Science-Backed Formulas', 'Personalized Programs'].map(t => (
-              <div key={t} className="flex items-center gap-2">
-                <div style={{ width: '5px', height: '5px', backgroundColor: '#C9A96E', borderRadius: '50%' }}></div>
-                <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.15em' }} className="uppercase">{t}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/skincare"
-              style={{
-                backgroundColor: '#C9A96E',
-                fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                letterSpacing: '0.15em',
-                fontSize: '12px',
-                display: 'inline-block',
-                padding: '18px 48px',
-                color: '#000',
-                textDecoration: 'none',
-              }}
-              className="uppercase hover:opacity-90 transition-opacity">
-              Shop Skincare →
-            </Link>
-            <Link to="/programs/optimization"
-              style={{
-                border: '1px solid #D0C8BA',
-                fontFamily: 'Helvetica Neue, Arial, sans-serif',
-                letterSpacing: '0.15em',
-                fontSize: '12px',
-                display: 'inline-block',
-                padding: '18px 36px',
-                color: '#6A6A6A',
-                textDecoration: 'none',
-              }}
-              className="uppercase hover:border-[#C9A96E] hover:text-[#C9A96E] transition-colors">
-              Explore Programs
-            </Link>
+            <Link to="/programs/optimization" style={primary}>Explore Private Coaching →</Link>
+            <Link to="/skincare" style={secondary}>Shop Skincare</Link>
           </div>
         </div>
 
-        {/* Social proof bar */}
-        <div style={{ borderTop: '1px solid #E8DDD0', borderBottom: '1px solid #E8DDD0', padding: '28px 0' }}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { stat: '2–4 wks', label: 'Visible Results' },
-              { stat: '7', label: 'Skincare Products' },
-              { stat: '6', label: 'Targeted Programs' },
-              { stat: 'GHK-Cu', label: 'Peptide Core Technology' },
-            ].map(item => (
-              <div key={item.label}>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#8A9E85', fontSize: '1.4rem', marginBottom: '4px' }}>{item.stat}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '10px', letterSpacing: '0.2em' }} className="uppercase">{item.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="flex justify-center mt-12">
-          <div style={{ width: '1px', height: '60px', background: 'linear-gradient(to bottom, #C9A96E88, transparent)' }}></div>
+        <div className="grid md:grid-cols-2 gap-4 mt-20 max-w-5xl mx-auto">
+          <Link to="/programs/optimization" style={{ ...pathCard, background: '#F3EDE4' }}>
+            <span style={eyebrow}>Private Optimization</span>
+            <strong style={pathTitle}>High-touch coaching, built around you.</strong>
+            <span style={pathCopy}>Personalized programs for physique, performance, metabolic health, cognition, fertility, hair and longevity.</span>
+            <span style={pathLink}>Explore programs →</span>
+          </Link>
+          <Link to="/skincare" style={{ ...pathCard, background: '#F8F4EE' }}>
+            <span style={eyebrow}>Peptide Skincare</span>
+            <strong style={pathTitle}>Simple routines. Purposeful formulas.</strong>
+            <span style={pathCopy}>A focused collection built around GHK-Cu, KPV and supportive skin-barrier ingredients.</span>
+            <span style={pathLink}>Explore skincare →</span>
+          </Link>
         </div>
       </div>
     </section>
   )
 }
+
+const eyebrow = { color: '#A7895B', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '.3em', fontSize: '10px', textTransform: 'uppercase', marginBottom: '18px' }
+const primary = { background: '#C9AA73', color: '#302E2B', textDecoration: 'none', padding: '17px 34px', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '.16em', textTransform: 'uppercase' }
+const secondary = { border: '1px solid #D7CCBD', color: '#5F5A54', textDecoration: 'none', padding: '17px 34px', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '.16em', textTransform: 'uppercase' }
+const pathCard = { display: 'flex', flexDirection: 'column', padding: '42px', textDecoration: 'none', border: '1px solid #E4D9CC', minHeight: '260px' }
+const pathTitle = { fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '1.55rem', lineHeight: 1.25, marginBottom: '14px' }
+const pathCopy = { fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#716D67', fontSize: '13px', lineHeight: 1.75, maxWidth: '420px' }
+const pathLink = { marginTop: 'auto', paddingTop: '28px', color: '#A7895B', fontSize: '10px', letterSpacing: '.16em', textTransform: 'uppercase' }
