@@ -1,1 +1,1 @@
-{"httpStatus":"200","response":{"service":"lion-elite-beauty-email","configured":true,"ordersFrom":"orders@lionelitebeauty.com","ordersBusinessTo":"orders@lionelitebeauty.com","infoFrom":"info@lionelitebeauty.com"}}
+{"httpStatus":"200","response":{"service":"lion-elite-beauty-email","configured":true,"ordersFrom":"orders@lionelitebeauty.com","ordersBusinessTo":"orders@lionelitebeauty.com","infoFrom":"info@lionelitebeauty.com","domain":{"name":"lionelitebeauty.com","status":"not_found"}}}
