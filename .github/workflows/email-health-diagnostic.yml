@@ -1,0 +1,31 @@
+name: Beauty Email Health Diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/email-health-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for production deploy and check email health
+        shell: bash
+        run: |
+          set -euo pipefail
+          sleep 45
+          curl -fsS https://www.lionelitebeauty.com/api/email-health > email-health-result.json
+          cat email-health-result.json
+      - name: Save safe diagnostic result
+        shell: bash
+        run: |
+          git config user.name 'lionelite-qa-bot'
+          git config user.email 'orders@lionelitebeauty.com'
+          git add email-health-result.json
+          git commit -m 'test: record Beauty email health result' || exit 0
+          git push
