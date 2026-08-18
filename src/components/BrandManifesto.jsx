@@ -1,87 +1,64 @@
 import { Link } from 'react-router-dom'
 
+const groups = [
+  { title: 'Physique', text: 'Muscle, recovery, weight management and body-composition goals.', links: [['Muscle & Recovery', '/programs/muscle'], ['Weight', '/programs/weight']] },
+  { title: 'Performance', text: 'Cognitive focus, recovery capacity and day-to-day performance.', links: [['Neuro', '/programs/neuro'], ['Longevity', '/programs/longevity']] },
+  { title: 'Health & Confidence', text: 'Targeted support for fertility, hair and long-term optimization.', links: [['Fertility', '/programs/fertility'], ['Hair', '/programs/hair']] },
+]
+
 export default function BrandManifesto() {
   return (
-    <>
-      {/* Philosophy strip */}
-      <section style={{ backgroundColor: '#F5F0E8', padding: '100px 0', borderTop: '1px solid #E8DDD0', borderBottom: '1px solid #E8DDD0' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-20 items-center">
-
-            {/* Left — Statement */}
-            <div>
-              <p style={{ color: '#8A9E85', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px', marginBottom: '24px' }} className="uppercase">Why It Works</p>
-              <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.6rem', lineHeight: '1.2', marginBottom: '32px' }} className="font-normal">
-                Your skin can repair itself.<br />We help it do that.
-              </h2>
-              <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '32px' }}></div>
-              <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '16px', lineHeight: '1.9', marginBottom: '24px' }}>
-                GHK-Cu peptide — the core of every Lion Elite Beauty formulation — is one of the most researched compounds in dermatology, studied alongside thousands of genes involved in skin renewal, collagen support, and barrier health. The result isn't coverage. It's genuine support for how your skin looks and feels — so you can feel confident in your own skin.
-              </p>
-              <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '1rem', fontStyle: 'italic', lineHeight: '1.7' }}>
-                "Not skincare that hides aging — skincare that supports your skin's natural renewal."
-              </p>
+    <section style={{ backgroundColor: '#F3EDE4', padding: '110px 0', borderTop: '1px solid #E5DACD', borderBottom: '1px solid #E5DACD' }}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-12 gap-16 items-start">
+          <div className="lg:col-span-5">
+            <p style={eyebrow}>The Lion Elite Method</p>
+            <h2 style={heading}>Private coaching for people who want more than a generic plan.</h2>
+            <p style={copy}>Our premium programs bring structure, accountability and personalization together around your goals. The point is not more information. It is a clear plan, ongoing guidance and consistent execution.</p>
+            <div className="flex flex-col sm:flex-row gap-3 mt-8">
+              <Link to="/apply" style={primary}>Apply for Private Coaching →</Link>
+              <Link to="/programs/optimization" style={secondary}>Explore Programs</Link>
             </div>
+          </div>
 
-            {/* Right — 4 pillars */}
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { icon: '🧬', title: 'Peptide-Powered', desc: 'GHK-Cu is one of the most researched peptides in dermatology — formulated to support the appearance of healthier skin.' },
-                { icon: '✔', title: 'Visible Difference', desc: 'Supports the appearance of improved texture, tone, and firmness with consistent daily use.' },
-                { icon: '⚕️', title: 'Purposeful Formulation', desc: 'Formulated at concentrations used in studies — not trace marketing amounts.' },
-                { icon: '🎯', title: 'No Filler. No Hype.', desc: 'Every ingredient earns its place. Nothing is added for marketing. Everything is added for results.' },
-              ].map(p => (
-                <div key={p.title} style={{ backgroundColor: '#FAF7F2', border: '1px solid #E0D5C5', padding: '28px 24px' }}>
-                  <span style={{ fontSize: '20px', display: 'block', marginBottom: '12px' }}>{p.icon}</span>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '12px', letterSpacing: '0.1em', marginBottom: '8px' }} className="uppercase">{p.title}</p>
-                  <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '12px', lineHeight: '1.7' }}>{p.desc}</p>
+          <div className="lg:col-span-7 grid md:grid-cols-3 gap-3">
+            {groups.map(group => (
+              <div key={group.title} style={card}>
+                <p style={eyebrow}>{group.title}</p>
+                <p style={{ ...copy, fontSize: '13px', marginBottom: '24px' }}>{group.text}</p>
+                <div style={{ marginTop: 'auto' }}>
+                  {group.links.map(([label, href]) => (
+                    <Link key={href} to={href} style={textLink}>{label} →</Link>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Process strip — Test → Analyze → Optimize → Maintain */}
-      <section style={{ backgroundColor: '#FAF7F2', padding: '80px 0' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p style={{ color: '#8A9E85', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '10px' }} className="uppercase mb-3">How It Works</p>
-            <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2rem' }} className="font-normal">The Lion Elite Method</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-0">
-            {[
-              { step: '01', title: 'Test', desc: 'At-home biomarker testing shipped directly to you. Comprehensive, clinical-grade analysis.' },
-              { step: '02', title: 'Analyze', desc: 'Your data is reviewed and interpreted. No guesswork — only precision insights.' },
-              { step: '03', title: 'Optimize', desc: 'A personalized strategy is built around your biology, goals, and performance targets.' },
-              { step: '04', title: 'Maintain', desc: 'Guided implementation with ongoing recommendations to sustain and build on results.' },
-            ].map((item, i) => (
-              <div key={item.step} style={{
-                padding: '40px 32px',
-                borderLeft: i === 0 ? '1px solid #E0D5C5' : 'none',
-                borderRight: '1px solid #E0D5C5',
-                borderTop: '1px solid #E0D5C5',
-                borderBottom: '1px solid #E0D5C5',
-                position: 'relative',
-              }}>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#E8DDD0', fontSize: '4rem', position: 'absolute', bottom: '16px', right: '20px', lineHeight: '1', userSelect: 'none' }}>{item.step}</p>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', fontSize: '9px', letterSpacing: '0.3em', marginBottom: '12px' }} className="uppercase">Step {item.step}</p>
-                <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.4rem', marginBottom: '12px' }} className="font-normal">{item.title}</p>
-                <div style={{ width: '24px', height: '1px', backgroundColor: '#C9A96E', marginBottom: '14px' }}></div>
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px', lineHeight: '1.8' }}>{item.desc}</p>
               </div>
             ))}
           </div>
-
-          <div className="text-center mt-12">
-            <Link to="/programs/optimization"
-              style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A9E85', fontSize: '11px', letterSpacing: '0.2em', textDecoration: 'none' }}
-              className="uppercase hover:opacity-70 transition-opacity">
-              See All Programs →
-            </Link>
-          </div>
         </div>
-      </section>
-    </>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px mt-16" style={{ background: '#DED1C2' }}>
+          {[
+            ['01', 'Assess', 'Start with your goals, context and current baseline.'],
+            ['02', 'Build', 'Create a personalized roadmap around the outcome you want.'],
+            ['03', 'Implement', 'Turn the plan into practical weekly action.'],
+            ['04', 'Refine', 'Adjust as progress, feedback and priorities change.'],
+          ].map(([n, title, text]) => (
+            <div key={n} style={{ background: '#FAF8F4', padding: '34px 28px' }}>
+              <p style={{ ...eyebrow, color: '#B49A73' }}>{n}</p>
+              <p style={{ fontFamily: 'Georgia, serif', color: '#302E2B', fontSize: '1.25rem', marginBottom: '10px' }}>{title}</p>
+              <p style={{ ...copy, fontSize: '12px', marginBottom: 0 }}>{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
+
+const eyebrow = { color: '#A7895B', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '.28em', fontSize: '10px', textTransform: 'uppercase', marginBottom: '16px' }
+const heading = { fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '2.55rem', lineHeight: 1.15, marginBottom: '22px' }
+const copy = { fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6F6962', fontSize: '15px', lineHeight: 1.8 }
+const card = { background: '#FAF8F4', border: '1px solid #E1D5C8', padding: '30px', display: 'flex', flexDirection: 'column', minHeight: '275px' }
+const primary = { background: '#C9AA73', color: '#302E2B', textDecoration: 'none', padding: '14px 22px', fontSize: '10px', letterSpacing: '.14em', textTransform: 'uppercase' }
+const secondary = { border: '1px solid #D2C5B5', color: '#6F6962', textDecoration: 'none', padding: '14px 22px', fontSize: '10px', letterSpacing: '.14em', textTransform: 'uppercase' }
+const textLink = { display: 'block', color: '#A7895B', textDecoration: 'none', fontSize: '10px', letterSpacing: '.14em', textTransform: 'uppercase', marginTop: '10px' }
