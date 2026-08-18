@@ -25,6 +25,7 @@ jobs:
         shell: bash
         run: |
           set +e
+          # Fresh production rebuild validation requested 2026-08-18 18:45 ET.
           npm run build > /tmp/build.log 2>&1
           CODE=$?
           tail -n 80 /tmp/build.log
