@@ -3,7 +3,6 @@ import { CartProvider } from './context/CartContext'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import BrandManifesto from './components/BrandManifesto'
-import ServicesOverview from './components/ServicesOverview'
 import RoutineSection from './components/RoutineSection'
 import BeforeAfterResults from './components/BeforeAfterResults'
 import SkincareLine from './components/SkincareLine'
@@ -20,6 +19,8 @@ import LongevityPage from './pages/LongevityPage'
 import SkincarePage from './pages/SkincarePage'
 import ProductPage from './pages/ProductPage'
 import StartHerePage from './pages/StartHerePage'
+import IngredientLibraryPage from './pages/IngredientLibraryPage'
+import IngredientDetailPage from './pages/IngredientDetailPage'
 import SkinSystemPage from './pages/SkinSystemPage'
 import ApplyPage from './pages/ApplyPage'
 import CartPage from './pages/CartPage'
@@ -41,14 +42,13 @@ import SEO from './components/SEO'
 function HomePage() {
   return (
     <>
-      <SEO title="Premium Peptide Skincare & Wellness" description="Science-backed peptide skincare and personalized wellness programs. Feel good in your own skin with Lion Elite Beauty." />
-      <div style={{ backgroundColor: '#0D0D0D' }}>
+      <SEO title="Private Optimization Coaching & Peptide Skincare" description="Lion Elite Beauty combines private optimization coaching with peptide-powered skincare for physique, performance, wellness and skin goals." />
+      <div style={{ backgroundColor: '#FAF8F4' }}>
         <Navbar />
         <Hero />
         <BrandManifesto />
-        <RoutineSection />
-        <ServicesOverview />
         <BeforeAfterResults />
+        <RoutineSection />
         <SkincareLine />
         <Testimonials />
         <CTASection />
@@ -76,7 +76,8 @@ export default function App() {
           <Route path="/skincare" element={<SkincarePage />} />
           <Route path="/skincare/:slug" element={<ProductPage />} />
           <Route path="/start-here" element={<StartHerePage />} />
-          <Route path="/ingredients" element={<StartHerePage />} />
+          <Route path="/ingredients" element={<IngredientLibraryPage />} />
+          <Route path="/ingredients/:slug" element={<IngredientDetailPage />} />
           <Route path="/skin-system" element={<SkinSystemPage />} />
           <Route path="/apply" element={<ApplyPage />} />
           <Route path="/client-check-in" element={<PeptideCheckInPage />} />
