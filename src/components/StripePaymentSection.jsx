@@ -20,7 +20,9 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
       return
     }
 
-    // Save order data before redirect (for Affirm/Klarna/Afterpay return)
+    // CheckoutPage has already saved the complete order payload to sessionStorage.
+    // That same saved payload is used after both redirect and non-redirect Stripe
+    // payments, so a browser navigation can never discard the order details.
     if (saveOrderData) saveOrderData()
 
     const { error: payError, paymentIntent } = await stripe.confirmPayment({
@@ -42,9 +44,7 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
       return
     }
 
-    // Never discard Stripe's actual PaymentIntent id. The server uses it to
-    // independently verify both payment status and amount before marking paid.
-    if (!paymentIntent?.id) {
+    if (!paymentIntent?.id || !paymentIntent?.client_secret) {
       const message = 'Payment completed but the confirmation reference was unavailable. Please contact support before retrying.'
       setError(message)
       onError?.(message)
@@ -52,7 +52,12 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
       return
     }
 
-    onSuccess?.(paymentIntent.id)
+    // IMPORTANT: CheckoutPage already has a hardened redirect-return flow that
+    // retrieves this PaymentIntent from Stripe and calls submitOrder with the
+    // REAL paymentIntent.id. Route card payments through that same path instead
+    // of its legacy handleCardSuccess('stripe_confirmed') path.
+    const secret = encodeURIComponent(paymentIntent.client_secret)
+    window.location.assign(`/checkout?payment_intent_client_secret=${secret}`)
   }
 
   return (
