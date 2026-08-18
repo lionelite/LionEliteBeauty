@@ -1,0 +1,44 @@
+name: Setup Beauty Email Domain
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/setup-email-domain.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Beauty domain in Resend and capture DNS requirements
+        shell: bash
+        run: |
+          set +e
+          sleep 25
+          STATUS=$(curl -LsS -o /tmp/setup.json -w '%{http_code}' -X POST https://www.lionelitebeauty.com/api/setup-email-domain)
+          BODY=$(cat /tmp/setup.json 2>/dev/null || echo '{}')
+          NS=$(dig +short NS lionelitebeauty.com | paste -sd ',' -)
+          python3 - "$STATUS" "$BODY" "$NS" <<'PY'
+import json,sys
+status,body,ns=sys.argv[1:4]
+try:
+    parsed=json.loads(body)
+except Exception:
+    parsed={'raw':body[:1000]}
+with open('email-domain-setup-result.json','w') as f:
+    json.dump({'httpStatus':status,'response':parsed,'nameservers':[x for x in ns.split(',') if x]},f)
+PY
+          cat email-domain-setup-result.json
+          exit 0
+      - name: Save setup result
+        shell: bash
+        run: |
+          git config user.name 'lionelite-qa-bot'
+          git config user.email 'orders@lionelitebeauty.com'
+          git add email-domain-setup-result.json
+          git commit -m 'fix: record Beauty email DNS requirements' || exit 0
+          git push
