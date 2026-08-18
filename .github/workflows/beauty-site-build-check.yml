@@ -7,7 +7,7 @@ on:
       - '.github/workflows/beauty-site-build-check.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -19,5 +19,30 @@ jobs:
         with:
           node-version: '20'
           cache: npm
-      - run: npm ci
-      - run: npm run build
+      - name: Install
+        run: npm ci
+      - name: Build and record result
+        shell: bash
+        run: |
+          set +e
+          npm run build > /tmp/build.log 2>&1
+          CODE=$?
+          tail -n 80 /tmp/build.log
+          if [ "$CODE" -eq 0 ]; then
+            printf '{"success":true,"exitCode":0}\n' > beauty-build-result.json
+          else
+            python3 - "$CODE" <<'PY'
+import json,sys
+log=open('/tmp/build.log',errors='ignore').read()[-5000:]
+json.dump({'success':False,'exitCode':int(sys.argv[1]),'tail':log},open('beauty-build-result.json','w'))
+PY
+          fi
+          exit 0
+      - name: Save result
+        shell: bash
+        run: |
+          git config user.name 'lionelite-build-bot'
+          git config user.email 'info@lionelitebeauty.com'
+          git add beauty-build-result.json
+          git commit -m 'test: record Beauty build result' || exit 0
+          git push
