@@ -2,6 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /orders
+Disallow: /rep
+Disallow: /checkout
+Disallow: /cart
 Disallow: /vip
 
 Sitemap: https://lionelitebeauty.com/sitemap.xml
