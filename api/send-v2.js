@@ -1,9 +1,10 @@
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-// Brand invariant: every Lion Elite Beauty transactional email is sent from
-// orders@lionelitebeauty.com. This is intentionally NOT environment-configurable.
-const FROM = 'Lion Elite Beauty <orders@lionelitebeauty.com>'
+// Order lifecycle mail must always come from the dedicated orders inbox.
+const ORDERS_FROM = 'Lion Elite Beauty <orders@lionelitebeauty.com>'
+// Non-order Beauty communication uses the general inbox.
+const INFO_FROM = 'Lion Elite Beauty <info@lionelitebeauty.com>'
 const ADMIN = process.env.ORDER_NOTIFICATION_EMAIL || 'info@lionelitewellness.com'
 
 function esc(value = '') {
@@ -83,8 +84,8 @@ export default async function handler(req, res) {
       await Promise.all([
         ...(b.skipAdmin
           ? []
-          : [sendEmail({ from: FROM, to: [ADMIN], replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ORDER — ${money(total)} — ${b.name}`, html: adminHtml })]),
-        sendEmail({ from: FROM, to: [b.email], subject: `Lion Elite Beauty Order Confirmed — ${id}`, html: clientHtml }),
+          : [sendEmail({ from: ORDERS_FROM, to: [ADMIN], replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ORDER — ${money(total)} — ${b.name}`, html: adminHtml })]),
+        sendEmail({ from: ORDERS_FROM, to: [b.email], subject: `Lion Elite Beauty Order Confirmed — ${id}`, html: clientHtml }),
       ])
       return res.status(200).json({ success: true, orderNumber: id, total })
     }
@@ -104,8 +105,8 @@ export default async function handler(req, res) {
       const clientHtml = page('Enrollment confirmed', `<p>Hi ${esc(b.name)},</p><p>Your <strong>${esc(tier)}</strong> enrollment for ${esc(b.program || 'Wellness Program')} has been received.</p><p style="font-family:Georgia,serif;font-size:22px;color:#c9a96e">${money(amount)}</p><p>Enrollment reference: <strong>${esc(id)}</strong></p>`)
 
       await Promise.all([
-        sendEmail({ from: FROM, to: [ADMIN], replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ENROLLMENT — ${money(amount)} — ${b.name}`, html: adminHtml }),
-        sendEmail({ from: FROM, to: [b.email], subject: `Lion Elite Beauty Enrollment Confirmed — ${tier}`, html: clientHtml }),
+        sendEmail({ from: INFO_FROM, to: [ADMIN], replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ENROLLMENT — ${money(amount)} — ${b.name}`, html: adminHtml }),
+        sendEmail({ from: INFO_FROM, to: [b.email], subject: `Lion Elite Beauty Enrollment Confirmed — ${tier}`, html: clientHtml }),
       ])
       return res.status(200).json({ success: true, orderNumber: id, total: amount })
     }
@@ -116,8 +117,8 @@ export default async function handler(req, res) {
     const clientHtml = page('Application received', `<p>Hi ${esc(b.name)},</p><p>We received your Lion Elite Beauty application for <strong>${esc(b.program || 'our wellness program')}</strong>. Our team will review it and contact you with next steps.</p>`)
 
     await Promise.all([
-      sendEmail({ from: FROM, to: [ADMIN], replyTo: b.email, subject: `New Lion Elite Beauty Application — ${b.program || 'Wellness'} — ${b.name}`, html: adminHtml }),
-      sendEmail({ from: FROM, to: [b.email], subject: 'Application Received — Lion Elite Beauty', html: clientHtml }),
+      sendEmail({ from: INFO_FROM, to: [ADMIN], replyTo: b.email, subject: `New Lion Elite Beauty Application — ${b.program || 'Wellness'} — ${b.name}`, html: adminHtml }),
+      sendEmail({ from: INFO_FROM, to: [b.email], subject: 'Application Received — Lion Elite Beauty', html: clientHtml }),
     ])
 
     return res.status(200).json({ success: true })
