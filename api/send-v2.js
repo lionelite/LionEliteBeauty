@@ -1,11 +1,9 @@
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = process.env.ORDER_FROM_EMAIL || 'Lion Elite Beauty <orders@lionelitebeauty.com>'
-// Defaults to the inbox the owner actually reads, mirroring the Wellness store
-// (src/app/api/order-confirmation/route.ts pins STORE_EMAIL to the same address).
-// The previous default, orders@lionelitebeauty.com, is not a monitored mailbox —
-// order alerts were being "sent" successfully and landing nowhere anyone looked.
+// Brand invariant: every Lion Elite Beauty transactional email is sent from
+// orders@lionelitebeauty.com. This is intentionally NOT environment-configurable.
+const FROM = 'Lion Elite Beauty <orders@lionelitebeauty.com>'
 const ADMIN = process.env.ORDER_NOTIFICATION_EMAIL || 'info@lionelitewellness.com'
 
 function esc(value = '') {
@@ -53,8 +51,6 @@ export default async function handler(req, res) {
   const b = req.body || {}
   if (!b.email || !b.name) return res.status(400).json({ error: 'Name and email are required' })
 
-  // Prefer the order number the caller already persisted, so the email and the
-  // stored order share one id. Only mint a new one when there is no record.
   const id = String(b.orderNumber || '').trim() || orderNumber()
   const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: 'full', timeStyle: 'short' })
 
@@ -84,9 +80,6 @@ export default async function handler(req, res) {
         ${b.address ? `<p style="margin-top:24px"><strong>Shipping to:</strong><br>${esc(b.address)}</p>` : ''}
       `)
 
-      // skipAdmin is set when /api/orders already recorded the order and sent the
-      // owner notification, so a successful checkout produces one owner email and
-      // one customer email rather than two of each.
       await Promise.all([
         ...(b.skipAdmin
           ? []
