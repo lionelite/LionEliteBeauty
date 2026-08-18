@@ -18,6 +18,7 @@ jobs:
         shell: bash
         run: |
           set +e
+          # Manual rerun after Beauty Resend key rotation.
           sleep 12
           ORDER="LEB-EMAIL-LIVE-$(date +%s)"
           cat > /tmp/payload.json <<JSON
