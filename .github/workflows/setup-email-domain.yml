@@ -18,7 +18,8 @@ jobs:
         shell: bash
         run: |
           set +e
-          sleep 25
+          # Endpoint is already deployed; short delay only for propagation.
+          sleep 10
           STATUS=$(curl -LsS -o /tmp/setup.json -w '%{http_code}' -X POST https://www.lionelitebeauty.com/api/setup-email-domain)
           BODY=$(cat /tmp/setup.json 2>/dev/null || echo '{}')
           NS=$(dig +short NS lionelitebeauty.com | paste -sd ',' -)
