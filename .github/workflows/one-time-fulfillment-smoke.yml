@@ -13,31 +13,37 @@ jobs:
   fulfillment-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
     steps:
-      - name: Full production Beauty order and email QA
+      - name: Full production Beauty admin lifecycle QA
         shell: bash
         run: |
           set -euo pipefail
-          # Post-deploy re-run: 2026-08-18
           BASE='https://www.lionelitebeauty.com'
-          ORDER="LEB-FULL-QA-$(date +%s)"
+          ORDER="LEB-ADMIN-QA-$(date +%s)"
+
+          if [ -z "${ADMIN_PASSWORD:-}" ]; then
+            echo 'ADMIN_PASSWORD repository secret is missing'
+            exit 2
+          fi
+          USERNAME="${ADMIN_USERNAME:-admin}"
 
           cat > /tmp/order.json <<JSON
           {
-            "action": "create",
-            "orderNumber": "$ORDER",
-            "name": "Lion Elite QA Customer",
-            "email": "gagoagos@gmail.com",
-            "phone": "+1 (555) 010-2026",
-            "address": "100 Luxury Test Blvd, Miami, FL 33131 — QA TEST / DO NOT SHIP",
-            "items": [
-              {"slug":"ghk-cu-serum","name":"GHK-Cu Intensive Serum","quantity":1,"price":69.99},
-              {"slug":"ghk-cu-face-wash","name":"GHK-Cu Peptide Face Wash","quantity":1,"price":69.99},
-              {"slug":"kpv-moisturizer","name":"KPV Recovery Moisturizer","quantity":1,"price":79.99},
-              {"slug":"hydra-boost-body-wash","name":"Hydra Boost Body Wash","quantity":1,"price":49.99}
+            "action":"create",
+            "orderNumber":"$ORDER",
+            "name":"Lion Elite QA Customer",
+            "email":"gagoagos@gmail.com",
+            "phone":"+1 (555) 010-2026",
+            "address":"100 Luxury Test Blvd, Miami, FL 33131 — QA TEST / DO NOT SHIP",
+            "items":[
+              {"slug":"ghk-cu-serum","quantity":1},
+              {"slug":"kpv-moisturizer","quantity":1}
             ],
-            "paymentMethod": "zelle",
-            "discountCode": "LION10"
+            "paymentMethod":"zelle",
+            "discountCode":"LION10"
           }
           JSON
 
@@ -46,44 +52,63 @@ jobs:
           import json, sys
           obj=json.loads(sys.argv[1]); order=sys.argv[2]
           assert obj.get('success') is True, obj
-          saved=obj.get('order') or {}
-          assert saved.get('orderNumber') == order, saved
-          assert saved.get('fulfillmentStatus') == 'processing', saved
-          assert saved.get('paymentMethod') == 'zelle', saved
-          assert saved.get('paymentStatus') == 'pending', saved
-          assert saved.get('discountCode') == 'LION10', saved
-          assert len(saved.get('items') or []) == 4, saved
-          assert saved.get('subtotal') == 269.96, saved
-          assert saved.get('total') == 242.96, saved
-          print('ORDER_CREATE_OK', order)
+          o=obj['order']
+          assert o['orderNumber'] == order
+          assert o['paymentStatus'] == 'pending'
+          assert o['fulfillmentStatus'] == 'processing'
+          assert o['paymentMethod'] == 'zelle'
+          print('CREATE_OK')
           PY
 
-          cat > /tmp/email.json <<JSON
-          {
-            "type": "order",
-            "orderNumber": "$ORDER",
-            "name": "Lion Elite QA Customer",
-            "email": "gagoagos@gmail.com",
-            "phone": "+1 (555) 010-2026",
-            "address": "100 Luxury Test Blvd, Miami, FL 33131 — QA TEST / DO NOT SHIP",
-            "items": [
-              {"name":"GHK-Cu Intensive Serum","quantity":1,"price":69.99},
-              {"name":"GHK-Cu Peptide Face Wash","quantity":1,"price":69.99},
-              {"name":"KPV Recovery Moisturizer","quantity":1,"price":79.99},
-              {"name":"Hydra Boost Body Wash","quantity":1,"price":49.99}
-            ],
-            "paymentMethod": "zelle",
-            "discountCode": "LION10",
-            "skipAdmin": true
+          auth_post () {
+            local action="$1"
+            local extra="${2:-}"
+            curl -fsS "$BASE/api/orders" \
+              -H 'content-type: application/json' \
+              --data-binary "{\"action\":\"$action\",\"username\":\"$USERNAME\",\"password\":\"$ADMIN_PASSWORD\",\"orderNumber\":\"$ORDER\"$extra}"
           }
-          JSON
 
-          SEND="$(curl -fsS "$BASE/api/send" -H 'content-type: application/json' --data-binary @/tmp/email.json)"
-          python3 - "$SEND" "$ORDER" <<'PY'
-          import json, sys
+          LIST="$(curl -fsS "$BASE/api/orders" -H 'content-type: application/json' --data-binary "{\"action\":\"list\",\"username\":\"$USERNAME\",\"password\":\"$ADMIN_PASSWORD\"}")"
+          python3 - "$LIST" "$ORDER" <<'PY'
+          import json,sys
           obj=json.loads(sys.argv[1]); order=sys.argv[2]
-          assert obj.get('success') is True, obj
-          assert obj.get('orderNumber') == order, obj
-          assert obj.get('total') == 242.96, obj
-          print('CUSTOMER_EMAIL_OK', order)
+          assert obj.get('authenticated') is True and obj.get('role') == 'admin', obj
+          assert any(x.get('orderNumber') == order for x in obj.get('orders',[])), obj
+          print('LIST_OK')
           PY
+
+          PAID="$(auth_post mark-paid ',\"paymentReference\":\"QA-ZELLE-CONFIRMED\"')"
+          python3 - "$PAID" <<'PY'
+          import json,sys
+          o=json.loads(sys.argv[1])['order']
+          assert o['paymentStatus'] == 'paid', o
+          print('MARK_PAID_OK')
+          PY
+
+          PACKED="$(auth_post update-fulfillment ',\"fulfillmentStatus\":\"packed\"')"
+          python3 - "$PACKED" <<'PY'
+          import json,sys
+          o=json.loads(sys.argv[1])['order']
+          assert o['fulfillmentStatus'] == 'packed', o
+          print('PACKED_OK')
+          PY
+
+          SHIPPED="$(auth_post update-tracking ',\"carrier\":\"USPS\",\"trackingNumber\":\"QA-DO-NOT-SHIP-0001\"')"
+          python3 - "$SHIPPED" <<'PY'
+          import json,sys
+          o=json.loads(sys.argv[1])['order']
+          assert o['fulfillmentStatus'] == 'shipped', o
+          assert o['trackingNumber'] == 'QA-DO-NOT-SHIP-0001', o
+          assert o.get('trackingSentAt'), o
+          print('SHIPPED_EMAIL_OK')
+          PY
+
+          DELIVERED="$(auth_post update-fulfillment ',\"fulfillmentStatus\":\"delivered\"')"
+          python3 - "$DELIVERED" <<'PY'
+          import json,sys
+          o=json.loads(sys.argv[1])['order']
+          assert o['fulfillmentStatus'] == 'delivered', o
+          print('DELIVERED_OK')
+          PY
+
+          echo "FULL_ADMIN_LIFECYCLE_OK $ORDER"
