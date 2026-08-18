@@ -1,0 +1,62 @@
+name: Beauty Email Send Diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/email-send-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose-send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send production Beauty order confirmation test
+        shell: bash
+        run: |
+          set +e
+          sleep 20
+          ORDER="LEB-EMAIL-DIAG-$(date +%s)"
+          cat > /tmp/payload.json <<JSON
+          {
+            "type":"order",
+            "orderNumber":"$ORDER",
+            "name":"Lion Elite QA Customer",
+            "email":"gagoagos@gmail.com",
+            "phone":"QA TEST",
+            "address":"QA TEST — DO NOT SHIP",
+            "items":[
+              {"name":"GHK-Cu Intensive Serum","quantity":1,"price":69.99},
+              {"name":"KPV Recovery Moisturizer","quantity":1,"price":79.99}
+            ],
+            "paymentMethod":"zelle",
+            "discountCode":"None",
+            "skipAdmin":false
+          }
+          JSON
+          STATUS=$(curl -LsS -o /tmp/send.json -w '%{http_code}' https://www.lionelitebeauty.com/api/send -H 'content-type: application/json' --data-binary @/tmp/payload.json)
+          BODY=$(cat /tmp/send.json 2>/dev/null || echo '{}')
+          python3 - "$STATUS" "$BODY" <<'PY'
+import json,sys
+status=sys.argv[1]
+body=sys.argv[2]
+try:
+    parsed=json.loads(body)
+except Exception:
+    parsed={'raw':body[:500]}
+with open('email-send-result.json','w') as f:
+    json.dump({'httpStatus':status,'response':parsed},f)
+PY
+          cat email-send-result.json
+          exit 0
+      - name: Save safe send diagnostic result
+        shell: bash
+        run: |
+          git config user.name 'lionelite-qa-bot'
+          git config user.email 'orders@lionelitebeauty.com'
+          git add email-send-result.json
+          git commit -m 'test: record Beauty email send result' || exit 0
+          git push
