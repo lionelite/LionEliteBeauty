@@ -1,24 +1,59 @@
 import { useEffect } from 'react'
 
-export default function SEO({ title, description, ogImage }) {
+export default function SEO({ title, description, ogImage, jsonLd }) {
   useEffect(() => {
-    document.title = title ? `${title} | Lion Elite Beauty` : 'Lion Elite Beauty | Peptide Skincare & Wellness'
-    const setMeta = (name, content) => {
-      let el = document.querySelector(`meta[name="${name}"], meta[property="${name}"]`)
+    const fullTitle = title ? `${title} | Lion Elite Beauty` : 'Lion Elite Beauty | Private Optimization Coaching & Peptide Skincare'
+    const metaDescription = description || 'Private optimization coaching and peptide-powered skincare from Lion Elite Beauty.'
+    const canonicalUrl = typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}` : ''
+
+    document.title = fullTitle
+
+    const setMeta = (name, content, property = false) => {
+      if (!content) return
+      const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`
+      let el = document.querySelector(selector)
       if (!el) {
         el = document.createElement('meta')
-        if (name.startsWith('og:')) el.setAttribute('property', name)
-        else el.setAttribute('name', name)
+        el.setAttribute(property ? 'property' : 'name', name)
         document.head.appendChild(el)
       }
-      if (content) el.setAttribute('content', content)
+      el.setAttribute('content', content)
     }
-    setMeta('description', description || 'Premium peptide-powered skincare and personalized wellness programs. Science-backed formulations designed to help you look, feel, and perform at your best.')
-    setMeta('og:title', title ? `${title} | Lion Elite Beauty` : 'Lion Elite Beauty')
-    setMeta('og:description', description || 'Premium peptide skincare and wellness programs.')
-    setMeta('og:image', ogImage || '')
-    setMeta('og:type', 'website')
-  }, [title, description, ogImage])
+
+    setMeta('description', metaDescription)
+    setMeta('robots', 'index,follow,max-image-preview:large')
+    setMeta('og:title', fullTitle, true)
+    setMeta('og:description', metaDescription, true)
+    setMeta('og:type', 'website', true)
+    setMeta('og:url', canonicalUrl, true)
+    if (ogImage) setMeta('og:image', ogImage.startsWith('http') ? ogImage : `${window.location.origin}${ogImage}`, true)
+    setMeta('twitter:card', ogImage ? 'summary_large_image' : 'summary')
+    setMeta('twitter:title', fullTitle)
+    setMeta('twitter:description', metaDescription)
+
+    let canonical = document.querySelector('link[rel="canonical"]')
+    if (!canonical) {
+      canonical = document.createElement('link')
+      canonical.setAttribute('rel', 'canonical')
+      document.head.appendChild(canonical)
+    }
+    canonical.setAttribute('href', canonicalUrl)
+
+    let script = document.getElementById('page-json-ld')
+    if (script) script.remove()
+    if (jsonLd) {
+      script = document.createElement('script')
+      script.id = 'page-json-ld'
+      script.type = 'application/ld+json'
+      script.textContent = JSON.stringify(jsonLd)
+      document.head.appendChild(script)
+    }
+
+    return () => {
+      const current = document.getElementById('page-json-ld')
+      if (current) current.remove()
+    }
+  }, [title, description, ogImage, jsonLd])
 
   return null
 }
