@@ -14,13 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Wait for production deploy and check email health
+      - name: Check production email health
         shell: bash
         run: |
-          set -euo pipefail
-          sleep 45
-          curl -fsS https://www.lionelitebeauty.com/api/email-health > email-health-result.json
+          set +e
+          sleep 20
+          STATUS=$(curl -sS -o /tmp/health.json -w '%{http_code}' https://www.lionelitebeauty.com/api/email-health)
+          if [ -s /tmp/health.json ]; then
+            BODY=$(cat /tmp/health.json)
+          else
+            BODY='{}'
+          fi
+          printf '{"httpStatus":"%s","response":%s}\n' "$STATUS" "$BODY" > email-health-result.json
           cat email-health-result.json
+          exit 0
       - name: Save safe diagnostic result
         shell: bash
         run: |
