@@ -18,6 +18,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Post-deploy re-run: 2026-08-18
           BASE='https://www.lionelitebeauty.com'
           ORDER="LEB-FULL-QA-$(date +%s)"
 
