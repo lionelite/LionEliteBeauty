@@ -14,22 +14,56 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check production email health
+      - name: Check production email health and live order mail
         shell: bash
         run: |
           set +e
-          # Manual rerun requested after Beauty Resend key rotation 2026-08-18 17:56 ET.
-          sleep 25
-          STATUS=$(curl -LsS -o /tmp/health.json -w '%{http_code}' https://www.lionelitebeauty.com/api/email-health)
-          if [ -s /tmp/health.json ]; then BODY=$(cat /tmp/health.json); else BODY='{}'; fi
-          printf '{"httpStatus":"%s","response":%s}\n' "$STATUS" "$BODY" > email-health-result.json
+          sleep 20
+
+          HEALTH_STATUS=$(curl -LsS -o /tmp/health.json -w '%{http_code}' https://www.lionelitebeauty.com/api/email-health)
+          if [ -s /tmp/health.json ]; then HEALTH_BODY=$(cat /tmp/health.json); else HEALTH_BODY='{}'; fi
+          printf '{"httpStatus":"%s","response":%s}\n' "$HEALTH_STATUS" "$HEALTH_BODY" > email-health-result.json
+
+          ORDER="LEB-EMAIL-LIVE-$(date +%s)"
+          cat > /tmp/payload.json <<JSON
+          {
+            "type":"order",
+            "orderNumber":"$ORDER",
+            "name":"Lion Elite Beauty QA",
+            "email":"gagoagos@gmail.com",
+            "phone":"+1 (555) 010-2026",
+            "address":"100 Luxury Test Blvd, Miami, FL 33131 — QA TEST / DO NOT SHIP",
+            "items":[
+              {"name":"GHK-Cu Intensive Serum","quantity":1,"price":69.99},
+              {"name":"KPV Recovery Moisturizer","quantity":1,"price":79.99}
+            ],
+            "paymentMethod":"zelle",
+            "discountCode":"None"
+          }
+          JSON
+          SEND_STATUS=$(curl -LsS -o /tmp/send.json -w '%{http_code}' \
+            -H 'content-type: application/json' \
+            --data-binary @/tmp/payload.json \
+            https://www.lionelitebeauty.com/api/send)
+          SEND_BODY=$(cat /tmp/send.json 2>/dev/null || echo '{}')
+          python3 - "$SEND_STATUS" "$SEND_BODY" "$ORDER" <<'PY'
+import json,sys
+status,body,order=sys.argv[1:4]
+try: parsed=json.loads(body)
+except Exception: parsed={'raw':body[:1000]}
+with open('live-order-email-test-result.json','w') as f:
+    json.dump({'httpStatus':status,'orderNumber':order,'response':parsed},f)
+PY
           cat email-health-result.json
+          cat live-order-email-test-result.json
           exit 0
-      - name: Save safe diagnostic result
+
+      - name: Save safe diagnostic results
         shell: bash
         run: |
           git config user.name 'lionelite-qa-bot'
           git config user.email 'orders@lionelitebeauty.com'
-          git add email-health-result.json
-          git commit -m 'test: record Beauty email health result' || exit 0
+          git add email-health-result.json live-order-email-test-result.json
+          git commit -m 'test: record Beauty email health and live send result' || exit 0
+          git pull --rebase origin main || true
           git push
