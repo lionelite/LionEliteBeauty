@@ -5,7 +5,6 @@ import { authenticateDashboard } from './_auth.js'
 import { priceOrder } from './_pricing.js'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null
 
 let redis
@@ -64,14 +63,8 @@ async function listOrders() {
   return orders
 }
 
-// Credentials come from the environment and fail closed — see api/_auth.js.
 const authenticate = authenticateDashboard
 
-/**
- * Confirm a Stripe payment actually succeeded and matches the server-computed
- * total before an order may be recorded as paid. Without this, anyone could
- * POST an order claiming `paymentMethod: 'stripe'` and have it marked paid.
- */
 async function verifyStripePayment(paymentIntentId, expectedCents) {
   if (!stripe) return { ok: false, reason: 'stripe_not_configured' }
   try {
@@ -119,9 +112,6 @@ function trackingEmailHtml(order) {
   </div>`
 }
 
-// Internal "NEW ORDER — ACTION REQUIRED" owner notification (Beauty-branded),
-// mirroring the Lion Elite Wellness order alert. Sent to the shop owner when an
-// order is created — never to the customer.
 function newOrderEmailHtml(order) {
   const rows = (order.items || []).map(i => `
         <tr>
@@ -169,8 +159,6 @@ function newOrderEmailHtml(order) {
   </div>`
 }
 
-// Fire-and-forget owner notification. Non-fatal: a failure here must never fail
-// the customer's order. No-ops if the email provider isn't configured.
 async function sendNewOrderNotification(order) {
   if (!process.env.RESEND_API_KEY) return { skipped: 'no_resend_key' }
   const to = process.env.ORDER_NOTIFICATION_EMAIL || 'info@lionelitewellness.com'
@@ -197,20 +185,14 @@ export default async function handler(req, res) {
       const existing = await loadOrder(body.orderNumber)
       if (existing) return res.status(200).json({ success: true, order: existing, duplicate: true })
 
-      // SECURITY: recompute money server-side from the catalog. Item prices in
-      // the request body are ignored; only product identity + quantity is used.
       const code = normalizeCode(body.discountCode)
       const priced = priceOrder({
         items: body.items,
         discountCode: code,
         discountApplied: Boolean(code),
       })
-      if (!priced.ok) {
-        return res.status(400).json({ error: priced.error })
-      }
+      if (!priced.ok) return res.status(400).json({ error: priced.error })
 
-      // A 'paid' status is only granted after Stripe confirms the charge
-      // succeeded for exactly the server-computed amount.
       let paymentStatus = 'pending'
       let paymentNote = null
       if (body.paymentMethod === 'stripe') {
@@ -250,8 +232,6 @@ export default async function handler(req, res) {
 
       await saveOrder(order)
 
-      // Notify the owner a new order came in. Non-fatal: never block the
-      // customer's successful checkout on a notification failure.
       try {
         await sendNewOrderNotification(order)
       } catch (notifyErr) {
@@ -270,6 +250,32 @@ export default async function handler(req, res) {
       return res.status(200).json({ authenticated: true, role: auth.role, orders })
     }
 
+    if (body.action === 'mark-paid') {
+      if (auth.role !== 'admin') return res.status(403).json({ error: 'Admin access required' })
+      const order = await loadOrder(body.orderNumber)
+      if (!order) return res.status(404).json({ error: 'Order not found' })
+      if (order.paymentMethod === 'stripe') return res.status(400).json({ error: 'Stripe payment status must come from Stripe verification' })
+      order.paymentStatus = 'paid'
+      order.paymentNote = 'manually_verified'
+      order.paymentConfirmedAt = new Date().toISOString()
+      order.updatedAt = new Date().toISOString()
+      await saveOrder(order)
+      return res.status(200).json({ success: true, order })
+    }
+
+    if (body.action === 'update-fulfillment') {
+      if (auth.role !== 'admin') return res.status(403).json({ error: 'Admin access required' })
+      const allowed = ['processing', 'packed', 'delivered', 'cancelled']
+      const next = String(body.fulfillmentStatus || '').trim().toLowerCase()
+      if (!allowed.includes(next)) return res.status(400).json({ error: 'Invalid fulfillment status' })
+      const order = await loadOrder(body.orderNumber)
+      if (!order) return res.status(404).json({ error: 'Order not found' })
+      order.fulfillmentStatus = next
+      order.updatedAt = new Date().toISOString()
+      await saveOrder(order)
+      return res.status(200).json({ success: true, order })
+    }
+
     if (body.action === 'update-tracking') {
       if (auth.role !== 'admin') return res.status(403).json({ error: 'Admin access required' })
       const order = await loadOrder(body.orderNumber)
@@ -282,7 +288,7 @@ export default async function handler(req, res) {
       order.updatedAt = new Date().toISOString()
 
       await resend.emails.send({
-        from: 'Lion Elite <orders@lionelitebeauty.com>',
+        from: 'Lion Elite Beauty <orders@lionelitebeauty.com>',
         to: [order.email],
         subject: `Your Lion Elite Beauty order #${order.orderNumber} has shipped`,
         html: trackingEmailHtml(order),
