@@ -18,6 +18,7 @@ jobs:
         shell: bash
         run: |
           set +e
+          # Domain verification diagnostic rerun.
           sleep 20
           STATUS=$(curl -LsS -o /tmp/health.json -w '%{http_code}' https://www.lionelitebeauty.com/api/email-health)
           if [ -s /tmp/health.json ]; then
