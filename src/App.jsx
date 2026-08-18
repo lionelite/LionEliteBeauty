@@ -93,6 +93,7 @@ export default function App() {
           <Route path="/rep/login" element={<RepPortalPage />} />
           <Route path="/rep/orders" element={<OrdersPage />} />
           <Route path="/admin/orders" element={<OrdersPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
         </Routes>
       </CartProvider>
     </BrowserRouter>
