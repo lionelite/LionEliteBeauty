@@ -23,7 +23,7 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
     // Save order data before redirect (for Affirm/Klarna/Afterpay return)
     if (saveOrderData) saveOrderData()
 
-    const { error: payError } = await stripe.confirmPayment({
+    const { error: payError, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         return_url: window.location.origin + '/checkout',
@@ -42,8 +42,17 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
       return
     }
 
-    // Success
-    onSuccess()
+    // Never discard Stripe's actual PaymentIntent id. The server uses it to
+    // independently verify both payment status and amount before marking paid.
+    if (!paymentIntent?.id) {
+      const message = 'Payment completed but the confirmation reference was unavailable. Please contact support before retrying.'
+      setError(message)
+      onError?.(message)
+      setSending(false)
+      return
+    }
+
+    onSuccess?.(paymentIntent.id)
   }
 
   return (
