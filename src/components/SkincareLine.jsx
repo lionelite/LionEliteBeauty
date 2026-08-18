@@ -3,104 +3,59 @@ import { skincareProducts } from '../data/skincareProducts'
 import ProductImage from './ProductImage'
 
 export default function SkincareLine() {
-  const isDark = (bg) => bg === '#1A1A1A' || bg === '#2A2A2A'
-
   return (
-    <section id="skincare" style={{ backgroundColor: '#FAF7F2', padding: '100px 0' }}>
+    <section id="skincare" style={{ backgroundColor: '#FAF8F4', padding: '105px 0' }}>
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-6">
-          <p style={{ color: '#C9A96E', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '0.3em', fontSize: '11px' }}
-            className="uppercase mb-4">Lion Elite Beauty</p>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.5rem', lineHeight: '1.2' }}
-            className="font-normal">
-            Advanced Peptide Skincare Collection
-          </h2>
-          <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', margin: '24px auto' }}></div>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '15px', lineHeight: '1.8', maxWidth: '560px', margin: '0 auto' }}>
-            Peptide-powered formulations designed to support the appearance of healthier, more nourished skin. Premium ingredients. Visible results with consistent use.
-          </p>
+        <div className="grid lg:grid-cols-12 gap-12 items-end mb-14">
+          <div className="lg:col-span-7">
+            <p style={eyebrow}>The current skincare collection</p>
+            <h2 style={heading}>Four products. Four clear jobs.</h2>
+          </div>
+          <div className="lg:col-span-5">
+            <p style={copy}>Shop by what each formula is actually meant to do, then use the Ingredient Library when you want the deeper science and formula details.</p>
+          </div>
         </div>
 
-        <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E8DDD0', padding: '20px 40px', maxWidth: '680px', margin: '0 auto 60px', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '13px', lineHeight: '1.7', letterSpacing: '0.05em' }}>
-            Advanced peptide skincare from Lion Elite Beauty — designed for simple, consistent daily routines.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {skincareProducts.map((p) => (
-            <div key={p.slug} style={{ backgroundColor: p.bg, display: 'flex', flexDirection: 'column' }}>
-              {p.badge && (
-                <div style={{ backgroundColor: p.badgeColor, padding: '8px 16px', alignSelf: 'flex-start' }}>
-                  <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '9px', letterSpacing: '0.2em' }}
-                    className="uppercase">{p.badge}</span>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {skincareProducts.map(p => (
+            <article key={p.slug} style={card}>
+              <Link to={`/skincare/${p.slug}`} style={{ textDecoration: 'none' }}>
+                <div style={{ minHeight: '190px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F4EEE6', marginBottom: '24px' }}>
+                  <ProductImage src={p.image} alt={p.name} style={{ maxWidth: '135px', maxHeight: '170px', objectFit: 'contain' }} />
                 </div>
-              )}
-
-              <div style={{ padding: '32px 28px 0', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ minHeight: '170px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
-                  <ProductImage
-                    src={p.image}
-                    alt={p.name}
-                    style={{ maxWidth: p.slug === 'ghk-cu-serum' ? '130px' : '110px', maxHeight: '170px', width: 'auto', height: 'auto', display: 'block', objectFit: 'contain' }}
-                    fallback={
-                      <div style={{
-                        width: '70px', height: '110px', backgroundColor: p.accent,
-                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                        position: 'relative',
-                      }}>
-                        <div style={{ position: 'absolute', top: '-8px', width: '30px', height: '10px', backgroundColor: p.accent, opacity: 0.6 }}></div>
-                        <p style={{ fontFamily: 'Georgia, serif', color: '#FFFFFF', fontSize: '7px', letterSpacing: '0.15em', textAlign: 'center', lineHeight: '2', opacity: 0.9 }}>
-                          LION<br />ELITE
-                        </p>
-                        <div style={{ width: '24px', height: '0.5px', backgroundColor: 'rgba(255,255,255,0.4)', margin: '4px 0' }}></div>
-                        <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#FFFFFF', fontSize: '6px', letterSpacing: '0.1em', opacity: 0.7 }}>{p.label || 'GHK-Cu'}</p>
-                      </div>
-                    }
-                  />
+                <p style={{ ...eyebrow, color: p.accent }}>{p.step}</p>
+                <h3 style={{ fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '1.2rem', lineHeight: 1.3, marginBottom: '10px' }}>{p.name}</h3>
+                <p style={{ ...copy, fontSize: '12px', minHeight: '64px' }}>{p.tagline}</p>
+                <div className="flex items-center justify-between mt-5 pt-5" style={{ borderTop: '1px solid #E7DDD1' }}>
+                  <span style={{ fontFamily: 'Georgia, serif', color: '#302E2B', fontSize: '1.25rem' }}>{p.price}</span>
+                  <span style={{ color: '#A7895B', fontSize: '10px', letterSpacing: '.12em', textTransform: 'uppercase' }}>View →</span>
                 </div>
-
-                <p style={{
-                  fontFamily: 'Georgia, serif',
-                  color: isDark(p.bg) ? '#FAFAF8' : '#1A1A1A',
-                  fontSize: '1rem', lineHeight: '1.4', marginBottom: '8px',
-                }} className="font-normal">{p.name}</p>
-
-                <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: p.accent, fontSize: '11px', letterSpacing: '0.12em', marginBottom: '16px' }}
-                  className="uppercase">{p.tagline}</p>
-
-                <div style={{ width: '28px', height: '1px', backgroundColor: p.accent, marginBottom: '16px' }}></div>
-
-                <ul className="space-y-2 mb-6 flex-1">
-                  {p.benefits.slice(0, 3).map(b => (
-                    <li key={b.title} className="flex items-center gap-2">
-                      <div style={{ width: '4px', height: '4px', backgroundColor: p.accent, borderRadius: '50%', flexShrink: 0 }}></div>
-                      <span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark(p.bg) ? '#7A7A7A' : '#6A6A6A', fontSize: '12px' }}>{b.title}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div style={{ borderTop: `1px solid ${isDark(p.bg) ? '#2E2E2E' : '#E8DDD0'}`, paddingTop: '20px', marginTop: 'auto', paddingBottom: '28px' }}>
-                  <div className="flex items-center justify-between mb-4">
-                    <p style={{ fontFamily: 'Georgia, serif', color: isDark(p.bg) ? '#FAFAF8' : '#1A1A1A', fontSize: '1.4rem' }}>{p.price}</p>
-                    <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: isDark(p.bg) ? '#4A4A4A' : '#9A9A9A', fontSize: '11px' }}>{p.size}</p>
-                  </div>
-                  <Link to={`/skincare/${p.slug}`}
-                    style={{
-                      display: 'block', textAlign: 'center', backgroundColor: 'transparent',
-                      border: `1px solid ${p.accent}`, color: isDark(p.bg) ? '#FAFAF8' : '#1A1A1A',
-                      fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', letterSpacing: '0.15em',
-                      padding: '12px', textDecoration: 'none',
-                    }}
-                    className="uppercase hover:opacity-70 transition-opacity">
-                    View Product →
-                  </Link>
-                </div>
-              </div>
-            </div>
+              </Link>
+            </article>
           ))}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-6">
+          <Link to="/skincare" style={{ ...ctaCard, background: '#F3EDE4' }}>
+            <span style={eyebrow}>Shop by skin goal</span>
+            <strong style={ctaTitle}>Find the right starting point.</strong>
+            <span style={ctaLink}>Explore skincare →</span>
+          </Link>
+          <Link to="/ingredients" style={{ ...ctaCard, background: '#EFF1EC' }}>
+            <span style={eyebrow}>Ingredient Library</span>
+            <strong style={ctaTitle}>Know what is in every formula.</strong>
+            <span style={ctaLink}>Explore ingredients →</span>
+          </Link>
         </div>
       </div>
     </section>
   )
 }
+
+const eyebrow = { color: '#A7895B', fontFamily: 'Helvetica Neue, Arial, sans-serif', letterSpacing: '.27em', fontSize: '10px', textTransform: 'uppercase', marginBottom: '14px' }
+const heading = { fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '2.55rem', lineHeight: 1.12 }
+const copy = { fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#716D67', fontSize: '14px', lineHeight: 1.8 }
+const card = { background: '#FFFDF9', border: '1px solid #E5DACD', padding: '18px' }
+const ctaCard = { border: '1px solid #E0D5C8', padding: '32px', textDecoration: 'none', display: 'flex', flexDirection: 'column', minHeight: '175px' }
+const ctaTitle = { fontFamily: 'Georgia, serif', color: '#302E2B', fontWeight: 400, fontSize: '1.35rem' }
+const ctaLink = { marginTop: 'auto', paddingTop: '24px', color: '#A7895B', fontSize: '10px', letterSpacing: '.14em', textTransform: 'uppercase' }
