@@ -1,1 +1,1 @@
-{"httpStatus":"307","response":Redirecting...}
+{"httpStatus":"200","response":{"service":"lion-elite-beauty-email","configured":true,"ordersFrom":"orders@lionelitebeauty.com","ordersBusinessTo":"orders@lionelitebeauty.com","infoFrom":"info@lionelitebeauty.com"}}
