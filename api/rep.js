@@ -5,25 +5,55 @@ const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
   : null
 
-// Non-secret rep metadata only. Credentials live in the REP_CREDENTIALS
-// environment variable and are verified in api/_auth.js — no password material
-// is stored in this repository.
-const REPS = {
-  colin: {
-    name: 'Colin',
-    username: 'Colin',
-    code: 'COLIN10',
-    discountPercent: 10,
-    commissionPercent: 20,
-  },
-}
-
 function normalizeCode(code) {
   return String(code || '').trim().toUpperCase()
 }
 
 function normalizeUsername(username) {
   return String(username || '').trim().toLowerCase()
+}
+
+// Rep metadata and credentials are driven by one environment registry so new
+// reps automatically appear in the portal without a code deployment.
+// REP_CREDENTIALS example:
+// {
+//   "colin": {
+//     "name": "Colin",
+//     "code": "COLIN10",
+//     "password": "...",
+//     "discountPercent": 10,
+//     "commissionPercent": 20
+//   }
+// }
+function getReps() {
+  const raw = process.env.REP_CREDENTIALS
+  if (!raw) return {}
+
+  try {
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {}
+
+    return Object.fromEntries(
+      Object.entries(parsed)
+        .map(([key, value]) => {
+          if (!value || typeof value !== 'object') return null
+          const username = normalizeUsername(key)
+          const code = normalizeCode(value.code)
+          if (!username || !code) return null
+
+          return [username, {
+            name: String(value.name || key).trim(),
+            username: String(value.username || key).trim(),
+            code,
+            discountPercent: Number.isFinite(Number(value.discountPercent)) ? Number(value.discountPercent) : 10,
+            commissionPercent: Number.isFinite(Number(value.commissionPercent)) ? Number(value.commissionPercent) : 20,
+          }]
+        })
+        .filter(Boolean),
+    )
+  } catch {
+    return {}
+  }
 }
 
 async function getAllPaymentIntents() {
@@ -71,12 +101,12 @@ function parseItems(itemsText) {
     })
 }
 
-function buildAdminDashboard(intents) {
+function buildAdminDashboard(intents, reps) {
   const succeeded = intents
     .filter(pi => pi.status === 'succeeded')
     .sort((a, b) => (b.created || 0) - (a.created || 0))
 
-  const repRows = Object.values(REPS).map(rep => {
+  const repRows = Object.values(reps).map(rep => {
     const matched = succeeded.filter(pi => normalizeCode(pi.metadata?.discountCode) === rep.code)
     const revenueCents = matched.reduce((sum, pi) => sum + (pi.amount_received || pi.amount || 0), 0)
     const commissionCents = Math.round(revenueCents * rep.commissionPercent / 100)
@@ -93,7 +123,7 @@ function buildAdminDashboard(intents) {
     }
   })
 
-  const repCodeMap = new Map(Object.values(REPS).map(rep => [rep.code, rep]))
+  const repCodeMap = new Map(Object.values(reps).map(rep => [rep.code, rep]))
   const sales = succeeded.map(pi => {
     const code = normalizeCode(pi.metadata?.discountCode)
     const rep = repCodeMap.get(code)
@@ -137,7 +167,7 @@ function buildAdminDashboard(intents) {
     reps: repRows,
     products,
     sales,
-    note: 'Product counts include completed Stripe orders. Exact product-level revenue for older orders is unavailable because older checkout metadata stored product names and quantities but not per-item prices.',
+    note: 'Product counts include completed Stripe orders. Representative sales and commissions update automatically from successful Stripe payment intents and the rep code stored in checkout metadata.',
   }
 }
 
@@ -147,12 +177,18 @@ export default async function handler(req, res) {
   }
 
   const { action, code, username, password } = req.body || {}
+  const reps = getReps()
 
   if (action === 'validate-code') {
     const normalizedCode = normalizeCode(code)
-    const rep = Object.values(REPS).find(r => r.code === normalizedCode)
+    const rep = Object.values(reps).find(r => r.code === normalizedCode)
     if (!rep) return res.status(404).json({ valid: false })
-    return res.status(200).json({ valid: true, code: rep.code, discountPercent: rep.discountPercent })
+    return res.status(200).json({
+      valid: true,
+      code: rep.code,
+      rep: rep.name,
+      discountPercent: rep.discountPercent,
+    })
   }
 
   if (action !== 'login') {
@@ -164,8 +200,6 @@ export default async function handler(req, res) {
   }
 
   const normalizedUsername = normalizeUsername(username)
-
-  // Credentials verified against the environment; fails closed when unset.
   const auth = authenticateDashboard(username, password)
   if (!auth) {
     return res.status(401).json({ error: 'Invalid username or password' })
@@ -175,12 +209,14 @@ export default async function handler(req, res) {
     const intents = await getAllPaymentIntents()
 
     if (auth.role === 'admin') {
-      return res.status(200).json(buildAdminDashboard(intents))
+      return res.status(200).json(buildAdminDashboard(intents, reps))
     }
 
-    const rep = REPS[normalizedUsername]
+    const rep = reps[normalizedUsername]
+      || Object.values(reps).find(r => r.code === normalizeCode(auth.code))
+
     if (!rep) {
-      return res.status(401).json({ error: 'Invalid username or password' })
+      return res.status(401).json({ error: 'Rep account is not configured' })
     }
 
     const matched = intents
@@ -210,7 +246,7 @@ export default async function handler(req, res) {
         latestSale: sales.length ? sales[0].date : null,
       },
       sales,
-      commissionBasis: `Commission is calculated at ${rep.commissionPercent}% of the amount actually collected after the customer discount.`,
+      commissionBasis: `Commission is calculated automatically at ${rep.commissionPercent}% of the amount actually collected after the customer discount.`,
     })
   } catch (err) {
     console.error('Rep portal error:', err)
