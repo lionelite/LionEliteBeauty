@@ -31,6 +31,7 @@ import SkincareTerms from './pages/SkincareTerms'
 import ProgramsTerms from './pages/ProgramsTerms'
 import ProgramCheckoutPage from './pages/ProgramCheckoutPage'
 import AdminPage from './pages/AdminPage'
+import AdminOperationsPage from './pages/AdminOperationsPage'
 import VIPPage from './pages/VIPPage'
 import RepPortalPage from './pages/RepPortalPage'
 import OrdersPage from './pages/OrdersPage'
@@ -88,12 +89,14 @@ export default function App() {
           <Route path="/terms/skincare" element={<SkincareTerms />} />
           <Route path="/terms/programs" element={<ProgramsTerms />} />
           <Route path="/programs/checkout" element={<ProgramCheckoutPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={<AdminOperationsPage />} />
+          <Route path="/admin/orders" element={<OrdersPage />} />
+          <Route path="/admin/affiliates" element={<RepPortalPage />} />
+          <Route path="/admin/clients" element={<AdminPage />} />
           <Route path="/vip" element={<VIPPage />} />
           <Route path="/rep" element={<RepPortalPage />} />
           <Route path="/rep/login" element={<RepPortalPage />} />
           <Route path="/rep/orders" element={<OrdersPage />} />
-          <Route path="/admin/orders" element={<OrdersPage />} />
           <Route path="/orders" element={<OrdersPage />} />
         </Routes>
       </CartProvider>
