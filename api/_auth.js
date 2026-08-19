@@ -10,19 +10,16 @@
 
 import { randomUUID, randomBytes, timingSafeEqual } from 'crypto'
 
-/** Timing-safe string compare that does not leak length via early return. */
 export function safeEqual(a, b) {
   const bufA = Buffer.from(String(a ?? ''), 'utf8')
   const bufB = Buffer.from(String(b ?? ''), 'utf8')
   if (bufA.length !== bufB.length) {
-    // Still burn a comparison so timing does not distinguish "wrong length".
     timingSafeEqual(bufA, bufA)
     return false
   }
   return timingSafeEqual(bufA, bufB)
 }
 
-/** Cryptographically secure opaque token. */
 export function secureToken(bytes = 32) {
   return randomBytes(bytes).toString('base64url')
 }
@@ -32,53 +29,33 @@ export function secureId(prefix) {
   return prefix ? `${prefix}-${raw.slice(0, 4)}-${raw.slice(4, 8)}` : raw
 }
 
-/**
- * The admin API token used by privileged endpoints.
- * Returns null when unset — callers MUST deny access in that case.
- */
 export function adminApiToken() {
   const token = process.env.ADMIN_TOKEN
   return token && token.length >= 16 ? token : null
 }
 
-/**
- * Verify a supplied admin API token. Denies when the server is unconfigured.
- * @returns {{ok:true}|{ok:false,status:number,error:string}}
- */
 export function verifyAdminToken(supplied) {
   const expected = adminApiToken()
-  if (!expected) {
-    return { ok: false, status: 503, error: 'Admin API is not configured' }
-  }
-  if (!supplied || !safeEqual(supplied, expected)) {
-    return { ok: false, status: 403, error: 'Unauthorized' }
-  }
+  if (!expected) return { ok: false, status: 503, error: 'Admin API is not configured' }
+  if (!supplied || !safeEqual(supplied, expected)) return { ok: false, status: 403, error: 'Unauthorized' }
   return { ok: true }
 }
 
-/**
- * Verify admin dashboard login against env credentials.
- * ADMIN_EMAIL + ADMIN_PASSWORD must both be set or login is unavailable.
- */
-export function verifyAdminLogin(email, password) {
-  const expectedEmail = process.env.ADMIN_EMAIL
+// Accept the configured admin username (defaults to "admin") or ADMIN_EMAIL.
+// The password remains environment-only and is never committed to this repo.
+export function verifyAdminLogin(identifier, password) {
+  const expectedEmail = String(process.env.ADMIN_EMAIL || '').trim().toLowerCase()
+  const expectedUser = String(process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase()
   const expectedPassword = process.env.ADMIN_PASSWORD
-  if (!expectedEmail || !expectedPassword) {
-    return { ok: false, status: 503, error: 'Admin login is not configured' }
-  }
-  const emailOk = safeEqual(String(email || '').trim().toLowerCase(), expectedEmail.trim().toLowerCase())
+  if (!expectedPassword) return { ok: false, status: 503, error: 'Admin login is not configured' }
+
+  const supplied = String(identifier || '').trim().toLowerCase()
+  const identityOk = safeEqual(supplied, expectedUser) || (expectedEmail && safeEqual(supplied, expectedEmail))
   const passOk = safeEqual(password, expectedPassword)
-  if (!emailOk || !passOk) {
-    return { ok: false, status: 403, error: 'Invalid credentials' }
-  }
-  return { ok: true, email: expectedEmail }
+  if (!identityOk || !passOk) return { ok: false, status: 403, error: 'Invalid credentials' }
+  return { ok: true, email: expectedEmail || null, username: expectedUser }
 }
 
-/**
- * Sales-rep credentials, configured as JSON in REP_CREDENTIALS, e.g.
- *   {"colin":{"code":"COLIN10","password":"..."}}
- * Absent/invalid config means no rep can authenticate (fail closed).
- */
 function repRegistry() {
   const raw = process.env.REP_CREDENTIALS
   if (!raw) return {}
@@ -90,18 +67,14 @@ function repRegistry() {
   }
 }
 
-/**
- * Authenticate an admin or rep for the orders/rep dashboards.
- * @returns {{role:'admin'|'rep', code:string|null, name:string}|null}
- */
 export function authenticateDashboard(username, password) {
   const name = String(username || '').trim().toLowerCase()
   if (!name || !password) return null
 
-  const adminEmail = process.env.ADMIN_EMAIL
-  const adminUser = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase()
+  const adminEmail = String(process.env.ADMIN_EMAIL || '').trim().toLowerCase()
+  const adminUser = String(process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase()
   const adminPassword = process.env.ADMIN_PASSWORD
-  const isAdminName = name === adminUser || (adminEmail && name === adminEmail.trim().toLowerCase())
+  const isAdminName = name === adminUser || (adminEmail && name === adminEmail)
   if (isAdminName && adminPassword && safeEqual(password, adminPassword)) {
     return { role: 'admin', code: null, name: 'Administrator' }
   }
