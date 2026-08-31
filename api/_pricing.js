@@ -11,6 +11,7 @@ import { skincareProducts } from '../src/data/skincareProducts.js'
 export const DISCOUNT_CODES = {
   LION10: { percent: 10, rep: null },
   COLIN10: { percent: 10, rep: 'Colin' },
+  DAYLEN10: { percent: 10, rep: 'Daylen' },
 }
 
 // Coaching program tiers (authoritative amounts, in cents).
