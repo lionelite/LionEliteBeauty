@@ -6,13 +6,9 @@
 // choose WHICH product and HOW MANY.
 
 import { skincareProducts } from '../src/data/skincareProducts.js'
+import { DISCOUNT_CODES, normalizeDiscountCode } from '../src/data/discountCodes.js'
 
-// Discount codes and their percentage. Server-side only.
-export const DISCOUNT_CODES = {
-  LION10: { percent: 10, rep: null },
-  COLIN10: { percent: 10, rep: 'Colin' },
-  DAYLEN10: { percent: 10, rep: 'Daylen' },
-}
+export { DISCOUNT_CODES }
 
 // Coaching program tiers (authoritative amounts, in cents).
 export const PROGRAM_TIERS = {
@@ -28,7 +24,6 @@ function catalogEntry(item) {
     const bySlug = skincareProducts.find(p => p.slug.toLowerCase() === slug)
     if (bySlug) return bySlug
   }
-  // Older checkout builds send only the display name.
   const name = String(item?.name || '').trim().toLowerCase()
   if (!name) return null
   return skincareProducts.find(
@@ -44,11 +39,6 @@ function safeQuantity(raw) {
   return q
 }
 
-/**
- * Resolve untrusted request items against the catalog.
- * Returns { ok:true, lines, subtotalCents } or { ok:false, error }.
- * `lines` carry SERVER prices — never the client's.
- */
 export function resolveLineItems(items) {
   if (!Array.isArray(items) || items.length === 0) {
     return { ok: false, error: 'No items in order' }
@@ -80,27 +70,20 @@ export function resolveLineItems(items) {
       quantity,
       unitCents,
       lineCents: unitCents * quantity,
-      price: Number(product.priceNum), // server value, for records/emails
+      price: Number(product.priceNum),
     })
   }
 
   return { ok: true, lines, subtotalCents }
 }
 
-/** Normalize a discount code and return its server-side definition (or null). */
 export function resolveDiscount(discountCode, discountApplied) {
-  const normalized = String(discountCode || (discountApplied ? 'LION10' : ''))
-    .trim()
-    .toUpperCase()
+  const normalized = normalizeDiscountCode(discountCode || (discountApplied ? 'LION10' : ''))
   if (!normalized) return { code: null, discount: null }
   const discount = DISCOUNT_CODES[normalized] || null
-  return { code: discount ? normalized : normalized, discount }
+  return { code: normalized, discount }
 }
 
-/**
- * Full server-side total. Returns { ok, subtotalCents, discountCents,
- * totalCents, lines, code, rep } or { ok:false, error }.
- */
 export function priceOrder({ items, discountCode, discountApplied }) {
   const resolved = resolveLineItems(items)
   if (!resolved.ok) return resolved
