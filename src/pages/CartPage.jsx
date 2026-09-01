@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { getDiscount, isValidDiscountCode, normalizeDiscountCode } from '../data/discountCodes'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+
+const ACTIVE_CODE_KEY = 'leb_active_discount_code'
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, subtotal, itemCount } = useCart()
@@ -13,37 +16,41 @@ export default function CartPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    const saved = sessionStorage.getItem('leb_active_discount_code')
-    if (saved === 'COLIN10') {
-      setDiscountCode('COLIN10')
+    const saved = normalizeDiscountCode(sessionStorage.getItem(ACTIVE_CODE_KEY))
+    if (saved && isValidDiscountCode(saved)) {
+      setDiscountCode(saved)
       setDiscountApplied(true)
     }
   }, [])
 
   function applyDiscount() {
-    const code = discountCode.trim().toUpperCase()
-    if (code === 'COLIN10') {
-      sessionStorage.setItem('leb_active_discount_code', 'COLIN10')
-      setDiscountCode('COLIN10')
+    const code = normalizeDiscountCode(discountCode)
+    if (isValidDiscountCode(code)) {
+      sessionStorage.setItem(ACTIVE_CODE_KEY, code)
+      setDiscountCode(code)
       setDiscountApplied(true)
       setDiscountError('')
       return
     }
     setDiscountApplied(false)
-    sessionStorage.removeItem('leb_active_discount_code')
+    sessionStorage.removeItem(ACTIVE_CODE_KEY)
     setDiscountError('Invalid code. Please check the code and try again.')
   }
 
   function removeDiscount() {
-    sessionStorage.removeItem('leb_active_discount_code')
+    sessionStorage.removeItem(ACTIVE_CODE_KEY)
     setDiscountCode('')
     setDiscountApplied(false)
     setDiscountError('')
   }
 
-  const discountAmount = discountApplied ? subtotal * 0.10 : 0
+  const activeDiscount = discountApplied ? getDiscount(discountCode) : null
+  const discountPercent = activeDiscount?.percent || 0
+  const discountAmount = subtotal * (discountPercent / 100)
   const total = subtotal - discountAmount
-  const checkoutHref = discountApplied ? '/checkout?discount=COLIN10' : '/checkout'
+  const checkoutHref = discountApplied
+    ? `/checkout?discount=${encodeURIComponent(normalizeDiscountCode(discountCode))}`
+    : '/checkout'
 
   return (
     <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh' }}>
@@ -56,7 +63,7 @@ export default function CartPage() {
           <h1 style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '2.6rem', lineHeight: '1.1', letterSpacing: '-0.02em' }} className="font-normal">
             Your Cart{itemCount > 0 ? ` (${itemCount})` : ''}
           </h1>
-          <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginTop: '20px' }}></div>
+          <div style={{ width: '48px', height: '1px', backgroundColor: '#C9A96E', marginTop: '20px' }} />
         </div>
       </section>
 
@@ -73,7 +80,7 @@ export default function CartPage() {
                 {items.map(item => (
                   <div key={item.slug} style={{ backgroundColor: '#FFFFFF', padding: '28px 32px', borderLeft: '2px solid transparent' }} className="flex items-center justify-between gap-6 transition-colors group">
                     <div className="flex-1 flex items-center gap-4">
-                      <div style={{ width: '4px', height: '32px', backgroundColor: '#C9A96E', opacity: '0.3', flexShrink: 0 }}></div>
+                      <div style={{ width: '4px', height: '32px', backgroundColor: '#C9A96E', opacity: '0.3', flexShrink: 0 }} />
                       <div>
                         <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '15px', lineHeight: '1.3', marginBottom: '4px' }}>{item.name}</p>
                         <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '11px', letterSpacing: '0.1em' }} className="uppercase">{item.size || ''}</p>
@@ -110,13 +117,13 @@ export default function CartPage() {
                     <input value={discountCode} onChange={e => { setDiscountCode(e.target.value.toUpperCase()); setDiscountError('') }} disabled={discountApplied} placeholder="Enter code" style={{ minWidth: 0, flex: 1, border: '1px solid #D0C8BA', padding: '11px 12px', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', outline: 'none', backgroundColor: discountApplied ? '#F7F3EC' : '#FFF' }} />
                     <button onClick={discountApplied ? removeDiscount : applyDiscount} style={{ border: 'none', backgroundColor: discountApplied ? '#8A9E85' : '#C9A96E', color: '#000', padding: '11px 13px', cursor: 'pointer', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '9px', letterSpacing: '0.12em' }} className="uppercase">{discountApplied ? 'Remove' : 'Apply'}</button>
                   </div>
-                  {discountApplied && <p style={{ color: '#5BA87A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', marginTop: '8px' }}>COLIN10 applied — 10% off.</p>}
+                  {discountApplied && <p style={{ color: '#5BA87A', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', marginTop: '8px' }}>{normalizeDiscountCode(discountCode)} applied — {discountPercent}% off.</p>}
                   {discountError && <p style={{ color: '#B85C5C', fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '11px', marginTop: '8px', lineHeight: 1.5 }}>{discountError}</p>}
                 </div>
 
                 <div style={{ borderTop: '1px solid #E0D5C5', paddingTop: '16px', marginBottom: '24px' }}>
                   <div className="flex justify-between mb-2"><span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#6A6A6A', fontSize: '13px' }}>Subtotal</span><span style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '16px' }}>${subtotal.toFixed(2)}</span></div>
-                  {discountApplied && <div className="flex justify-between mb-2"><span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '13px' }}>COLIN10 (10%)</span><span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '13px' }}>−${discountAmount.toFixed(2)}</span></div>}
+                  {discountApplied && <div className="flex justify-between mb-2"><span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '13px' }}>{normalizeDiscountCode(discountCode)} ({discountPercent}%)</span><span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#5BA87A', fontSize: '13px' }}>−${discountAmount.toFixed(2)}</span></div>}
                   <div className="flex justify-between mb-3" style={{ borderTop: discountApplied ? '1px solid #EEE6DB' : 'none', paddingTop: discountApplied ? '10px' : 0 }}><span style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#2A2A2A', fontSize: '13px', fontWeight: 600 }}>Total</span><span style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '18px' }}>${total.toFixed(2)}</span></div>
                   <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px' }}>Shipping calculated at checkout</p>
                 </div>
