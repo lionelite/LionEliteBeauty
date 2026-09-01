@@ -78,7 +78,7 @@ export function resolveLineItems(items) {
 }
 
 export function resolveDiscount(discountCode, discountApplied) {
-  const normalized = normalizeDiscountCode(discountCode || (discountApplied ? 'LION10' : ''))
+  const normalized = normalizeDiscountCode(discountCode)
   if (!normalized) return { code: null, discount: null }
   const discount = DISCOUNT_CODES[normalized] || null
   return { code: normalized, discount }

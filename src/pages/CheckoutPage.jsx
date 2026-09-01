@@ -7,6 +7,9 @@ import StripePaymentSection from '../components/StripePaymentSection'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
+import { getDiscount, isValidDiscountCode, normalizeDiscountCode } from '../data/discountCodes'
+
+const ACTIVE_CODE_KEY = 'leb_active_discount_code'
 
 let stripePromise
 function getStripe() {
@@ -26,7 +29,19 @@ const US_STATES = [
 
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart()
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    const params = new URLSearchParams(window.location.search)
+    const incoming = normalizeDiscountCode(params.get('discount'))
+    const saved = normalizeDiscountCode(sessionStorage.getItem(ACTIVE_CODE_KEY))
+    const code = isValidDiscountCode(incoming) ? incoming : saved
+
+    if (isValidDiscountCode(code)) {
+      sessionStorage.setItem(ACTIVE_CODE_KEY, code)
+      setDiscountCode(code)
+      setDiscountApplied(true)
+    }
+  }, [])
 
   // ── Handle redirect return from Affirm / Klarna / Afterpay ────────────
   useEffect(() => {
@@ -134,9 +149,14 @@ export default function CheckoutPage() {
 
   // ── Discount code ──────────────────────────────────────────────────────
   function handleApplyDiscount() {
-    if (discountCode.trim().toLowerCase() === 'lion10') {
+    const code = normalizeDiscountCode(discountCode)
+    if (isValidDiscountCode(code)) {
+      sessionStorage.setItem(ACTIVE_CODE_KEY, code)
+      setDiscountCode(code)
       setDiscountApplied(true)
     } else {
+      sessionStorage.removeItem(ACTIVE_CODE_KEY)
+      setDiscountApplied(false)
       alert('Invalid discount code')
     }
   }
@@ -148,7 +168,9 @@ export default function CheckoutPage() {
   const [rewardMessage, setRewardMessage] = useState('')
   const [pointsEarned, setPointsEarned] = useState(0)   // points from this order
 
-  const finalTotal = discountApplied ? (subtotal * 0.9) : subtotal
+  const activeDiscount = discountApplied ? getDiscount(discountCode) : null
+  const discountPercent = activeDiscount?.percent || 0
+  const finalTotal = subtotal * (1 - discountPercent / 100)
   const estPointsEarned = finalTotal > 0 ? Math.floor(finalTotal) : 0
 
   // ── Rewards: Register or Login ─────────────────────────────────────────
@@ -212,7 +234,7 @@ export default function CheckoutPage() {
         const intentRes = await fetch('/api/create-payment-intent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items, discountApplied }),
+          body: JSON.stringify({ items, discountApplied, discountCode: normalizeDiscountCode(discountCode) }),
         })
         const intentData = await intentRes.json()
         if (!intentRes.ok) {
