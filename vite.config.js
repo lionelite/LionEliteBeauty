@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 // Checkout source transformer keeps affiliate-code support centralized without
 // duplicating the large checkout page. It enables both the house code and
 // rep codes, passes the applied code to Stripe, and supports share links such
-// as /checkout?discount=COLIN10.
+// as /checkout?discount=DAYLEN10.
 function affiliateCheckoutPlugin() {
   return {
     name: 'lion-elite-beauty-affiliate-checkout',
@@ -17,12 +17,12 @@ function affiliateCheckoutPlugin() {
 
       next = next.replace(
         "useEffect(() => { window.scrollTo(0, 0) }, [])",
-        `useEffect(() => {\n    window.scrollTo(0, 0)\n    const promo = new URLSearchParams(window.location.search).get('discount')\n    if (promo && ['lion10', 'colin10'].includes(promo.trim().toLowerCase())) {\n      setDiscountCode(promo.trim().toUpperCase())\n      setDiscountApplied(true)\n    }\n  }, [])`
+        `useEffect(() => {\n    window.scrollTo(0, 0)\n    const promo = new URLSearchParams(window.location.search).get('discount')\n    if (promo && ['lion10', 'colin10', 'daylen10'].includes(promo.trim().toLowerCase())) {\n      setDiscountCode(promo.trim().toUpperCase())\n      setDiscountApplied(true)\n    }\n  }, [])`
       )
 
       next = next.replace(
         "if (discountCode.trim().toLowerCase() === 'lion10') {",
-        "if (['lion10', 'colin10'].includes(discountCode.trim().toLowerCase())) {"
+        "if (['lion10', 'colin10', 'daylen10'].includes(discountCode.trim().toLowerCase())) {"
       )
 
       next = next.replace(
