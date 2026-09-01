@@ -37,7 +37,6 @@ import RepPortalPage from './pages/RepPortalPage'
 import OrdersPage from './pages/OrdersPage'
 import PeptideCheckInPage from './pages/PeptideCheckInPage'
 import SiteEnhancements from './components/SiteEnhancements'
-import ColinDiscountBridge from './components/ColinDiscountBridge'
 import SEO from './components/SEO'
 
 function HomePage() {
@@ -64,7 +63,6 @@ export default function App() {
     <BrowserRouter>
       <CartProvider>
         <SiteEnhancements />
-        <ColinDiscountBridge />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/programs/optimization" element={<OptimizationPage />} />
