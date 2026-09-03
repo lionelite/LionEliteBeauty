@@ -1,5 +1,17 @@
 import ordersHandler from './orders.js'
+import sendHandler from './send-v2.js'
 import { finalizeStripeOrder, getStripe, lockCheckout } from './_stripe-order.js'
+
+async function canonicalizeStripeOrder(body) {
+  if (!body?.stripePaymentId) return null
+  const stripe = getStripe()
+  const intent = await stripe.paymentIntents.retrieve(String(body.stripePaymentId))
+  if (intent?.status !== 'succeeded') return intent
+  await finalizeStripeOrder(intent)
+  const canonical = intent.metadata?.orderNumber
+  if (canonical) body.orderNumber = canonical
+  return intent
+}
 
 export default async function handler(req, res) {
   // /api/checkout-lock is rewritten here. This must succeed before the browser
@@ -17,19 +29,20 @@ export default async function handler(req, res) {
     }
   }
 
+  // /api/send is rewritten here so the customer receipt uses the same canonical
+  // order number stored in the fulfillment dashboard.
+  if (req.method === 'POST' && req.body?.type === 'order' && !req.body?.action) {
+    try { await canonicalizeStripeOrder(req.body) } catch (err) { console.error('Customer receipt canonicalization failed:', err) }
+    return sendHandler(req, res)
+  }
+
   // /api/orders is also rewritten here. Successful Stripe payments are first
   // reconciled to the canonical server-created order number, then the existing
   // orders handler continues normally. This prevents browser retries from
   // creating duplicate fulfillment records.
   try {
     if (req.method === 'POST' && req.body?.action === 'create' && req.body?.stripePaymentId) {
-      const stripe = getStripe()
-      const intent = await stripe.paymentIntents.retrieve(String(req.body.stripePaymentId))
-      if (intent?.status === 'succeeded') {
-        await finalizeStripeOrder(intent)
-        const canonical = intent.metadata?.orderNumber
-        if (canonical) req.body.orderNumber = canonical
-      }
+      await canonicalizeStripeOrder(req.body)
     }
   } catch (err) {
     console.error('Stripe order reconciliation gateway failed:', err)
