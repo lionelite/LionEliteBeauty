@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/api/send", "destination": "/api/send-v2" },
+    { "source": "/api/send", "destination": "/api/email-health" },
     { "source": "/api/checkout-lock", "destination": "/api/email-health" },
     { "source": "/api/orders", "destination": "/api/email-health" },
     { "source": "/api/stripe-webhook", "destination": "/api/order-email-live-test" },
