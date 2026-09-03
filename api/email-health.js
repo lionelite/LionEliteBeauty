@@ -1,83 +1,39 @@
-import { Resend } from 'resend'
-
-const DOMAIN = 'lionelitebeauty.com'
-
-function keyCandidates(rawValue) {
-  const raw = String(rawValue || '')
-  const trimmed = raw.trim()
-  const withoutAssignment = trimmed.replace(/^RESEND_API_KEY\s*=\s*/i, '').trim()
-  const unquote = value => {
-    const v = String(value || '').trim()
-    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) return v.slice(1, -1).trim()
-    return v
-  }
-  const candidates = [
-    ['raw', raw],
-    ['trimmed', trimmed],
-    ['assignment_stripped', withoutAssignment],
-    ['unquoted', unquote(trimmed)],
-    ['assignment_stripped_unquoted', unquote(withoutAssignment)],
-  ]
-  const seen = new Set()
-  return candidates.filter(([, value]) => {
-    if (!value || seen.has(value)) return false
-    seen.add(value)
-    return true
-  })
-}
-
-async function validateKey(value) {
-  try {
-    const resend = new Resend(value)
-    const listed = await resend.domains.list()
-    if (listed?.error) return { ok: false, error: listed.error.message || 'Resend rejected key' }
-    const domains = listed?.data?.data || listed?.data || []
-    const match = Array.isArray(domains)
-      ? domains.find(d => String(d?.name || '').toLowerCase() === DOMAIN)
-      : null
-    return {
-      ok: true,
-      domain: match ? { id: match.id || null, name: match.name, status: match.status || null } : { name: DOMAIN, status: 'not_found' },
-    }
-  } catch (error) {
-    return { ok: false, error: String(error?.message || error).slice(0, 200) }
-  }
-}
+import ordersHandler from './orders.js'
+import { finalizeStripeOrder, getStripe, lockCheckout } from './_stripe-order.js'
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
-
-  const rawKey = process.env.RESEND_API_KEY
-  const base = {
-    service: 'lion-elite-beauty-email',
-    configured: Boolean(rawKey),
-    ordersFrom: 'orders@lionelitebeauty.com',
-    ordersBusinessTo: 'orders@lionelitebeauty.com',
-    infoFrom: 'info@lionelitebeauty.com',
-  }
-
-  if (!rawKey) return res.status(200).json({ ...base, keyVariant: null, domain: null })
-
-  const attempts = []
-  for (const [variant, value] of keyCandidates(rawKey)) {
-    const result = await validateKey(value)
-    attempts.push({ variant, ok: result.ok, error: result.ok ? null : result.error })
-    if (result.ok) {
-      return res.status(200).json({
-        ...base,
-        validKey: true,
-        keyVariant: variant,
-        domain: result.domain,
-        attempts: attempts.map(a => ({ variant: a.variant, ok: a.ok, error: a.error })),
+  // /api/checkout-lock is rewritten here. This must succeed before the browser
+  // is allowed to confirm a Stripe payment.
+  if (req.method === 'POST' && req.body?.checkout && !req.body?.action) {
+    try {
+      const order = await lockCheckout({
+        cookieHeader: req.headers.cookie,
+        checkout: req.body.checkout,
       })
+      return res.status(200).json({ success: true, orderNumber: order.orderNumber })
+    } catch (err) {
+      console.error('Checkout lock failed:', err)
+      return res.status(409).json({ error: err?.message || 'Could not safely lock checkout before payment.' })
     }
   }
 
-  return res.status(200).json({
-    ...base,
-    validKey: false,
-    keyVariant: null,
-    domain: { name: DOMAIN, status: 'unavailable' },
-    attempts: attempts.map(a => ({ variant: a.variant, ok: a.ok, error: a.error })),
-  })
+  // /api/orders is also rewritten here. Successful Stripe payments are first
+  // reconciled to the canonical server-created order number, then the existing
+  // orders handler continues normally. This prevents browser retries from
+  // creating duplicate fulfillment records.
+  try {
+    if (req.method === 'POST' && req.body?.action === 'create' && req.body?.stripePaymentId) {
+      const stripe = getStripe()
+      const intent = await stripe.paymentIntents.retrieve(String(req.body.stripePaymentId))
+      if (intent?.status === 'succeeded') {
+        await finalizeStripeOrder(intent)
+        const canonical = intent.metadata?.orderNumber
+        if (canonical) req.body.orderNumber = canonical
+      }
+    }
+  } catch (err) {
+    console.error('Stripe order reconciliation gateway failed:', err)
+  }
+
+  return ordersHandler(req, res)
 }
