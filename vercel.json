@@ -5,7 +5,9 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/api/send", "destination": "/api/send-v2" },
-    { "source": "/api/orders", "destination": "/api/orders-v2" },
+    { "source": "/api/checkout-lock", "destination": "/api/email-health" },
+    { "source": "/api/orders", "destination": "/api/email-health" },
+    { "source": "/api/stripe-webhook", "destination": "/api/order-email-live-test" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/skincare/(.*)", "destination": "/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
