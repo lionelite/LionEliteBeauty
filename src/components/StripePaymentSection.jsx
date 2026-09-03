@@ -20,9 +20,37 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
       return
     }
 
-    // CheckoutPage has already saved the complete order payload to sessionStorage.
-    // That same saved payload is used after both redirect and non-redirect Stripe
-    // payments, so a browser navigation can never discard the order details.
+    // CRITICAL SAFETY GATE: CheckoutPage stores the complete cart, contact, and
+    // shipping payload before it creates the PaymentIntent. Persist that full
+    // payload on the server now, BEFORE Stripe is allowed to charge anything.
+    // If this fails, confirmation is blocked and the customer is not charged.
+    try {
+      const raw = sessionStorage.getItem('leb_checkout')
+      const checkout = raw ? JSON.parse(raw) : null
+      const lockRes = await fetch('/api/checkout-lock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ checkout }),
+      })
+      const lockData = await lockRes.json().catch(() => ({}))
+      if (!lockRes.ok) {
+        const message = lockData.error || 'We could not safely record your order. You have not been charged. Please retry.'
+        setError(message)
+        onError?.(message)
+        setSending(false)
+        return
+      }
+    } catch (lockErr) {
+      const message = 'We could not safely record your order. You have not been charged. Please retry.'
+      console.error('Pre-payment order lock failed:', lockErr)
+      setError(message)
+      onError?.(message)
+      setSending(false)
+      return
+    }
+
+    // Preserve the existing redirect recovery payload only after the authoritative
+    // server-side order record is safely locked.
     if (saveOrderData) saveOrderData()
 
     const { error: payError, paymentIntent } = await stripe.confirmPayment({
@@ -52,10 +80,9 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
       return
     }
 
-    // IMPORTANT: CheckoutPage already has a hardened redirect-return flow that
-    // retrieves this PaymentIntent from Stripe and calls submitOrder with the
-    // REAL paymentIntent.id. Route card payments through that same path instead
-    // of its legacy handleCardSuccess('stripe_confirmed') path.
+    // Route all successful payments through the same recovery path. The server
+    // webhook is already the source of truth, so this redirect is an additional
+    // browser-side fallback rather than the fulfillment trigger.
     const secret = encodeURIComponent(paymentIntent.client_secret)
     window.location.assign(`/checkout?payment_intent_client_secret=${secret}`)
   }
@@ -70,7 +97,7 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60px' }}>
             <div style={{ width: '20px', height: '20px', border: '2px solid #E0D5C5', borderTopColor: '#C9A96E', borderRadius: '50%', animation: 'pulse 0.8s linear infinite' }}></div>
-            <style>{`@keyframes pulse { to { transform: rotate(360deg) } }`}</style>
+            <style>{`@keyframes pulse { to { transform: rotate360deg); } }`}</style>
           </div>
         )}
       </div>
