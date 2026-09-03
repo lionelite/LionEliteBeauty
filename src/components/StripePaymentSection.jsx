@@ -97,7 +97,7 @@ export default function StripePaymentSection({ email, name, finalTotal, onSucces
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60px' }}>
             <div style={{ width: '20px', height: '20px', border: '2px solid #E0D5C5', borderTopColor: '#C9A96E', borderRadius: '50%', animation: 'pulse 0.8s linear infinite' }}></div>
-            <style>{`@keyframes pulse { to { transform: rotate360deg); } }`}</style>
+            <style>{`@keyframes pulse { to { transform: rotate(360deg); } }`}</style>
           </div>
         )}
       </div>
