@@ -9,5 +9,16 @@ export default function ProductImage({ src, alt, style, fallback = null }) {
 
   if (!src || failed) return fallback
 
-  return <img src={src} alt={alt} style={style} onError={() => setFailed(true)} />
+  return (
+    <img
+      src={src}
+      alt={alt}
+      style={{
+        display: 'block',
+        filter: 'drop-shadow(0 18px 22px rgba(74, 61, 45, 0.14))',
+        ...style,
+      }}
+      onError={() => setFailed(true)}
+    />
+  )
 }
