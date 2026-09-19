@@ -6,6 +6,11 @@ const INFO_FROM = 'Lion Elite Beauty <info@lionelitebeauty.com>'
 // Order notifications are a Beauty order function. Keep the business recipient
 // deterministic so a stale Vercel env var cannot send Beauty orders elsewhere.
 const ORDER_ADMIN = 'orders@lionelitebeauty.com'
+const ORDER_ADMINS = [
+  'info@lionelitewellness.com',
+  'orders@lionelitebeauty.com',
+  'info@lionelitebeauty.com',
+]
 const GENERAL_ADMIN = process.env.BEAUTY_INFO_NOTIFICATION_EMAIL || 'info@lionelitebeauty.com'
 
 function esc(value = '') {
@@ -87,10 +92,10 @@ export default async function handler(req, res) {
       `)
 
       const sends = []
-      if (!b.skipAdmin) sends.push(sendEmail({ from: ORDERS_FROM, to: [ORDER_ADMIN], replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ORDER — ${money(total)} — ${b.name}`, html: adminHtml }))
+      if (!b.skipAdmin) sends.push(sendEmail({ from: ORDERS_FROM, to: ORDER_ADMINS, replyTo: b.email, subject: `💰 NEW LION ELITE BEAUTY ORDER — ${money(total)} — ${b.name}`, html: adminHtml }))
       sends.push(sendEmail({ from: ORDERS_FROM, to: [b.email], replyTo: ORDER_ADMIN, subject: `Lion Elite Beauty Order ${paid ? 'Confirmed' : 'Received'} — ${id}`, html: clientHtml }))
       await Promise.all(sends)
-      return res.status(200).json({ success: true, orderNumber: id, total, customerEmailSent: true, businessEmailSent: !b.skipAdmin, businessRecipient: ORDER_ADMIN })
+      return res.status(200).json({ success: true, orderNumber: id, total, customerEmailSent: true, businessEmailSent: !b.skipAdmin, businessRecipients: ORDER_ADMINS })
     }
 
     if (b.type === 'program_order') {

@@ -4,12 +4,22 @@ import Stripe from 'stripe'
 import { authenticateDashboard } from './_auth.js'
 import { priceOrder } from './_pricing.js'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null
 const ORDERS_EMAIL = 'orders@lionelitebeauty.com'
+const OWNER_RECIPIENTS = [
+  'info@lionelitewellness.com',
+  'orders@lionelitebeauty.com',
+  'info@lionelitebeauty.com',
+]
 
 let redis
+let resend
 const memStore = new Map()
+
+function getResend() {
+  if (!resend && process.env.RESEND_API_KEY) resend = new Resend(process.env.RESEND_API_KEY)
+  return resend
+}
 
 function getRedis() {
   if (redis) return redis
@@ -172,14 +182,40 @@ function newOrderEmailHtml(order) {
 
 async function sendNewOrderNotification(order) {
   if (!process.env.RESEND_API_KEY) return { skipped: 'no_resend_key' }
-  const result = await resend.emails.send({
+  const result = await getResend().emails.send({
     from: `Lion Elite Beauty <${ORDERS_EMAIL}>`,
-    to: [ORDERS_EMAIL],
+    to: OWNER_RECIPIENTS,
     subject: `🛒 New Order #${order.orderNumber} — Lion Elite Beauty — $${Number(order.total || 0).toFixed(2)}`,
     html: newOrderEmailHtml(order),
   })
   if (result?.error) throw new Error(result.error.message || 'Order notification failed')
-  return { sent: true, to: ORDERS_EMAIL }
+  return { sent: true, to: OWNER_RECIPIENTS, id: result?.data?.id || result?.id || null }
+}
+
+async function notifyAndRecord(order) {
+  try {
+    const result = await sendNewOrderNotification(order)
+    if (!result?.sent) throw new Error(result?.skipped || 'Order notification was not sent')
+    const notified = {
+      ...order,
+      ownerNotifiedAt: new Date().toISOString(),
+      ownerNotificationId: result.id,
+      ownerNotificationError: null,
+      updatedAt: new Date().toISOString(),
+    }
+    await saveOrder(notified)
+    return { order: notified, sent: true }
+  } catch (err) {
+    console.error('New-order notification failed:', err)
+    const failed = {
+      ...order,
+      ownerNotificationError: String(err?.message || err),
+      ownerNotificationLastAttemptAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    await saveOrder(failed)
+    return { order: failed, sent: false }
+  }
 }
 
 export default async function handler(req, res) {
@@ -191,7 +227,15 @@ export default async function handler(req, res) {
       if (!body.orderNumber || !body.email || !Array.isArray(body.items)) return res.status(400).json({ error: 'Missing order data' })
 
       const existing = await loadOrder(body.orderNumber)
-      if (existing) return res.status(200).json({ success: true, order: existing, duplicate: true })
+      if (existing) {
+        // A provider outage must not permanently silence an order. Replays are
+        // idempotent for storage, but retry the owner alert until it succeeds.
+        if (!existing.ownerNotifiedAt) {
+          const retried = await notifyAndRecord(existing)
+          return res.status(200).json({ success: true, order: retried.order, duplicate: true, notificationRetried: true, ownerNotificationSent: retried.sent })
+        }
+        return res.status(200).json({ success: true, order: existing, duplicate: true, ownerNotificationSent: true })
+      }
 
       const code = normalizeCode(body.discountCode)
       const priced = priceOrder({ items: body.items, discountCode: code, discountApplied: Boolean(code) })
@@ -232,11 +276,14 @@ export default async function handler(req, res) {
         carrier: '',
         trackingNumber: '',
         trackingSentAt: null,
+        ownerNotifiedAt: null,
+        ownerNotificationId: null,
+        ownerNotificationError: null,
       }
 
       await saveOrder(order)
-      try { await sendNewOrderNotification(order) } catch (notifyErr) { console.error('New-order notification failed:', notifyErr) }
-      return res.status(200).json({ success: true, order })
+      const notified = await notifyAndRecord(order)
+      return res.status(200).json({ success: true, order: notified.order, ownerNotificationSent: notified.sent })
     }
 
     const auth = authenticate(body.username, body.password)
@@ -285,7 +332,9 @@ export default async function handler(req, res) {
       order.fulfillmentStatus = 'shipped'
       order.updatedAt = new Date().toISOString()
 
-      const result = await resend.emails.send({
+      const mail = getResend()
+      if (!mail) throw new Error('Email service is not configured')
+      const result = await mail.emails.send({
         from: `Lion Elite Beauty <${ORDERS_EMAIL}>`,
         to: [order.email],
         subject: `Your Lion Elite Beauty order #${order.orderNumber} has shipped`,
