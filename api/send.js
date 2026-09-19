@@ -4,7 +4,17 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Where owner/admin notifications go. Configurable so alerts land in an inbox
 // the owner actually watches; falls back to the original hardcoded address.
-const ADMIN_EMAIL = process.env.ORDER_NOTIFICATION_EMAIL || 'orders@lionelitebeauty.com'
+const ADMIN_EMAILS = process.env.ORDER_NOTIFICATION_EMAIL
+  ? process.env.ORDER_NOTIFICATION_EMAIL.split(',').map(email => email.trim()).filter(Boolean)
+  : ['info@lionelitewellness.com', 'orders@lionelitebeauty.com', 'info@lionelitebeauty.com']
+
+async function sendEmail(payload) {
+  const result = await resend.emails.send(payload)
+  if (result?.error) throw new Error(result.error.message || 'Email provider rejected the message')
+  const accepted = result?.data || result
+  if (!accepted?.id) throw new Error('Email provider did not return a delivery reference')
+  return accepted
+}
 
 function generateOrderNumber() {
   const date = new Date()
@@ -427,7 +437,7 @@ export default async function handler(req, res) {
 
   const body = req.body
   const isOrder = body.type === 'order'
-  const orderNumber = generateOrderNumber()
+  const orderNumber = String(body.orderNumber || '').trim() || generateOrderNumber()
 
   try {
     if (isOrder) {
@@ -438,9 +448,9 @@ export default async function handler(req, res) {
       const total = subtotal - discountAmount
 
       const [adminRes, clientRes] = await Promise.all([
-        resend.emails.send({
+        sendEmail({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
-          to: [ADMIN_EMAIL],
+          to: ADMIN_EMAILS,
           subject: `New Order #${orderNumber}: ${items.map(i => i.name).join(', ')} — ${body.name}`,
           html: wrap(adminBody({
             name: body.name, email: body.email,
@@ -454,7 +464,7 @@ export default async function handler(req, res) {
           })),
           replyTo: body.email,
         }),
-        resend.emails.send({
+        sendEmail({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
           to: [body.email],
           subject: `Order Confirmed — #${orderNumber}`,
@@ -475,9 +485,9 @@ export default async function handler(req, res) {
         : { label: 'VIP Transformation Program', price: '$2,400.00', period: '/ 6 months', emailSub: '(VIP)', duration: '6-month personalized protocol' }
 
       const [adminRes, clientRes] = await Promise.all([
-        resend.emails.send({
+        sendEmail({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
-          to: [ADMIN_EMAIL],
+          to: ADMIN_EMAILS,
           subject: `Program Enrollment: ${tierInfo.label} — ${progName} — ${body.name} ${body.vipId ? `(${body.vipId})` : ''}`,
           html: wrap(programAdminBody({
             name: body.name, email: body.email,
@@ -489,7 +499,7 @@ export default async function handler(req, res) {
           })),
           replyTo: body.email,
         }),
-        resend.emails.send({
+        sendEmail({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
           to: [body.email],
           subject: `Welcome to Lion Elite — ${tierInfo.label} Enrollment`,
@@ -507,9 +517,9 @@ export default async function handler(req, res) {
       console.log('Program enrollment emails:', tierInfo.label, adminRes.id, clientRes.id)
     } else {
       const [adminRes, clientRes] = await Promise.all([
-        resend.emails.send({
+        sendEmail({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
-          to: [ADMIN_EMAIL],
+          to: ADMIN_EMAILS,
           subject: `New Application: ${body.program} — ${body.name}`,
           html: wrap(adminBody({
             name: body.name, email: body.email,
@@ -524,7 +534,7 @@ export default async function handler(req, res) {
           })),
           replyTo: body.email,
         }),
-        resend.emails.send({
+        sendEmail({
           from: 'Lion Elite <orders@lionelitebeauty.com>',
           to: [body.email],
           subject: 'Application Received — Lion Elite',

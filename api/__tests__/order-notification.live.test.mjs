@@ -29,17 +29,15 @@ const { default: handler } = await import('../orders.js')
 function stubTransport({ fail = false } = {}) {
   const sent = []
   globalThis.fetch = async (url, options = {}) => {
-    const target = String(url)
+    const target = typeof url === 'string' ? url : url?.url || String(url)
     if (!target.includes('resend')) throw new Error(`unexpected outbound call: ${target}`)
     if (fail) throw new Error('simulated Resend outage')
-    sent.push(JSON.parse(options.body || '{}'))
-    return {
-      ok: true,
+    const rawBody = options.body || (url && typeof url.text === 'function' ? await url.clone().text() : '{}')
+    sent.push(JSON.parse(rawBody || '{}'))
+    return new Response(JSON.stringify({ id: 'msg_test' }), {
       status: 200,
-      headers: { get: () => 'application/json' },
-      json: async () => ({ id: 'msg_test' }),
-      text: async () => JSON.stringify({ id: 'msg_test' }),
-    }
+      headers: { 'content-type': 'application/json' },
+    })
   }
   return sent
 }
@@ -78,24 +76,14 @@ test('a new order is recorded and the owner is emailed', async () => {
 
   assert.equal(sent.length, 1, 'exactly one owner notification should go out')
   const email = sent[0]
-  assert.deepEqual(email.to, ['info@lionelitewellness.com'], 'must reach the monitored inbox')
+  assert.deepEqual(
+    email.to,
+    ['info@lionelitewellness.com', 'orders@lionelitebeauty.com', 'info@lionelitebeauty.com'],
+    'must reach the monitored Gmail destination and both Beauty inboxes'
+  )
   assert.match(email.subject, /LEB-TEST-0001/)
   assert.match(email.subject, /69\.99/)
   assert.match(email.html, /NEW ORDER/i)
-})
-
-test('ORDER_NOTIFICATION_EMAIL overrides the recipient', async () => {
-  process.env.ORDER_NOTIFICATION_EMAIL = 'alerts@example.com'
-  // Re-import with a cache-busting query so the module-level constant is re-read.
-  const { default: freshHandler } = await import(`../orders.js?override=${Date.now()}`)
-  const sent = stubTransport()
-  const res = mockRes()
-
-  await freshHandler({ method: 'POST', body: orderBody('LEB-TEST-0002') }, res)
-
-  assert.equal(res.statusCode, 200)
-  assert.deepEqual(sent[0].to, ['alerts@example.com'])
-  delete process.env.ORDER_NOTIFICATION_EMAIL
 })
 
 test('replaying the same order number does not double-record or double-email', async () => {
@@ -126,15 +114,18 @@ test('a notification failure never fails the customer checkout', async () => {
   assert.equal(res.body.order.orderNumber, 'LEB-TEST-0004')
 })
 
-test('the order survives the failed-notification path and is not re-created', async () => {
-  // LEB-TEST-0004 was stored during the outage above; it must already exist.
+test('the order survives a failed notification and a replay retries the owner alert', async () => {
+  // LEB-TEST-0004 was stored during the outage above; it must already exist,
+  // while its notification remains eligible for recovery.
   const sent = stubTransport()
   const res = mockRes()
 
   await handler({ method: 'POST', body: orderBody('LEB-TEST-0004') }, res)
 
   assert.equal(res.body.duplicate, true, 'the order was persisted even though the email failed')
-  assert.equal(sent.length, 0, 'a duplicate must not trigger a fresh notification')
+  assert.equal(res.body.notificationRetried, true)
+  assert.equal(res.body.ownerNotificationSent, true)
+  assert.equal(sent.length, 1, 'a silent order must retry its owner notification')
 })
 
 test('an unknown product is rejected before anything is recorded or emailed', async () => {

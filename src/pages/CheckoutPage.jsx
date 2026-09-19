@@ -99,6 +99,8 @@ export default function CheckoutPage() {
   const [stripeError, setStripeError] = useState('')
   const [clientSecret, setClientSecret] = useState('')
   const [showCardForm, setShowCardForm] = useState(false)
+  const [confirmationPayload, setConfirmationPayload] = useState(null)
+  const [confirmationStatus, setConfirmationStatus] = useState('idle')
 
   // Ref to hold checkout data for redirect return (Affirm/Klarna/Afterpay)
   const checkoutDataRef = useRef({})
@@ -262,6 +264,24 @@ export default function CheckoutPage() {
     setStripeError(msg)
   }
 
+  async function sendOrderConfirmation() {
+    if (!confirmationPayload || confirmationStatus === 'sending' || confirmationStatus === 'sent') return
+    setConfirmationStatus('sending')
+    try {
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(confirmationPayload),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok || !result.success) throw new Error(result.error || 'Confirmation email failed')
+      setConfirmationStatus('sent')
+    } catch (err) {
+      console.error('Order confirmation failed:', err)
+      setConfirmationStatus('error')
+    }
+  }
+
   async function submitOrder(stripePaymentId = null) {
     const d = checkoutDataRef.current
     if (!d.items || d.items.length === 0) {
@@ -295,6 +315,7 @@ export default function CheckoutPage() {
       // create persists the order and sends the owner notification. It is
       // idempotent on orderNumber, so a retry cannot double-record or double-notify.
       let recorded = false
+      let ownerNotificationSent = false
       try {
         const orderRes = await fetch('/api/orders', {
           method: 'POST',
@@ -302,6 +323,8 @@ export default function CheckoutPage() {
           body: JSON.stringify({ action: 'create', orderNumber: placedOrderNumber, ...orderPayload }),
         })
         recorded = orderRes.ok
+        const orderResult = await orderRes.json().catch(() => ({}))
+        ownerNotificationSent = Boolean(orderResult.ownerNotificationSent || orderResult.order?.ownerNotifiedAt)
         if (!orderRes.ok) console.error('Order record failed:', orderRes.status)
       } catch (recordErr) {
         console.error('Order record failed:', recordErr)
@@ -311,21 +334,28 @@ export default function CheckoutPage() {
       // response.ok and retry once. skipAdmin is set only when the order was
       // recorded — if recording failed, /api/send still sends the owner copy, so
       // a paid order can never pass with nobody notified.
-      const sendPayload = { ...orderPayload, orderNumber: placedOrderNumber, skipAdmin: recorded }
-      let sendRes = await fetch('/api/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sendPayload),
-      })
-      if (!sendRes.ok) {
-        sendRes = await fetch('/api/send', {
+      const sendPayload = { ...orderPayload, orderNumber: placedOrderNumber, skipAdmin: recorded && ownerNotificationSent }
+      if (d.paymentMethod === 'stripe') {
+        let sendRes = await fetch('/api/send', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(sendPayload),
         })
-      }
-      if (!sendRes.ok && recorded) {
-        console.error('Customer confirmation failed after retry; order is recorded and the owner was notified')
+        if (!sendRes.ok) {
+          sendRes = await fetch('/api/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(sendPayload),
+          })
+        }
+        if (!sendRes.ok && recorded) {
+          console.error('Customer confirmation failed after retry; order is recorded')
+        }
+      } else {
+        // Match the Wellness manual-payment flow: the order is recorded first,
+        // then the customer explicitly sends their receipt from the confirmation screen.
+        setConfirmationPayload(sendPayload)
+        setConfirmationStatus('idle')
       }
 
       // Add points if user has a rewards account
@@ -454,6 +484,26 @@ export default function CheckoutPage() {
                     <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.6', marginTop: '8px' }}>
                       Include your order name in the memo so we can match it.
                     </p>
+                    <button
+                      type="button"
+                      onClick={sendOrderConfirmation}
+                      disabled={confirmationStatus === 'sending' || confirmationStatus === 'sent'}
+                      style={{
+                        width: '100%', marginTop: '22px', padding: '16px 20px', border: '1px solid #C9A96E',
+                        backgroundColor: confirmationStatus === 'sent' ? '#E8F5E9' : '#C9A96E',
+                        color: confirmationStatus === 'sent' ? '#3F7650' : '#000',
+                        fontFamily: 'Helvetica Neue, Arial, sans-serif', fontSize: '12px', letterSpacing: '0.14em',
+                        cursor: confirmationStatus === 'sending' || confirmationStatus === 'sent' ? 'default' : 'pointer',
+                      }}
+                      className="uppercase"
+                    >
+                      {confirmationStatus === 'sending' ? 'Sending Confirmation…' : confirmationStatus === 'sent' ? '✓ Confirmation Sent!' : 'Send Order Confirmation'}
+                    </button>
+                    {confirmationStatus === 'error' && (
+                      <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#B42318', fontSize: '12px', lineHeight: '1.6', marginTop: '10px', textAlign: 'center' }}>
+                        Email could not be sent. Please try again.
+                      </p>
+                    )}
                   </div>
                 )}
                 <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '12px', lineHeight: '1.7', textAlign: 'center', marginTop: '20px' }}>

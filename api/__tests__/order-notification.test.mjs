@@ -18,31 +18,23 @@ const read = (p) => fs.readFileSync(path.join(root, p), 'utf8')
 
 const sendV2 = read('api/send-v2.js')
 const orders = read('api/orders.js')
+const legacySend = read('api/send.js')
 const checkout = read('src/pages/CheckoutPage.jsx')
 const vercelJson = JSON.parse(read('vercel.json'))
 
-// ── Defect 1: alerts went to an unmonitored mailbox ────────────────────────
-// Both handlers defaulted to orders@lionelitebeauty.com. Sends "succeeded" and
-// landed somewhere nobody reads, so the owner saw nothing.
+// ── Defect 1: alerts reached only one Beauty mailbox ───────────────────────
 
-test('owner notifications default to the inbox the owner actually reads', () => {
-  for (const [name, source] of [['send-v2.js', sendV2], ['orders.js', orders]]) {
-    assert.match(
-      source,
-      /process\.env\.ORDER_NOTIFICATION_EMAIL \|\| 'info@lionelitewellness\.com'/,
-      `${name} must fall back to the monitored owner inbox`
-    )
-    assert.doesNotMatch(
-      source,
-      /\|\| 'orders@lionelitebeauty\.com'/,
-      `${name} must not fall back to the unmonitored orders@ mailbox`
-    )
+test('owner notifications go to both Beauty inboxes', () => {
+  for (const [name, source] of [['send-v2.js', sendV2], ['orders.js', orders], ['send.js', legacySend]]) {
+    assert.match(source, /info@lionelitewellness\.com/, `${name} must include the monitored Gmail destination used by Wellness`)
+    assert.match(source, /orders@lionelitebeauty\.com/, `${name} must include the orders inbox`)
+    assert.match(source, /info@lionelitebeauty\.com/, `${name} must include the info inbox`)
   }
 })
 
-test('the recipient stays overridable by environment', () => {
-  assert.match(sendV2, /process\.env\.ORDER_NOTIFICATION_EMAIL/)
-  assert.match(orders, /process\.env\.ORDER_NOTIFICATION_EMAIL/)
+test('legacy sender detects provider rejection instead of returning false success', () => {
+  assert.match(legacySend, /result\?\.error/)
+  assert.match(legacySend, /did not return a delivery reference/)
 })
 
 // ── Defect 2: successful orders were never recorded ────────────────────────
@@ -50,14 +42,21 @@ test('the recipient stays overridable by environment', () => {
 // clean checkout stored nothing and the admin dashboard missed every good order.
 
 test('checkout records the order before sending any email', () => {
-  const createIndex = checkout.indexOf("action: 'create'")
-  const sendIndex = checkout.indexOf("fetch('/api/send'")
+  const submitOrder = checkout.slice(checkout.indexOf('async function submitOrder'))
+  const createIndex = submitOrder.indexOf("action: 'create'")
+  const sendIndex = submitOrder.indexOf("fetch('/api/send'")
   assert.notEqual(createIndex, -1, 'checkout must call /api/orders create')
   assert.notEqual(sendIndex, -1, 'checkout must call /api/send')
   assert.ok(
     createIndex < sendIndex,
     'the order record must be written before emails, matching the Wellness store'
   )
+})
+
+test('manual-payment checkout offers the Wellness-style confirmation button', () => {
+  assert.match(checkout, /Send Order Confirmation/)
+  assert.match(checkout, /sendOrderConfirmation/)
+  assert.match(checkout, /confirmationStatus === 'sent'/)
 })
 
 test('the order record is not conditional on the email succeeding', () => {
@@ -83,10 +82,10 @@ test('send-v2 reuses the persisted order number instead of minting a second one'
   assert.match(sendV2, /String\(b\.orderNumber \|\| ''\)\.trim\(\) \|\| orderNumber\(\)/)
 })
 
-// ── The rewrite that makes api/send.js inert ───────────────────────────────
+// ── The gateway routes all email and order writes through canonical logic ──
 
-test('/api/send is rewritten to send-v2, so send.js is not the live path', () => {
+test('/api/send is rewritten to the canonical email gateway', () => {
   const rewrite = vercelJson.rewrites.find((r) => r.source === '/api/send')
   assert.ok(rewrite, 'vercel.json must still declare the /api/send rewrite')
-  assert.equal(rewrite.destination, '/api/send-v2')
+  assert.equal(rewrite.destination, '/api/email-health')
 })

@@ -7,7 +7,11 @@ import { priceOrder } from './_pricing.js'
 const ORDERS_INDEX = 'orders:beauty:index'
 const WEBHOOK_SECRET_KEY = 'config:beauty:stripe_webhook_secret'
 const WEBHOOK_URL = `${process.env.SITE_URL || 'https://lionelitebeauty.com'}/api/stripe-webhook`
-const NOTIFY_TO = ['orders@lionelitebeauty.com', 'info@lionelitebeauty.com']
+const NOTIFY_TO = [
+  'info@lionelitewellness.com',
+  'orders@lionelitebeauty.com',
+  'info@lionelitebeauty.com',
+]
 
 let redis
 let stripe
