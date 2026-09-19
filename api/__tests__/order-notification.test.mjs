@@ -42,14 +42,21 @@ test('legacy sender detects provider rejection instead of returning false succes
 // clean checkout stored nothing and the admin dashboard missed every good order.
 
 test('checkout records the order before sending any email', () => {
-  const createIndex = checkout.indexOf("action: 'create'")
-  const sendIndex = checkout.indexOf("fetch('/api/send'")
+  const submitOrder = checkout.slice(checkout.indexOf('async function submitOrder'))
+  const createIndex = submitOrder.indexOf("action: 'create'")
+  const sendIndex = submitOrder.indexOf("fetch('/api/send'")
   assert.notEqual(createIndex, -1, 'checkout must call /api/orders create')
   assert.notEqual(sendIndex, -1, 'checkout must call /api/send')
   assert.ok(
     createIndex < sendIndex,
     'the order record must be written before emails, matching the Wellness store'
   )
+})
+
+test('manual-payment checkout offers the Wellness-style confirmation button', () => {
+  assert.match(checkout, /Send Order Confirmation/)
+  assert.match(checkout, /sendOrderConfirmation/)
+  assert.match(checkout, /confirmationStatus === 'sent'/)
 })
 
 test('the order record is not conditional on the email succeeding', () => {
