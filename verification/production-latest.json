@@ -1,8 +1,8 @@
 {
   "verified": true,
-  "verified_at_utc": "2026-09-19T15:19:23.625292+00:00",
-  "expected_git_commit": "e913b21a27e4f23c3690aae82bd93a27616de3f2",
-  "deployed_git_commit": "e913b21a27e4f23c3690aae82bd93a27616de3f2",
+  "verified_at_utc": "2026-09-23T17:30:53.145903+00:00",
+  "expected_git_commit": "ff0c338c18fe8f979a76995c2580a23a0e132ad1",
+  "deployed_git_commit": "ff0c338c18fe8f979a76995c2580a23a0e132ad1",
   "environment": "production",
   "homepage": {
     "url": "https://lionelitebeauty.com/",
