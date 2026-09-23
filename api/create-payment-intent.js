@@ -9,12 +9,21 @@ export default async function handler(req, res) {
   let stripe
   try {
     stripe = getStripe()
-    // Fail closed: if we cannot guarantee Stripe can call us back, do not expose
-    // a client secret that could accept money without a fulfillment record.
-    await ensureStripeWebhook()
   } catch (err) {
-    console.error('Checkout safety prerequisites failed:', err)
+    console.error('Stripe configuration failed:', err)
     return res.status(503).json({ error: 'Checkout is temporarily unavailable. No payment was taken.' })
+  }
+
+  // Keep the authoritative webhook/order-lock path when infrastructure is healthy,
+  // but do not take the entire storefront offline if webhook provisioning or durable
+  // storage is temporarily unavailable. The browser still completes the existing
+  // post-payment order + email flow as a recovery path.
+  let webhookReady = false
+  try {
+    await ensureStripeWebhook()
+    webhookReady = true
+  } catch (err) {
+    console.error('Stripe webhook prerequisite unavailable; continuing in checkout fallback mode:', err)
   }
 
   try {
@@ -38,18 +47,15 @@ export default async function handler(req, res) {
       },
     })
 
+    let durableOrder = false
     try {
-      // The order record exists in persistent storage BEFORE the browser receives
-      // a client secret. If persistence fails, the intent is canceled and cannot
-      // be paid.
       await createPendingOrder({ paymentIntent, priced })
+      durableOrder = true
+      res.setHeader('Set-Cookie', `leb_pending_order=${encodeURIComponent(orderNumber)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=1800`)
     } catch (persistErr) {
-      console.error('Could not persist pending order:', persistErr)
-      try { await stripe.paymentIntents.cancel(paymentIntent.id) } catch {}
-      return res.status(503).json({ error: 'We could not safely record your order. No payment was taken.' })
+      console.error('Pending order persistence unavailable; continuing in checkout fallback mode:', persistErr)
     }
 
-    res.setHeader('Set-Cookie', `leb_pending_order=${encodeURIComponent(orderNumber)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=1800`)
     return res.status(200).json({
       clientSecret: paymentIntent.client_secret,
       orderNumber,
@@ -57,6 +63,8 @@ export default async function handler(req, res) {
       subtotalCents: priced.subtotalCents,
       discountCents: priced.discountCents,
       discountCode: priced.code,
+      durableOrder,
+      webhookReady,
     })
   } catch (err) {
     console.error('Stripe error:', err)

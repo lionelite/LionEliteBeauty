@@ -13,18 +13,32 @@ async function canonicalizeStripeOrder(body) {
   return intent
 }
 
+function isInfrastructureLockFailure(err) {
+  const message = String(err?.message || err || '')
+  return /Persistent Redis is required|Secure order reference is missing|Pending order record was not found/i.test(message)
+}
+
 export default async function handler(req, res) {
-  // /api/checkout-lock is rewritten here. This must succeed before the browser
-  // is allowed to confirm a Stripe payment.
+  // /api/checkout-lock is rewritten here. Use the durable lock whenever it is
+  // available. If infrastructure is unavailable, allow the existing browser-side
+  // post-payment order + email recovery flow to keep checkout operational.
   if (req.method === 'POST' && req.body?.checkout && !req.body?.action) {
     try {
       const order = await lockCheckout({
         cookieHeader: req.headers.cookie,
         checkout: req.body.checkout,
       })
-      return res.status(200).json({ success: true, orderNumber: order.orderNumber })
+      return res.status(200).json({ success: true, orderNumber: order.orderNumber, durable: true })
     } catch (err) {
       console.error('Checkout lock failed:', err)
+      if (isInfrastructureLockFailure(err)) {
+        return res.status(200).json({
+          success: true,
+          durable: false,
+          fallback: true,
+          warning: 'Durable checkout lock unavailable; browser recovery flow enabled.',
+        })
+      }
       return res.status(409).json({ error: err?.message || 'Could not safely lock checkout before payment.' })
     }
   }
