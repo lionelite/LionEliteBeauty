@@ -293,7 +293,7 @@ export async function ensureStripeWebhook() {
 }
 
 export async function getWebhookSecret() {
-  const fromEnv = process.env.STRIPE_WEBHOOK_SECRET
+  const fromEnv = process.env.WELLNESS_STRIPE_WEBHOOK_SECRET
   if (fromEnv) return fromEnv
   const value = await getRedisStrict().get(WEBHOOK_SECRET_KEY)
   if (!value) throw new Error('Stripe webhook signing secret is not configured')
