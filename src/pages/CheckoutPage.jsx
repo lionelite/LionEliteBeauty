@@ -13,7 +13,7 @@ const ACTIVE_CODE_KEY = 'leb_active_discount_code'
 
 let stripePromise
 function getStripe() {
-  const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+  const key = import.meta.env.VITE_WELLNESS_STRIPE_PUBLISHABLE_KEY
   if (!key) return null
   if (!stripePromise) stripePromise = loadStripe(key)
   return stripePromise
