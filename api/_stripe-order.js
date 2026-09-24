@@ -6,6 +6,7 @@ import { priceOrder } from './_pricing.js'
 
 const ORDERS_INDEX = 'orders:beauty:index'
 const WEBHOOK_SECRET_KEY = 'config:beauty:stripe_webhook_secret'
+const STRIPE_ACCOUNT_KEY = 'config:beauty:stripe_account_id'
 const WEBHOOK_URL = `${process.env.SITE_URL || 'https://lionelitebeauty.com'}/api/stripe-webhook`
 const NOTIFY_TO = [
   'info@lionelitewellness.com',
@@ -18,7 +19,8 @@ let stripe
 let resend
 
 export function getStripe() {
-  if (!stripe && process.env.STRIPE_SECRET_KEY) stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+  const secretKey = process.env.WELLNESS_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY
+  if (!stripe && secretKey) stripe = new Stripe(secretKey)
   if (!stripe) throw new Error('Stripe is not configured')
   return stripe
 }
@@ -252,10 +254,27 @@ export async function finalizeStripeOrder(intent) {
 
 export async function ensureStripeWebhook() {
   const r = getRedisStrict()
-  const existingSecret = await r.get(WEBHOOK_SECRET_KEY)
-  if (existingSecret) return { configured: true, url: WEBHOOK_URL, source: 'redis' }
-
   const s = getStripe()
+
+  // Stripe webhook signing secrets belong to a specific Stripe account.
+  // Detect an account migration (for example Beauty -> Wellness) and rotate
+  // the cached secret before accepting payments on the new account.
+  const account = await s.accounts.retrieve()
+  const activeAccountId = String(account?.id || '')
+  if (!activeAccountId) throw new Error('Could not identify active Stripe account')
+
+  const cachedAccountId = String((await r.get(STRIPE_ACCOUNT_KEY)) || '')
+  const existingSecret = await r.get(WEBHOOK_SECRET_KEY)
+
+  if (existingSecret && cachedAccountId === activeAccountId) {
+    return { configured: true, url: WEBHOOK_URL, accountId: activeAccountId, source: 'redis' }
+  }
+
+  if (existingSecret && cachedAccountId && cachedAccountId !== activeAccountId) {
+    console.info('Stripe account changed for Lion Elite Beauty; rotating webhook configuration.')
+    await r.del(WEBHOOK_SECRET_KEY)
+  }
+
   const list = await s.webhookEndpoints.list({ limit: 100 })
   const matches = (list.data || []).filter(ep => ep.url === WEBHOOK_URL)
   for (const ep of matches) {
@@ -265,11 +284,12 @@ export async function ensureStripeWebhook() {
   const endpoint = await s.webhookEndpoints.create({
     url: WEBHOOK_URL,
     enabled_events: ['payment_intent.succeeded', 'payment_intent.payment_failed', 'payment_intent.canceled'],
-    description: 'Lion Elite Beauty authoritative paid-order fulfillment webhook',
+    description: 'Lion Elite Beauty authoritative paid-order fulfillment webhook (Wellness Stripe)',
   })
   if (!endpoint.secret) throw new Error('Stripe did not return a webhook signing secret')
   await r.set(WEBHOOK_SECRET_KEY, endpoint.secret)
-  return { configured: true, url: WEBHOOK_URL, endpointId: endpoint.id, source: 'created' }
+  await r.set(STRIPE_ACCOUNT_KEY, activeAccountId)
+  return { configured: true, url: WEBHOOK_URL, accountId: activeAccountId, endpointId: endpoint.id, source: 'created' }
 }
 
 export async function getWebhookSecret() {
