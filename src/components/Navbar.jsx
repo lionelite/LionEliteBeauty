@@ -12,7 +12,6 @@ const programs = [
 ]
 
 const skincare = [
-  ['GHK-Cu Intensive Serum', '/skincare/ghk-cu-serum'],
   ['GHK-Cu Peptide Face Wash', '/skincare/ghk-cu-face-wash'],
   ['KPV Recovery Moisturizer', '/skincare/kpv-moisturizer'],
   ['Hydra Boost Body Wash', '/skincare/hydra-boost-body-wash'],

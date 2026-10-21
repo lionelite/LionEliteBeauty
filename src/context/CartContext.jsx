@@ -7,7 +7,7 @@ function normalizeCart(raw) {
   if (!Array.isArray(raw)) return []
 
   return raw
-    .filter(item => item && typeof item.slug === 'string' && item.slug.trim())
+    .filter(item => item && typeof item.slug === 'string' && item.slug.trim() && item.slug !== 'ghk-cu-serum')
     .map(item => ({
       ...item,
       quantity: Math.max(1, Number.parseInt(item.quantity, 10) || 1),
@@ -56,7 +56,7 @@ export function CartProvider({ children }) {
       priceNum: Number.isFinite(Number(product?.priceNum)) ? Number(product.priceNum) : 0,
     }
 
-    if (!normalizedProduct.slug) return
+    if (!normalizedProduct.slug || normalizedProduct.slug === 'ghk-cu-serum') return
 
     setItems(prev => {
       const existing = prev.find(i => i.slug === normalizedProduct.slug)

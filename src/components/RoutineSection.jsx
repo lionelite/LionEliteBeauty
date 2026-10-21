@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 
 const steps = [
   { step: '01', label: 'Cleanse', product: 'GHK-Cu Peptide Face Wash', slug: 'ghk-cu-face-wash', accent: '#C9AA73', micro: 'Clean without stripping. Prep skin for what comes next.' },
-  { step: '02', label: 'Treat', product: 'GHK-Cu Intensive Serum', slug: 'ghk-cu-serum', accent: '#C9AA73', micro: 'Concentrated copper peptide care for smoother, firmer-looking skin.' },
   { step: '03', label: 'Recover', product: 'KPV Recovery Moisturizer', slug: 'kpv-moisturizer', accent: '#9C8BAF', micro: 'Calm, hydrate and support the look of a comfortable skin barrier.' },
 ]
 

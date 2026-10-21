@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import Navbar from './components/Navbar'
@@ -39,6 +40,11 @@ import PeptideCheckInPage from './pages/PeptideCheckInPage'
 import SiteEnhancements from './components/SiteEnhancements'
 import SEO from './components/SEO'
 
+function SerumRedirect() {
+  useEffect(() => { window.location.replace('https://lionelitewellness.com/skincare/ghk-cu-serum') }, [])
+  return <p>GHK-Cu serum is now available at <a href="https://lionelitewellness.com/skincare/ghk-cu-serum">Lion Elite Wellness</a>.</p>
+}
+
 function HomePage() {
   return (
     <>
@@ -73,6 +79,8 @@ export default function App() {
           <Route path="/programs/weight" element={<WeightPage />} />
           <Route path="/programs/longevity" element={<LongevityPage />} />
           <Route path="/skincare" element={<SkincarePage />} />
+          <Route path="/skincare/ghk-cu-serum" element={<SerumRedirect />} />
+          <Route path="/skincare/rejuvenate-serum" element={<SerumRedirect />} />
           <Route path="/skincare/:slug" element={<ProductPage />} />
           <Route path="/start-here" element={<StartHerePage />} />
           <Route path="/ingredients" element={<IngredientLibraryPage />} />

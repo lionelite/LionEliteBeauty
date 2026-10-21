@@ -1,33 +1,5 @@
 export const skincareProducts = [
   {
-    slug: 'ghk-cu-serum',
-    name: 'GHK-Cu Intensive Serum',
-    shortName: 'GHK-Cu Serum',
-    image: '/images/ghk-cu-rejuvenating-serum.webp',
-    price: '$69.99', priceNum: 69.99, size: '30ml', badge: 'In Stock', badgeColor: '#8A9E85',
-    accent: '#C9AA73', bg: '#F5F0E8', label: 'GHK-Cu',
-    step: 'Treat',
-    goal: ['Firm + Smooth', 'Hydrate + Glow'],
-    tagline: 'Copper peptide treatment with niacinamide and layered hydration.',
-    description: 'A lightweight GHK-Cu treatment serum that pairs copper peptide with niacinamide, glycerin, hyaluronic acid and aloe. Designed to support smoother, firmer-looking skin while adding hydration and tone-focused support in one easy daily step.',
-    bestFor: ['Firmness', 'Texture', 'Fine lines', 'Tone', 'Radiance'],
-    benefits: [
-      { title: 'Copper peptide focused', desc: 'GHK-Cu remains the hero ingredient at the center of the treatment.' },
-      { title: 'Tone + barrier support', desc: 'Niacinamide adds a complementary multi-tasking step for a more even-looking complexion and everyday barrier support.' },
-      { title: 'Layered hydration', desc: 'Glycerin, hyaluronic acid and aloe support a comfortable, hydrated skin feel without a heavy finish.' },
-    ],
-    howToUse: ['Apply 2–3 drops to clean, dry skin after cleansing.', 'Press gently into skin and allow to absorb.', 'Follow with moisturizer; use SPF during the day.'],
-    keyIngredients: [
-      { name: 'GHK-Cu (Copper Peptide)', slug: 'ghk-cu', role: 'The hero copper peptide in the formula.' },
-      { name: 'Niacinamide', slug: 'niacinamide', role: 'Supports a more even-looking tone and everyday barrier function.' },
-      { name: 'Glycerin', slug: 'glycerin', role: 'A humectant that helps attract and retain moisture at the skin surface.' },
-      { name: 'Hyaluronic Acid', slug: 'hyaluronic-acid', role: 'Supports hydration and a plumper-looking skin surface.' },
-      { name: 'Aloe Vera', slug: 'aloe-vera', role: 'Supports a calm, comfortable skin feel.' },
-    ],
-    whoItsFor: 'For anyone who wants a copper-peptide treatment that combines firmness and texture support with niacinamide and layered hydration.',
-    pairsWith: ['ghk-cu-face-wash', 'kpv-moisturizer'], position: 0,
-  },
-  {
     slug: 'ghk-cu-face-wash',
     name: 'GHK-Cu Peptide Face Wash',
     shortName: 'GHK-Cu Face Wash',
@@ -51,7 +23,7 @@ export const skincareProducts = [
       { name: 'Aloe Vera', slug: 'aloe-vera', role: 'Supports a calm, comfortable skin feel.' },
     ],
     whoItsFor: 'For anyone who wants a simple daily cleanser that fits naturally into a peptide-focused routine.',
-    pairsWith: ['ghk-cu-serum', 'kpv-moisturizer'], position: 1,
+    pairsWith: ['kpv-moisturizer'], position: 1,
   },
   {
     slug: 'kpv-moisturizer',
@@ -77,7 +49,7 @@ export const skincareProducts = [
       { name: 'Allantoin', slug: 'allantoin', role: 'Supports softness and comfort.' },
     ],
     whoItsFor: 'For sensitive, redness-prone or stressed-looking skin, and anyone who wants a calm, lightweight moisturizer at the end of the routine.',
-    pairsWith: ['ghk-cu-face-wash', 'ghk-cu-serum'], position: 2,
+    pairsWith: ['ghk-cu-face-wash'], position: 2,
   },
   {
     slug: 'hydra-boost-body-wash',

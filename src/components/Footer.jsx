@@ -11,7 +11,6 @@ export default function Footer() {
   ]
 
   const skincare = [
-    { label: 'GHK-Cu Intensive Serum', href: '/skincare/ghk-cu-serum' },
     { label: 'GHK-Cu Peptide Face Wash', href: '/skincare/ghk-cu-face-wash' },
     { label: 'KPV Recovery Moisturizer', href: '/skincare/kpv-moisturizer' },
     { label: 'Hydra Boost Body Wash', href: '/skincare/hydra-boost-body-wash' },
