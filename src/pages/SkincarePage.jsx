@@ -33,7 +33,7 @@ export default function SkincarePage() {
               <h1 style={heading}>Start with what your skin needs.</h1>
             </div>
             <div className="lg:col-span-5">
-              <p style={copy}>Four focused products. Clear jobs. A simple routine you can actually understand and use consistently.</p>
+              <p style={copy}>Three focused products. Clear jobs. A simple routine you can actually understand and use consistently.</p>
             </div>
           </div>
         </div>
@@ -82,8 +82,8 @@ export default function SkincarePage() {
           <div className="grid md:grid-cols-2 gap-5 mt-5">
             <div style={{ ...card, background: '#F3EDE4' }}>
               <p style={eyebrow}>The core routine</p>
-              <h3 style={smallHeading}>Cleanse → Treat → Recover</h3>
-              <p style={copy}>Start with the face wash, add the GHK-Cu serum as your treatment step, then finish with KPV moisturizer when your skin needs hydration and comfort.</p>
+              <h3 style={smallHeading}>Cleanse → Recover</h3>
+              <p style={copy}>Start with the face wash, then finish with KPV moisturizer when your skin needs hydration and comfort.</p>
             </div>
             <Link to="/ingredients" style={{ ...card, background: '#EFF1EC', textDecoration: 'none' }}>
               <p style={eyebrow}>Ingredient Library</p>

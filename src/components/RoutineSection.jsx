@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 const steps = [
   { step: '01', label: 'Cleanse', product: 'GHK-Cu Peptide Face Wash', slug: 'ghk-cu-face-wash', accent: '#C9AA73', micro: 'Clean without stripping. Prep skin for what comes next.' },
-  { step: '03', label: 'Recover', product: 'KPV Recovery Moisturizer', slug: 'kpv-moisturizer', accent: '#9C8BAF', micro: 'Calm, hydrate and support the look of a comfortable skin barrier.' },
+  { step: '02', label: 'Recover', product: 'KPV Recovery Moisturizer', slug: 'kpv-moisturizer', accent: '#9C8BAF', micro: 'Calm, hydrate and support the look of a comfortable skin barrier.' },
 ]
 
 export default function RoutineSection() {
@@ -11,11 +11,11 @@ export default function RoutineSection() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p style={eyebrow}>Peptide skincare, simplified</p>
-          <h2 style={heading}>Cleanse. Treat. Recover.</h2>
-          <p style={copy}>Three essential steps. Purposeful formulas. No complicated 12-step routine.</p>
+          <h2 style={heading}>Cleanse. Recover.</h2>
+          <p style={copy}>Two essential steps. Purposeful formulas. No complicated 12-step routine.</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 gap-4">
           {steps.map(s => (
             <Link key={s.step} to={`/skincare/${s.slug}`} style={card}>
               <div className="flex items-center justify-between mb-12">
