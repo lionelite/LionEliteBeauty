@@ -11,11 +11,11 @@ export default function Hero() {
             Look better. Feel better.<br />Perform better.
           </h1>
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#716D67', fontSize: '18px', lineHeight: 1.85, maxWidth: '650px', margin: '0 auto 42px' }}>
-            Private optimization coaching and peptide-powered skincare for people who want a more intentional approach to how they look, feel, and perform.
+            Private optimization coaching for people who want a more intentional approach to how they look, feel, and perform.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/programs/optimization" style={primary}>Explore Private Coaching →</Link>
-            <Link to="/skincare" style={secondary}>Shop Skincare</Link>
+            <Link to="/apply" style={secondary}>Apply for Coaching</Link>
           </div>
         </div>
 
@@ -26,11 +26,11 @@ export default function Hero() {
             <span style={pathCopy}>Personalized programs for physique, performance, metabolic health, cognition, fertility, hair and longevity.</span>
             <span style={pathLink}>Explore programs →</span>
           </Link>
-          <Link to="/skincare" style={{ ...pathCard, background: '#F8F4EE' }}>
-            <span style={eyebrow}>Peptide Skincare</span>
-            <strong style={pathTitle}>Simple routines. Purposeful formulas.</strong>
-            <span style={pathCopy}>A focused collection built around GHK-Cu, KPV and supportive skin-barrier ingredients.</span>
-            <span style={pathLink}>Explore skincare →</span>
+          <Link to="/vip" style={{ ...pathCard, background: '#F8F4EE' }}>
+            <span style={eyebrow}>Coaching Support</span>
+            <strong style={pathTitle}>Structure. Accountability. Progress.</strong>
+            <span style={pathCopy}>A dedicated client portal to stay connected to your coaching program and keep your progress in focus.</span>
+            <span style={pathLink}>Client portal →</span>
           </Link>
         </div>
       </div>

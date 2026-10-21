@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useCart } from '../context/CartContext'
 
 const programs = [
   ['Muscle & Recovery', '/programs/muscle'],
@@ -11,20 +10,13 @@ const programs = [
   ['Hair', '/programs/hair'],
 ]
 
-const skincare = [
-  ['GHK-Cu Peptide Face Wash', '/skincare/ghk-cu-face-wash'],
-  ['KPV Recovery Moisturizer', '/skincare/kpv-moisturizer'],
-  ['Hydra Boost Body Wash', '/skincare/hydra-boost-body-wash'],
-]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [programsOpen, setProgramsOpen] = useState(false)
-  const [skinOpen, setSkinOpen] = useState(false)
-  const { itemCount } = useCart()
   const location = useLocation()
 
-  useEffect(() => { setOpen(false); setProgramsOpen(false); setSkinOpen(false) }, [location.pathname])
+  useEffect(() => { setOpen(false); setProgramsOpen(false) }, [location.pathname])
 
   return (
     <nav style={{ background: 'rgba(250,248,244,.97)', borderBottom: '1px solid #E7DDD1', backdropFilter: 'blur(14px)' }} className="fixed top-0 left-0 right-0 z-50">
@@ -39,13 +31,7 @@ export default function Navbar() {
             <Link to="/programs/optimization" style={navLink}>Private Coaching</Link>
             {programsOpen && <Dropdown items={programs} footer={['View all programs', '/programs/optimization']} />}
           </div>
-          <div className="relative" onMouseEnter={() => setSkinOpen(true)} onMouseLeave={() => setSkinOpen(false)}>
-            <Link to="/skincare" style={navLink}>Skincare</Link>
-            {skinOpen && <Dropdown items={skincare} footer={['Shop all skincare', '/skincare']} />}
-          </div>
-          <Link to="/ingredients" style={navLink}>Ingredients</Link>
           <Link to="/vip" style={navLink}>VIP Account</Link>
-          <Link to="/cart" style={{ ...navLink, position: 'relative' }}>Bag{itemCount > 0 ? ` (${itemCount})` : ''}</Link>
           <Link to="/apply" style={apply}>Apply</Link>
         </div>
 
@@ -55,10 +41,7 @@ export default function Navbar() {
       {open && (
         <div className="lg:hidden px-6 pb-8" style={{ background: '#FAF8F4', borderTop: '1px solid #E7DDD1', maxHeight: 'calc(100vh - 70px)', overflowY: 'auto' }}>
           <MobileSection title="Private Coaching" items={programs} top="/programs/optimization" />
-          <MobileSection title="Skincare" items={skincare} top="/skincare" />
-          <Link to="/ingredients" style={mobileTop}>Ingredient Library</Link>
           <Link to="/vip" style={mobileTop}>VIP Account</Link>
-          <Link to="/cart" style={mobileTop}>Bag {itemCount > 0 ? `(${itemCount})` : ''}</Link>
           <Link to="/apply" style={{ ...apply, display: 'block', textAlign: 'center', marginTop: '18px' }}>Apply for Coaching</Link>
         </div>
       )}

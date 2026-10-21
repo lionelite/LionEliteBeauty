@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 
 export default function SEO({ title, description, ogImage, jsonLd }) {
   useEffect(() => {
-    const fullTitle = title ? `${title} | Lion Elite Beauty` : 'Lion Elite Beauty | Private Optimization Coaching & Peptide Skincare'
-    const metaDescription = description || 'Private optimization coaching and peptide-powered skincare from Lion Elite Beauty.'
+    const fullTitle = title ? `${title} | Lion Elite Beauty` : 'Lion Elite Beauty | Private Optimization Coaching'
+    const metaDescription = description || 'Private optimization coaching, personalized plans and accountability from Lion Elite Beauty.'
     const canonicalUrl = typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}` : ''
 
     document.title = fullTitle

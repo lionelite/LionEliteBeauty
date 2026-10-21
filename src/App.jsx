@@ -1,12 +1,9 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import BrandManifesto from './components/BrandManifesto'
-import RoutineSection from './components/RoutineSection'
-import BeforeAfterResults from './components/BeforeAfterResults'
-import SkincareLine from './components/SkincareLine'
 import Testimonials from './components/Testimonials'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
@@ -17,15 +14,7 @@ import FertilityPage from './pages/FertilityPage'
 import HairPage from './pages/HairPage'
 import WeightPage from './pages/WeightPage'
 import LongevityPage from './pages/LongevityPage'
-import SkincarePage from './pages/SkincarePage'
-import ProductPage from './pages/ProductPage'
-import StartHerePage from './pages/StartHerePage'
-import IngredientLibraryPage from './pages/IngredientLibraryPage'
-import IngredientDetailPage from './pages/IngredientDetailPage'
-import SkinSystemPage from './pages/SkinSystemPage'
 import ApplyPage from './pages/ApplyPage'
-import CartPage from './pages/CartPage'
-import CheckoutPage from './pages/CheckoutPage'
 import SkincarePolicies from './pages/SkincarePolicies'
 import ProgramsPolicies from './pages/ProgramsPolicies'
 import SkincareTerms from './pages/SkincareTerms'
@@ -48,14 +37,11 @@ function SerumRedirect() {
 function HomePage() {
   return (
     <>
-      <SEO title="Private Optimization Coaching & Peptide Skincare" description="Lion Elite Beauty combines private optimization coaching with peptide-powered skincare for physique, performance, wellness and skin goals." />
+      <SEO title="Private Optimization Coaching" description="Personalized coaching for physique, performance and long-term progress. Explore our coaching options and apply for a program." />
       <div style={{ backgroundColor: '#FAF8F4' }}>
         <Navbar />
         <Hero />
         <BrandManifesto />
-        <BeforeAfterResults />
-        <RoutineSection />
-        <SkincareLine />
         <Testimonials />
         <CTASection />
         <Footer />
@@ -78,18 +64,18 @@ export default function App() {
           <Route path="/programs/hair" element={<HairPage />} />
           <Route path="/programs/weight" element={<WeightPage />} />
           <Route path="/programs/longevity" element={<LongevityPage />} />
-          <Route path="/skincare" element={<SkincarePage />} />
+          <Route path="/skincare" element={<Navigate to="/programs/optimization" replace />}  />
           <Route path="/skincare/ghk-cu-serum" element={<SerumRedirect />} />
           <Route path="/skincare/rejuvenate-serum" element={<SerumRedirect />} />
-          <Route path="/skincare/:slug" element={<ProductPage />} />
-          <Route path="/start-here" element={<StartHerePage />} />
-          <Route path="/ingredients" element={<IngredientLibraryPage />} />
-          <Route path="/ingredients/:slug" element={<IngredientDetailPage />} />
-          <Route path="/skin-system" element={<SkinSystemPage />} />
+          <Route path="/skincare/:slug" element={<Navigate to="/programs/optimization" replace />}  />
+          <Route path="/start-here" element={<Navigate to="/programs/optimization" replace />}  />
+          <Route path="/ingredients" element={<Navigate to="/programs/optimization" replace />}  />
+          <Route path="/ingredients/:slug" element={<Navigate to="/programs/optimization" replace />}  />
+          <Route path="/skin-system" element={<Navigate to="/programs/optimization" replace />}  />
           <Route path="/apply" element={<ApplyPage />} />
           <Route path="/client-check-in" element={<PeptideCheckInPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/cart" element={<Navigate to="/programs/optimization" replace />}  />
+          <Route path="/checkout" element={<Navigate to="/programs/optimization" replace />}  />
           <Route path="/policies/skincare" element={<SkincarePolicies />} />
           <Route path="/policies/programs" element={<ProgramsPolicies />} />
           <Route path="/terms/skincare" element={<SkincareTerms />} />

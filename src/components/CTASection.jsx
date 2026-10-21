@@ -17,7 +17,7 @@ export default function CTASection() {
         <div className="text-center mb-20">
           <p style={{ fontFamily: 'Georgia, serif', color: '#C9A96E', fontSize: '4rem', lineHeight: '1', marginBottom: '8px' }}>"</p>
           <p style={{ fontFamily: 'Georgia, serif', color: '#2A2A2A', fontSize: '1.8rem', lineHeight: '1.5', maxWidth: '680px', margin: '0 auto 8px', fontStyle: 'italic' }}>
-            The system behind high-performance individuals who take their skin and body seriously.
+            The system behind high-performance individuals who take their goals and progress seriously.
           </p>
           <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#C9A96E', fontSize: '10px', letterSpacing: '0.3em' }} className="uppercase">Lion Elite</p>
         </div>
@@ -64,7 +64,7 @@ export default function CTASection() {
               lionelitewellness.com →
             </a>
             <p style={{ fontFamily: 'Helvetica Neue, Arial, sans-serif', color: '#8A8A8A', fontSize: '11px', marginTop: '6px' }}>
-              Clinical wellness programs · Medical services · Advanced protocols
+              Lion Elite Wellness
             </p>
           </div>
         </div>

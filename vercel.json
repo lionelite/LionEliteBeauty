@@ -43,6 +43,46 @@
       "source": "/skincare/rejuvenate-serum",
       "destination": "https://lionelitewellness.com/skincare/ghk-cu-serum",
       "permanent": true
+    },
+    {
+      "source": "/skincare",
+      "destination": "/programs/optimization",
+      "permanent": true
+    },
+    {
+      "source": "/skincare/:path*",
+      "destination": "/programs/optimization",
+      "permanent": true
+    },
+    {
+      "source": "/ingredients",
+      "destination": "/programs/optimization",
+      "permanent": true
+    },
+    {
+      "source": "/ingredients/:path*",
+      "destination": "/programs/optimization",
+      "permanent": true
+    },
+    {
+      "source": "/start-here",
+      "destination": "/programs/optimization",
+      "permanent": true
+    },
+    {
+      "source": "/skin-system",
+      "destination": "/programs/optimization",
+      "permanent": true
+    },
+    {
+      "source": "/cart",
+      "destination": "/programs/optimization",
+      "permanent": true
+    },
+    {
+      "source": "/checkout",
+      "destination": "/programs/optimization",
+      "permanent": true
     }
   ]
 }
