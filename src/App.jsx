@@ -26,6 +26,7 @@ import VIPPage from './pages/VIPPage'
 import RepPortalPage from './pages/RepPortalPage'
 import OrdersPage from './pages/OrdersPage'
 import PeptideCheckInPage from './pages/PeptideCheckInPage'
+import ShapewearPage from './pages/ShapewearPage'
 import SiteEnhancements from './components/SiteEnhancements'
 import SEO from './components/SEO'
 
@@ -72,6 +73,7 @@ export default function App() {
           <Route path="/ingredients" element={<Navigate to="/programs/optimization" replace />}  />
           <Route path="/ingredients/:slug" element={<Navigate to="/programs/optimization" replace />}  />
           <Route path="/skin-system" element={<Navigate to="/programs/optimization" replace />}  />
+          <Route path="/shapewear" element={<ShapewearPage />} />
           <Route path="/apply" element={<ApplyPage />} />
           <Route path="/client-check-in" element={<PeptideCheckInPage />} />
           <Route path="/cart" element={<Navigate to="/programs/optimization" replace />}  />

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export default function SEO({ title, description, ogImage, jsonLd }) {
+export default function SEO({ title, description, ogImage, jsonLd, noindex = false }) {
   useEffect(() => {
     const fullTitle = title ? `${title} | Lion Elite Beauty` : 'Lion Elite Beauty | Private Optimization Coaching'
     const metaDescription = description || 'Private optimization coaching, personalized plans and accountability from Lion Elite Beauty.'
@@ -21,7 +21,7 @@ export default function SEO({ title, description, ogImage, jsonLd }) {
     }
 
     setMeta('description', metaDescription)
-    setMeta('robots', 'index,follow,max-image-preview:large')
+    setMeta('robots', noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large')
     setMeta('og:title', fullTitle, true)
     setMeta('og:description', metaDescription, true)
     setMeta('og:type', 'website', true)
@@ -53,7 +53,7 @@ export default function SEO({ title, description, ogImage, jsonLd }) {
       const current = document.getElementById('page-json-ld')
       if (current) current.remove()
     }
-  }, [title, description, ogImage, jsonLd])
+  }, [title, description, ogImage, jsonLd, noindex])
 
   return null
 }
