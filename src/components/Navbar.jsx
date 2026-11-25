@@ -31,6 +31,7 @@ export default function Navbar() {
             <Link to="/programs/optimization" style={navLink}>Private Coaching</Link>
             {programsOpen && <Dropdown items={programs} footer={['View all programs', '/programs/optimization']} />}
           </div>
+          <Link to="/shapewear" style={navLink} aria-current={location.pathname === '/shapewear' ? 'page' : undefined}>Shapewear</Link>
           <Link to="/vip" style={navLink}>VIP Account</Link>
           <Link to="/apply" style={apply}>Apply</Link>
         </div>
@@ -41,6 +42,7 @@ export default function Navbar() {
       {open && (
         <div className="lg:hidden px-6 pb-8" style={{ background: '#FAF8F4', borderTop: '1px solid #E7DDD1', maxHeight: 'calc(100vh - 70px)', overflowY: 'auto' }}>
           <MobileSection title="Private Coaching" items={programs} top="/programs/optimization" />
+          <Link to="/shapewear" style={mobileTop} aria-current={location.pathname === '/shapewear' ? 'page' : undefined}>Shapewear</Link>
           <Link to="/vip" style={mobileTop}>VIP Account</Link>
           <Link to="/apply" style={{ ...apply, display: 'block', textAlign: 'center', marginTop: '18px' }}>Apply for Coaching</Link>
         </div>
